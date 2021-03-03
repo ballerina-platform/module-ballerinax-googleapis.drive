@@ -42,6 +42,7 @@ target
 .idea/
 .m2
 .vscode/
+
 # Ignore ballerina files
 accessToken.bal
 temp.bal.ballerina/
@@ -54,10 +55,3 @@ modules
 
 # Error log file
 ballerina-internal.log
-
-# Commit template
-.mycommitmsg.txt
-
-#Temporary 
-git-commit-template.txt
-.github/
