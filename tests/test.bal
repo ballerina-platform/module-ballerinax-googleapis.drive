@@ -15,11 +15,12 @@
 // under the License.
 
 import ballerina/log;
+import ballerina/os;
 import ballerina/test;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshToken = ?;
+configurable string clientId = os:getEnv("CLIENT_ID");
+configurable string clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 
 const string fileName = "ballerina_temp_file"; 
 const string folderName = "ballerina_temp_folder";
