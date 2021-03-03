@@ -1,0 +1,12 @@
+[package]
+org = "ballerinax"
+name = "googleapis_drive"
+version = "0.1.0"
+authors = ["Ballerina"]
+keywords = ["google", "drive", "storage"]
+repository = "https://github.com/ballerina-platform/module-ballerinax-googleapis.drive"
+license = ["Apache-2.0"]
+
+
+[build-options]
+observabilityIncluded = true

@@ -1,7 +1,7 @@
 # module-ballerinax-googleapis.drive
+### Google Drive Connecter
 Connector repository for Google Drive API V3.
 
-### Google Drive Connecter
 Connects to Google Drive from Ballerina.
 
 # Package Overview
