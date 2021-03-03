@@ -44,6 +44,7 @@ Add the project configuration file by creating a `Config.toml` file under the ro
 This file should have following configurations. Add the tokens obtained in the previous step to the `Config.toml` file.
 
 ```
+[ballerinax.googleapis_drive]
 clientId = "<client_id">
 clientSecret = "<client_secret>"
 refreshToken = "<refresh_token>"

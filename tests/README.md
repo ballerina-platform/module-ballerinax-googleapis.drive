@@ -43,9 +43,6 @@ In order to run the tests, the user will need to have a Gdrive account and creat
 refreshToken = "enter your refresh token here"
 clientId = "enter your client id here"
 clientSecret = "enter your client secret here"
-
-fileName = "ballerina_temp_file.jpeg"
-folderName = "ballerina_temp_folder"
 ```
 
 Assign the values for the clientId, clientSecret and refreshToken inside constructed endpoint in 
