@@ -531,3 +531,193 @@ isolated function checkAndSetErrors(http:Response|http:PayloadType|error httpRes
         return error(HTTP_ERROR_MSG + (<error>httpResponse).message());
     }
 }
+
+# Gets information about the user, the user's Drive, and system capabilities.
+# 
+# + httpClient - The HTTP Client 
+# + fields - The paths of the fields you want included in the response
+# + return - If successful, returns `About`. Else returns `error`
+function getDriveInfo(http:Client httpClient, string? fields) returns @tainted About|error {
+    string path = DRIVE_PATH + ABOUT + QUESTION_MARK + FIELDS + EQUAL + _ALL;
+    if (fields is string) {
+        path = DRIVE_PATH + ABOUT + QUESTION_MARK + FIELDS + EQUAL + fields;
+    }
+    json response = check sendRequest(httpClient, path);
+    About|error info = response.cloneWithType(About);
+    if (info is About) {
+        return info;
+    } else {
+        return error(ERR_DRIVE_INFO_RESPONSE, info);
+    }
+}
+
+# Retrieve file using the fileID.
+# 
+# + httpClient - The HTTP Client 
+# + fileId - ID of the file to retreive
+# + optional - 'GetFileOptional' used to add query parameters to the request
+# + return - If successful, returns `File`. Else returns `error`
+function getFileById(http:Client httpClient, string fileId,  GetFileOptional? optional = ()) 
+                        returns @tainted File|error {
+    string path = prepareUrlWithFileOptional(fileId, optional);
+    json response = check sendRequest(httpClient, path);
+    File|error file = response.cloneWithType(File);
+    if (file is File) {
+        return file;
+    } else {
+        return error(ERR_FILE_RESPONSE, file);
+    }
+}
+
+# Delete file using the fileID.
+# 
+# + httpClient - The HTTP Client
+# + fileId - ID of the file to delete
+# + optional - 'DeleteFileOptional' used to add query parameters to the request
+# + return - If successful, returns `boolean` as true. Else returns `error`
+function deleteFileById(http:Client httpClient, string fileId, DeleteFileOptional? optional = ()) 
+                            returns @tainted boolean|error {
+    string path = prepareUrlWithDeleteOptional(fileId, optional);
+    boolean|error response = deleteRequest(httpClient, path);
+    return response;
+}
+
+
+# Copy file using the fileID.
+# 
+# + httpClient - The HTTP Client
+# + fileId - ID of the file to copy
+# + optional - 'CopyFileOptional' used to add query parameters to the request
+# + fileResource - 'File' can added as a payload to change metadata
+# + return - If successful, returns `File`. Else returns `error`
+function copyFile(http:Client httpClient, string fileId, CopyFileOptional? optional = (), 
+                 File? fileResource = ()) returns @tainted File|error {
+    json payload = check fileResource.cloneWithType(json);
+    string path = prepareUrlWithCopyOptional(fileId, optional);
+    json response = check sendRequestWithPayload(httpClient, path, payload);
+    File|error file = response.cloneWithType(File);
+    if (file is File) {
+        return file;
+    } else {
+        return error(ERR_FILE_RESPONSE, file);
+    }
+}
+
+# Update file metadata using the fileID.
+# 
+# + httpClient - The HTTP Client
+# + fileId - ID of the file to be updated
+# + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
+# + fileResource - 'File' can added as a payload to change metadata
+# + return - If successful, returns `File`. Else returns `error`
+function updateFileById(http:Client httpClient, string fileId, UpdateFileMetadataOptional? optional = (), 
+                        File? fileResource = ()) returns @tainted File|error {
+    json payload = check fileResource.cloneWithType(json);
+    string path = prepareUrlWithUpdateOptional(fileId, optional);
+    json response = check updateRequestWithPayload(httpClient, path, payload);
+    File|error file = response.cloneWithType(File);
+    if (file is File) {
+        return file;
+    } else {
+        return error(ERR_FILE_RESPONSE, file);
+    }
+}
+
+# Create new file (with only metadata).
+# 
+# + httpClient - The HTTP Client
+# + optional - 'CreateFileOptional' used to add query parameters to the request
+# + fileData - 'File' Metadata is send to in the payload 
+# + return - If successful, returns `File`. Else returns `error`
+function createMetaDataFile(http:Client httpClient, CreateFileOptional? optional = (), File? fileData = ()) 
+                                returns @tainted File|error {
+    json payload = check fileData.cloneWithType(json);
+    string path = prepareUrlwithMetadataFileOptional(optional);
+    json response = check uploadRequestWithPayload(httpClient, path, payload);
+    File|error file = response.cloneWithType(File);
+    if (file is File) {
+        return file;
+    } else {
+        return error(ERR_FILE_RESPONSE, file);
+    }
+}
+
+# Upload new file.
+# 
+# + httpClient - The HTTP Client
+# + filePath - Path to the file object to be uploaded
+# + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
+# + fileMetadata - 'File' Metadata is send to in the payload 
+# + return - If successful, returns `File`. Else returns `error`
+function uploadFile(http:Client httpClient, string filePath, UpdateFileMetadataOptional? optional = (), 
+                                File? fileMetadata = ()) returns @tainted File|error {    
+    string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);  
+    json response = check uploadFiles(httpClient, path, filePath);  
+    //update metadata
+    json|error respId = response.id;
+    string fileId = EMPTY_STRING;
+    if (respId is json) {
+        fileId = respId.toString();
+    }
+    string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
+    json payload = check fileMetadata.cloneWithType(json);
+    json changeResponse = check updateRequestWithPayload(httpClient, newFileUrl, payload);
+    File|error file = changeResponse.cloneWithType(File);
+    if (file is File) {
+        return file;
+    } else {
+        return error(ERR_FILE_RESPONSE, file);
+    }
+}
+
+# Retrieve files.
+# 
+# + httpClient - The HTTP Client
+# + optional - 'ListFilesOptional' used to add query parameters to the request
+# + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+function getFiles(http:Client httpClient, ListFilesOptional? optional = ()) returns @tainted stream<File>|error {
+    string path = prepareUrlwithFileListOptional(optional);
+    json response = check sendRequest(httpClient, path);
+    File[] files = [];
+    FilesResponse|error res = response.cloneWithType(FilesResponse);
+    if (res is FilesResponse) {
+        int i = files.length();
+        foreach File item in res.files {
+            files[i] = item;
+            i = i + 1;
+        }        
+        stream<File> filesStream = (<@untainted>files).toStream();
+        return filesStream;
+    } else {
+        return error(ERR_FILE_RESPONSE, res);
+    }
+}
+
+# Upload new file using a Byte array.
+# 
+# + httpClient - The HTTP Client
+# + byteArray - Byte array that represents the file object
+# + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
+# + fileMetadata - 'File' Metadata is send to in the payload 
+# + return - If successful, returns `File`. Else returns `error`
+function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, UpdateFileMetadataOptional? optional = (), 
+                                  File? fileMetadata = ()) returns @tainted File|error {    
+    string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);
+    log:print(path.toString());
+    json response = check uploadFileWithByteArray(httpClient, path, byteArray);
+    //update metadata
+    json|error respId = response.id;
+    string fileId = EMPTY_STRING;
+    if (respId is json) {
+        fileId = respId.toString();
+    }
+    string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
+    json payload = check fileMetadata.cloneWithType(json);
+    json changeResponse = check updateRequestWithPayload(httpClient, newFileUrl, payload);
+    File|error file = changeResponse.cloneWithType(File);
+    if (file is File) {
+        return file;
+    } else {
+        return error(ERR_FILE_RESPONSE, file);
+    }
+}
