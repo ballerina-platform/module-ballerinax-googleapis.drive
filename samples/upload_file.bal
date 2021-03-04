@@ -3,7 +3,7 @@ import ballerinax/googleapis_drive as drive;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
-configurable string REFRESH_URL = ?;
+
 configurable string refreshToken = ?;
 
 ###################################################

@@ -183,12 +183,12 @@ function testCreateFile() {
     CreateFileOptional optionalsCreateFile = {
         ignoreDefaultVisibility : false
     };
-    File payload_create_file = {
+    File payloadCreateFile = {
         mimeType : "application/vnd.google-apps.document",
         name : fileName
         //parents : [parentFolder]
     };
-    File|error response = driveClient->createMetaDataFile(optionalsCreateFile, payload_create_file);
+    File|error response = driveClient->createMetaDataFile(optionalsCreateFile, payloadCreateFile);
     //Assertions
     if(response is File){
         test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -258,13 +258,13 @@ function testGetFiles() {
 }
 function testNewUpload() {
     log:print("Gdrive Client -> testNewUpload()");
-    UpdateFileMetadataOptional optionals_ = {
+    UpdateFileMetadataOptional optionals = {
         addParents : parentFolder //Parent folderID
     };
-    File payload_ = {
+    File payload = {
         name : fileName
     };
-    File|error response = driveClient->uploadFile(filePath, optionals_, payload_);
+    File|error response = driveClient->uploadFile(filePath, optionals, payload);
     // Assertions 
     if(response is File){
         test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -284,14 +284,14 @@ function testNewUpload() {
 }
 function testNewUploadByteArray() {
     log:print("Gdrive Client -> testNewUploadByteArray()");
-    UpdateFileMetadataOptional optionals_ = {
+    UpdateFileMetadataOptional optionals = {
     addParents : parentFolder //Parent folderID
     };
-    File payload_ = {
+    File payload = {
         name : fileName
     };
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
-    File|error response = driveClient->uploadFileUsingByteArray(byteArray, optionals_, payload_);
+    File|error response = driveClient->uploadFileUsingByteArray(byteArray, optionals, payload);
     // Assertions 
     if(response is File){
         string id = response?.id.toString();

@@ -3,7 +3,6 @@ import ballerinax/googleapis_drive as drive;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;
-configurable string REFRESH_URL = ?;
 configurable string refreshToken = ?;
 
 ###################################################
@@ -23,11 +22,11 @@ public function main() {
         }
     };
 
-    drive:UpdateFileMetadataOptional optionals_ = {
+    drive:UpdateFileMetadataOptional optionals = {
         // addParents : parentFolder //Parent folderID
     };
 
-    drive:File payload_ = {
+    drive:File payload = {
         name : "test123.jpeg"
     };
 
@@ -40,7 +39,7 @@ public function main() {
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
 
     // Issue : ballerina: too many arguments.
-    drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, optionals_, payload_);
+    drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, optionals, payload);
 
     //Print file ID
     if(res is drive:File){
