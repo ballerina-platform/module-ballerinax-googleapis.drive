@@ -120,8 +120,7 @@ returns @tainted json|error {
 # + path - POST URI path
 # + jsonPayload - Payload of the request
 # + return - json or error if not suceeded.
-function uploadRequestWithPayload(http:Client httpClient, string path, json jsonPayload = ())
-returns @tainted json|error {
+function uploadRequestWithPayload(http:Client httpClient, string path, json jsonPayload) returns @tainted json|error {
     http:Request httpRequest = new;
     if (jsonPayload != ()) {
         httpRequest.setJsonPayload(<@untainted>jsonPayload);

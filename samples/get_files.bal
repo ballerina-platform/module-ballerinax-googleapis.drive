@@ -1,6 +1,6 @@
 import ballerina/log;
 import ballerina/os;
-import nuwantissera/googleapis_drive as drive;
+import ballerinax/googleapis_drive as drive;
 
 configurable string clientId = os:getEnv("CLIENT_ID");
 configurable string clientSecret = os:getEnv("CLIENT_SECRET");
