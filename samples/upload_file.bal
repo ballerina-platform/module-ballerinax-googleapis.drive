@@ -1,10 +1,13 @@
 import ballerina/log;
-import ballerinax/googleapis_drive as drive;
+import ballerina/os;
+import nuwantissera/googleapis_drive as drive;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
+configurable string clientId = os:getEnv("CLIENT_ID");
+configurable string clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
+configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-configurable string refreshToken = ?;
+string filePath = "<PATH_TO_FILE_TO_BE_UPLOADED>";
 
 ###################################################
 # Upload file 
@@ -16,27 +19,22 @@ public function main() {
         clientConfig: {
             clientId: clientId,
             clientSecret: clientSecret,
-            refreshUrl: REFRESH_URL,
+            refreshUrl: refreshUrl,
             refreshToken: refreshToken
         }
     };
 
-    drive:UpdateFileMetadataOptional optionals_ = {
+    drive:UpdateFileMetadataOptional optionals = {
         // addParents : parentFolder //Parent folderID
     };
 
-    drive:File payload_ = {
-        name : "test123.jpeg"
-    };
-
     drive:File payload = {
-        mimeType : "application/vnd.google-apps.folder",
-        name : "folderInTheRoot"
+        name : "FILE_NAME"
     };
 
     drive:Client driveClient = new (config);
     
-    drive:File|error res = driveClient->uploadFile(filePath, optionals_, payload_);
+    drive:File|error res = driveClient->uploadFile(filePath, optionals, payload);
 
     //Print file ID
     if(res is drive:File){

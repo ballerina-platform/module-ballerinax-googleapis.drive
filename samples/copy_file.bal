@@ -1,10 +1,13 @@
 import ballerina/log;
-import ballerinax/googleapis_drive as drive;
+import ballerina/os;
+import nuwantissera/googleapis_drive as drive;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshToken = ?;
-configurable string fileId = ?;
+configurable string clientId = os:getEnv("CLIENT_ID");
+configurable string clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
+configurable string refreshUrl = os:getEnv("REFRESH_URL");
+
+string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
 
 ###################################################################################
 # Copy file by ID
@@ -22,7 +25,7 @@ public function main() {
         clientConfig: {
             clientId: clientId,
             clientSecret: clientSecret,
-            refreshUrl: REFRESH_URL,
+            refreshUrl: refreshUrl,
             refreshToken: refreshToken
         }
     };

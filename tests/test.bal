@@ -285,7 +285,7 @@ function testNewUpload() {
 function testNewUploadByteArray() {
     log:print("Gdrive Client -> testNewUploadByteArray()");
     UpdateFileMetadataOptional optionals = {
-    addParents : parentFolder //Parent folderID
+        addParents : parentFolder //Parent folderID
     };
     File payload = {
         name : fileName
