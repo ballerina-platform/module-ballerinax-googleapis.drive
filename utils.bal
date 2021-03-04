@@ -60,8 +60,7 @@ function deleteRequest(http:Client httpClient, string path) returns @tainted boo
 # + path - POST URI path
 # + jsonPayload - Payload of the request.
 # + return - json or error if not suceeded.
-function sendRequestWithPayload(http:Client httpClient, string path, json jsonPayload = ()) 
-                                    returns @tainted json|error {
+function sendRequestWithPayload(http:Client httpClient, string path, json jsonPayload) returns @tainted json|error {
     http:Request httpRequest = new;
     if (jsonPayload != ()) {
         httpRequest.setJsonPayload(<@untainted>jsonPayload);
@@ -90,8 +89,7 @@ function sendRequestWithPayload(http:Client httpClient, string path, json jsonPa
 # + path - PATCH URI path
 # + jsonPayload - Payload of the request
 # + return - json or error if not suceeded.
-function updateRequestWithPayload(http:Client httpClient, string path, json jsonPayload = ())
-returns @tainted json|error {
+function updateRequestWithPayload(http:Client httpClient, string path, json jsonPayload) returns @tainted json|error {
     http:Request httpRequest = new;
     if (jsonPayload != ()) {
         httpRequest.setJsonPayload(<@untainted>jsonPayload);
