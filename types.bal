@@ -264,27 +264,27 @@ public type VideoMediaMetadata record {
 
 # Additional metadata about image media, if available.
 #
-# + meteringMode -  The metering mode used to create the photo. 
-# + exposureTime -  The length of the exposure, in seconds.
-# + whiteBalance -  The white balance mode used to create the photo
-# + rotation -  The number of clockwise 90 degree rotations applied from the image's original orientation. 
-# + maxApertureValue -  The smallest f-number of the lens at the focal length used to create the photo (APEX value).
-# + lens -  The lens used to create the photo.
-# + exposureBias -  The exposure bias of the photo (APEX value)
-# + colorSpace -   The color space of the photo
-# + aperture -   The aperture used to create the photo (f-number).
-# + flashUsed -  Whether a flash was used to create the photo. 
-# + subjectDistance -  The distance to the subject of the photo, in meters.
-# + width -  The width of the video in pixels.  
-# + cameraModel -  The model of the camera used to create the photo. 	
-# + location -  Geographic location information stored in the image.
-# + isoSpeed -  The ISO speed used to create the photo.  
-# + sensor -   The type of sensor used to create the photo
-# + time -  The date and time the photo was taken (EXIF DateTime). 
-# + cameraMake -   The make of the camera used to create the photo.
-# + exposureMode -   The length of the exposure, in seconds.
-# + height -   The height of the image in pixels.
-# + focalLength -    The focal length used to create the photo, in millimeters.
+# + meteringMode - The metering mode used to create the photo. 
+# + exposureTime - The length of the exposure, in seconds.
+# + whiteBalance - The white balance mode used to create the photo
+# + rotation - The number of clockwise 90 degree rotations applied from the image's original orientation. 
+# + maxApertureValue - The smallest f-number of the lens at the focal length used to create the photo (APEX value).
+# + lens - The lens used to create the photo.
+# + exposureBias - The exposure bias of the photo (APEX value)
+# + colorSpace - The color space of the photo
+# + aperture - The aperture used to create the photo (f-number).
+# + flashUsed - Whether a flash was used to create the photo. 
+# + subjectDistance - The distance to the subject of the photo, in meters.
+# + width - The width of the video in pixels.  
+# + cameraModel - The model of the camera used to create the photo. 	
+# + location - Geographic location information stored in the image.
+# + isoSpeed - The ISO speed used to create the photo.  
+# + sensor - The type of sensor used to create the photo
+# + time - The date and time the photo was taken (EXIF DateTime). 
+# + cameraMake - The make of the camera used to create the photo.
+# + exposureMode - The length of the exposure, in seconds.
+# + height - The height of the image in pixels.
+# + focalLength - The focal length used to create the photo, in millimeters.
 public type ImageMediaMetadata record {
     int width;
     int height;
@@ -352,7 +352,7 @@ public type Thumbnail record {
 # + incompleteSearch - Whether the search process was incomplete. If true, then some search results may be missing, 
 #                      Since all documents were not searched. This may occur when searching multiple drives with the 
 #                      "allDrives" corpora, but all corpora could not be searched. When this happens, it is suggested 
-#                       that clients narrow their query by choosing a different corpus such as "user" or "drive".  
+#                      that clients narrow their query by choosing a different corpus such as "user" or "drive".  
 public type FilesResponse record {
     string kind;
     string nextPageToken?;
@@ -642,8 +642,8 @@ public type PermissionDetails record {
 #              'domain' (files shared to the user's domain), and 'allDrives' 
 #              (A combination of 'user' and 'drive' for all drives where the user is a member). 
 #              When able, use 'user' or 'drive', instead of 'allDrives', for efficiency.  
-# + includePermissionsForView -   Specifies which additional view's permissions to include in the response. 
-#                                 Only 'published' is supported.
+# + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
+#                               Only 'published' is supported.
 # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 
 #             'modifiedByMeTime', 'modifiedTime', 'name', 
 #            'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', and 'viewedByMeTime'. 
