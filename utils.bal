@@ -25,21 +25,17 @@ import ballerina/log;
 # + path - GET URI path
 # + return - JSON or error if not suceeded
 function sendRequest(http:Client httpClient, string path) returns @tainted json|error {
-    var httpResponse = httpClient->get(<@untainted>path);
-    if (httpResponse is http:Response) {
-        int statusCode = httpResponse.statusCode;
-        json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
-        if (jsonResponse is json) {
-            error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
-            if (validateStatusCodeRes is error) {
-                return validateStatusCodeRes;
-            }
-            return jsonResponse;
-        } else {
-            return getDriveError(jsonResponse);
+    http:Response httpResponse = <http:Response> check httpClient->get(<@untainted>path);
+    int statusCode = httpResponse.statusCode;
+    json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
+    if (jsonResponse is json) {
+        error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
+        if (validateStatusCodeRes is error) {
+            return validateStatusCodeRes;
         }
+        return jsonResponse;
     } else {
-        return getDriveError(<json|error>httpResponse);
+        return getDriveError(jsonResponse);
     }
 }
 
@@ -49,9 +45,12 @@ function sendRequest(http:Client httpClient, string path) returns @tainted json|
 # + path - DELETE URI path
 # + return - boolean or error if not suceeded, True if Deleted successfully.
 function deleteRequest(http:Client httpClient, string path) returns @tainted boolean|error {
-    var httpResponse = httpClient->delete(<@untainted>path);
-    _ = check checkAndSetErrors(httpResponse);
-    return true;
+    http:Response httpResponse = <http:Response> check httpClient->delete(<@untainted>path);
+    if(httpResponse.statusCode == http:STATUS_NO_CONTENT){
+        return true;
+    }
+    json | http:ClientError jsonResponse = httpResponse.getJsonPayload();
+    return getDriveError(jsonResponse);
 }
 
 # Send POST request with  a Payload.
@@ -65,21 +64,17 @@ function sendRequestWithPayload(http:Client httpClient, string path, json jsonPa
     if (jsonPayload != ()) {
         httpRequest.setJsonPayload(<@untainted>jsonPayload);
     }
-    var httpResponse = httpClient->post(<@untainted>path, httpRequest);
-    if (httpResponse is http:Response) {
-        int statusCode = httpResponse.statusCode;
-        json | http:ClientError jsonResponse = httpResponse.getJsonPayload();
-        if (jsonResponse is json) {
-            error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
-            if (validateStatusCodeRes is error) {
-                return validateStatusCodeRes;
-            }
-            return jsonResponse;
-        } else {
-            return getDriveError(jsonResponse);
+    http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);
+    int statusCode = httpResponse.statusCode;
+    json | http:ClientError jsonResponse = httpResponse.getJsonPayload();
+    if (jsonResponse is json) {
+        error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
+        if (validateStatusCodeRes is error) {
+            return validateStatusCodeRes;
         }
+        return jsonResponse;
     } else {
-        return getDriveError(<json|error>httpResponse);
+        return getDriveError(jsonResponse);
     }
 }
 
@@ -94,21 +89,17 @@ function updateRequestWithPayload(http:Client httpClient, string path, json json
     if (jsonPayload != ()) {
         httpRequest.setJsonPayload(<@untainted>jsonPayload);
     }
-    var httpResponse = httpClient->patch(<@untainted>path, httpRequest);
-    if (httpResponse is http:Response) {
-        int statusCode = httpResponse.statusCode;
-        json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
-        if (jsonResponse is json) {
-            error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
-            if (validateStatusCodeRes is error) {
-                return validateStatusCodeRes;
-            }
-            return jsonResponse;
-        } else {
-            return getDriveError(jsonResponse);
+    http:Response httpResponse = <http:Response> check httpClient->patch(<@untainted>path, httpRequest);
+    int statusCode = httpResponse.statusCode;
+    json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
+    if (jsonResponse is json) {
+        error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
+        if (validateStatusCodeRes is error) {
+            return validateStatusCodeRes;
         }
+        return jsonResponse;
     } else {
-        return getDriveError(<json|error>httpResponse);
+        return getDriveError(jsonResponse);
     }
 }
 
@@ -123,21 +114,17 @@ function uploadRequestWithPayload(http:Client httpClient, string path, json json
     if (jsonPayload != ()) {
         httpRequest.setJsonPayload(<@untainted>jsonPayload);
     }
-    var httpResponse = httpClient->post(<@untainted>path, httpRequest);
-    if (httpResponse is http:Response) {
-        int statusCode = httpResponse.statusCode;
-        json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
-        if (jsonResponse is json) {
-            error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
-            if (validateStatusCodeRes is error) {
-                return validateStatusCodeRes;
-            }
-            return jsonResponse;
-        } else {
-            return getDriveError(jsonResponse);
+    http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);
+    int statusCode = httpResponse.statusCode;
+    json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
+    if (jsonResponse is json) {
+        error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
+        if (validateStatusCodeRes is error) {
+            return validateStatusCodeRes;
         }
+        return jsonResponse;
     } else {
-        return getDriveError(<json|error>httpResponse);
+        return getDriveError(jsonResponse);
     }
 }
 
@@ -436,21 +423,17 @@ function uploadFiles(http:Client httpClient, string path, string filePath) retur
     byte[] fileContentByteArray = check io:fileReadBytes(filePath);
     httpRequest.setHeader(CONTENT_LENGTH ,fileContentByteArray.length().toString());
     httpRequest.setBinaryPayload(<@untainted> fileContentByteArray);
-    var httpResponse = httpClient->post(<@untainted>path, httpRequest);     
-    if (httpResponse is http:Response) {
-        int statusCode = httpResponse.statusCode;
-        json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
-        if (jsonResponse is json) {
-            error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
-            if (validateStatusCodeRes is error) {
-                return validateStatusCodeRes;
-            }
-            return jsonResponse;
-        } else {
-            return getDriveError(jsonResponse);
+    http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);     
+    int statusCode = httpResponse.statusCode;
+    json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
+    if (jsonResponse is json) {
+        error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
+        if (validateStatusCodeRes is error) {
+            return validateStatusCodeRes;
         }
+        return jsonResponse;
     } else {
-        return getDriveError(<json|error>httpResponse);
+        return getDriveError(jsonResponse);
     }
 }
 
@@ -463,8 +446,7 @@ function uploadFileWithByteArray(http:Client httpClient, string path, byte[] byt
     http:Request httpRequest = new;
     httpRequest.setHeader(CONTENT_LENGTH ,byteArray.length().toString());
     httpRequest.setBinaryPayload(<@untainted> byteArray);
-    var httpResponse = httpClient->post(<@untainted>path, httpRequest);
-    if (httpResponse is http:Response) {
+    http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);
         int statusCode = httpResponse.statusCode;
         json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
         if (jsonResponse is json) {
@@ -476,9 +458,6 @@ function uploadFileWithByteArray(http:Client httpClient, string path, byte[] byt
         } else {
             return getDriveError(jsonResponse);
         }
-    } else {
-        return getDriveError(<json|error>httpResponse);
-    }
 }
 
 # Get File ID from a File Response
@@ -498,35 +477,6 @@ isolated function getIdFromFileResponse(File|error file) returns string {
         }
     }
     return fileOrFolderId;
-}
-
-# Check HTTP response and return JSON payload on success else an error.
-# 
-# + httpResponse - HTTP respone or HTTP payload or error
-# + return - JSON result on success else an error
-isolated function checkAndSetErrors(http:Response|http:PayloadType|error httpResponse) returns @tainted json|error {
-    if (httpResponse is http:Response) {
-        if (httpResponse.statusCode == http:STATUS_OK || httpResponse.statusCode == http:STATUS_CREATED) {
-            json|error jsonResponse = httpResponse.getJsonPayload();
-            if (jsonResponse is json) {
-                return jsonResponse;
-            } else {
-                return error(JSON_ACCESSING_ERROR_MSG, jsonResponse);
-            }
-        } else if (httpResponse.statusCode == http:STATUS_NO_CONTENT) {
-            return {};
-        } else {
-            json|error jsonResponse = httpResponse.getJsonPayload();
-            if (jsonResponse is json) {
-                json err = check jsonResponse.'error.message;
-                return error(HTTP_ERROR_MSG + err.toString());
-            } else {
-                return error(ERR_EXTRACTING_ERROR_MSG, jsonResponse);
-            }
-        }
-    } else {
-        return error(HTTP_ERROR_MSG + (<error>httpResponse).message());
-    }
 }
 
 # Gets information about the user, the user's Drive, and system capabilities.
