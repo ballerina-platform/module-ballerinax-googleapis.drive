@@ -249,6 +249,28 @@ function testGetFiles() {
     }
 }
 
+###################
+# Search files 
+# #################
+
+@test:Config {}
+function testSearchFiles() {
+    log:print("Gdrive Client -> testSearchFiles()");
+    ListFilesOptional optionalSearch = {
+        q: "name = 'hello'" // Get Files with name 'hello'
+    };
+    stream<File>|error response = driveClient->getFiles(optionalSearch);
+    if (response is stream<File>){
+        error? e = response.forEach(isolated function (File response) {
+            test:assertNotEquals(response?.id, "", msg = "Expect File id");
+            log:print(response?.id.toString());
+        });
+    } else {
+        test:assertFail(response.message());
+        log:printError(response.message());
+    }
+}
+
 ##############
 # Upload File
 # ############
