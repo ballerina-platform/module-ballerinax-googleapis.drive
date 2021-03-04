@@ -101,11 +101,11 @@ public type About record {
 #             list responses returned for any user who does not own the file. 
 #             However, all users with access to the file can see the trashed item metadata in an API response. 
 #             All users with access can copy, download, export, and share the file.  
-# + parents -  The IDs of the parent folders which contain the file. If not specified as part of a create request, 
-#              the file will be placed directly in the user's My Drive folder. 
-#              If not specified as part of a copy request, 
-#              the file will inherit any discoverable parents of the source file. 
-#              Update requests must use the addParents and removeParents parameters to modify the parents list.
+# + parents - The IDs of the parent folders which contain the file. If not specified as part of a create request, 
+#             the file will be placed directly in the user's My Drive folder. 
+#             If not specified as part of a copy request, 
+#             the file will inherit any discoverable parents of the source file. 
+#             Update requests must use the addParents and removeParents parameters to modify the parents list.
 # + appProperties - A collection of arbitrary key-value pairs which are private to the requesting app.  
 # + folderColorRgb - The color for a folder as an RGB hex string. 
 #                    The supported colors are published in the folderColorPalette field of the About resource.  
@@ -390,17 +390,17 @@ public type DeleteFileOptional record {
 # Creates a copy of a file and applies any requested updates with patch semantics. Folders cannot be copied.
 #
 # + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
-# + keepRevisionForever -   Whether to set the 'keepForever' field in the new head revision. 
-#                           This is only applicable to files with binary content in Google Drive. 
-#                           Only 200 revisions for the file can be kept forever. If the limit is reached,
-#                           try deleting pinned revisions. (Default: false)
-# + ignoreDefaultVisibility -  Whether to ignore the domain's default visibility settings for the created file. 
-#                              Domain administrators can choose to make all uploaded files 
-#                              visible to the domain by default; 
-#                              this parameter bypasses that behavior for the request. 
-#                              Permissions are still inherited from parent folders. (Default: false) 
-# + includePermissionsForView -  Specifies which additional view's permissions to include in the response. 
-#                                Only 'published' is supported. 
+# + keepRevisionForever -  Whether to set the 'keepForever' field in the new head revision. 
+#                          This is only applicable to files with binary content in Google Drive. 
+#                          Only 200 revisions for the file can be kept forever. If the limit is reached,
+#                          try deleting pinned revisions. (Default: false)
+# + ignoreDefaultVisibility - Whether to ignore the domain's default visibility settings for the created file. 
+#                             Domain administrators can choose to make all uploaded files 
+#                             visible to the domain by default; 
+#                             this parameter bypasses that behavior for the request. 
+#                             Permissions are still inherited from parent folders. (Default: false) 
+# + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
+#                               Only 'published' is supported. 
 # + fields - The paths of the fields you want included in the response. 
 #            If not specified, the response includes a default set of fields 
 #            specific to this method. For development you can use the special value * to return all fields, 
@@ -417,22 +417,22 @@ public type CopyFileOptional record {
 
 # Optional Query Parameters in Create files
 #
-# + ocrLanguage -  A language hint for OCR processing during image import (ISO 639-1 code).
-# + keepRevisionForever -   Whether to set the 'keepForever' field in the new head revision. 
-#                           This is only applicable to files with binary content in Google Drive. 
-#                           Only 200 revisions for the file can be kept forever. If the limit is reached,
-#                           try deleting pinned revisions. (Default: false)
-# + useContentAsIndexableText -   Whether to use the uploaded content as indexable text. (Default: false)
-# + ignoreDefaultVisibility -  Whether to ignore the domain's default visibility settings for the created file. 
-#                              Domain administrators can choose to make all uploaded files visible to the 
-#                              domain by default; 
-#                              this parameter bypasses that behavior for the request. 
-#                              Permissions are still inherited from parent folders. (Default: false) 
-# + uploadType -   The type of upload request to the /upload URI. If you are uploading data (using an /upload URI), 
-#                  More details : https://developers.google.com/drive/api/v3/reference/files/create
-# + includePermissionsForView -  Specifies which additional view's permissions to include in the response. 
-#                                Only 'published' is supported. 
-# + supportsAllDrives -   Whether the requesting application supports both My Drives and shared drives. (Default: false)
+# + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
+# + keepRevisionForever - Whether to set the 'keepForever' field in the new head revision. 
+#                         This is only applicable to files with binary content in Google Drive. 
+#                         Only 200 revisions for the file can be kept forever. If the limit is reached,
+#                         try deleting pinned revisions. (Default: false)
+# + useContentAsIndexableText - Whether to use the uploaded content as indexable text. (Default: false)
+# + ignoreDefaultVisibility - Whether to ignore the domain's default visibility settings for the created file. 
+#                             Domain administrators can choose to make all uploaded files visible to the 
+#                             domain by default; 
+#                             this parameter bypasses that behavior for the request. 
+#                             Permissions are still inherited from parent folders. (Default: false) 
+# + uploadType - The type of upload request to the /upload URI. If you are uploading data (using an /upload URI), 
+#                More details : https://developers.google.com/drive/api/v3/reference/files/create
+# + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
+#                               Only 'published' is supported. 
+# + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)
 public type CreateFileOptional record {
     never uploadType?; 
     boolean? ignoreDefaultVisibility = ();
@@ -445,16 +445,16 @@ public type CreateFileOptional record {
 
 # Description
 #
-# + ocrLanguage -   A language hint for OCR processing during image import (ISO 639-1 code).
-# + removeParents -  A comma-separated list of parent IDs to remove. 
-# + keepRevisionForever -   Whether to set the 'keepForever' field in the new head revision. 
-#                           This is only applicable to files with binary content in Google Drive. 
-#                           Only 200 revisions for the file can be kept forever. If the limit is reached,
-#                           try deleting pinned revisions. (Default: false)
-# + useContentAsIndexableText -   Whether to use the uploaded content as indexable text. (Default: false)
-# + includePermissionsForView -   Specifies which additional view's permissions to include in the response. 
-#                                 Only 'published' is supported.
-# + addParents -   A comma-separated list of parent IDs to add.
+# + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
+# + removeParents - A comma-separated list of parent IDs to remove. 
+# + keepRevisionForever - Whether to set the 'keepForever' field in the new head revision. 
+#                         This is only applicable to files with binary content in Google Drive. 
+#                         Only 200 revisions for the file can be kept forever. If the limit is reached,
+#                         try deleting pinned revisions. (Default: false)
+# + useContentAsIndexableText - Whether to use the uploaded content as indexable text. (Default: false)
+# + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
+#                               Only 'published' is supported.
+# + addParents - A comma-separated list of parent IDs to add.
 # + supportsAllDrives -   
 public type UpdateFileMetadataOptional record {
    string? addParents = (); 
@@ -469,12 +469,12 @@ public type UpdateFileMetadataOptional record {
 # User Record
 #
 # + permissionId - The user's ID as visible in Permission resources.  
-# + emailAddress -  The email address of the user. This may not be present in certain contexts if the user has not made. 
+# + emailAddress - The email address of the user. This may not be present in certain contexts if the user has not made. 
 #                   their email address visible to the requester.
-# + kind -  Identifies what kind of resource this is. Value: the fixed string "drive#user". 
-# + displayName -   A plain text displayable name for this user.
-# + me -  Whether this user is the requesting user. 
-# + photoLink -   A link to the user's profile photo, if available.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#user". 
+# + displayName - A plain text displayable name for this user.
+# + me - Whether this user is the requesting user. 
+# + photoLink - A link to the user's profile photo, if available.
 public type User record {
     string kind;
     string displayName;
@@ -487,63 +487,63 @@ public type User record {
 #  	Capabilities the current user has on this file. 
 #   Each capability corresponds to a fine-grained action that a user may take.
 #
-# + canReadRevisions -   Whether the current user can read the revisions resource of this file. For a shared drive item, 
-#                        whether revisions of non-folder descendants of this item, 
+# + canReadRevisions - Whether the current user can read the revisions resource of this file. For a shared drive item, 
+#                      whether revisions of non-folder descendants of this item, 
 #                        or this item itself if it is not a folder, can be read.
-# + canMoveItemOutOfDrive -   Whether the current user can move this item outside of this drive by changing its parent. 
-#                             Note that a request to change the parent of the item may still fail depending on the new 
-#                             parent that is being added.
-# + canEdit -   Whether the current user can edit this file. 
-#               Other factors may limit the type of changes a user can make to a file. 
-#               For example, see canChangeCopyRequiresWriterPermission or canModifyContent.
-# + canRename -   Whether the current user can rename this file.
-# + canAddMyDriveParent -   Whether the current user can add a parent for the item without removing 
-#                           an existing parent in the same request. 
-#                           Not populated for shared drive files. 
-# + canTrashChildren -  Whether the current user can trash children of this folder. 
-#                       This is false when the item is not a folder. 
-#                       Only populated for items in shared drives. 
-# + canAddChildren -  Whether the current user can add children to this folder. 
-#                     This is always false when the item is not a folder. 
-# + canListChildren -   Whether the current user can list the children of this folder. 
-#                       This is always false when the item is not a folder.
-# + canTrash -   Whether the current user can move this file to trash.  
-# + canRemoveMyDriveParent -  Whether the current user can remove a parent from the item without adding 
-#                             another parent in the same request. 
-#                             Not populated for shared drive files. 
-# + canCopy -   Whether the current user can copy this file. For an item in a shared drive, 
-#               whether the current user can copy non-folder 
-#               descendants of this item, or this item itself if it is not a folder.
-# + canDownload -   Whether the current user can download this file.
-# + canDelete -  Whether the current user can delete this file. 
-# + canAddFolderFromAnotherDrive -  Whether the current user can add a folder from 
-#                                   another drive (different shared drive or My Drive) to this folder. 
-#                                   This is false when the item is not a folder. Only populated for items 
-#                                   in shared drives. 
+# + canMoveItemOutOfDrive - Whether the current user can move this item outside of this drive by changing its parent. 
+#                           Note that a request to change the parent of the item may still fail depending on the new 
+#                           parent that is being added.
+# + canEdit - Whether the current user can edit this file. 
+#             Other factors may limit the type of changes a user can make to a file. 
+#             For example, see canChangeCopyRequiresWriterPermission or canModifyContent.
+# + canRename - Whether the current user can rename this file.
+# + canAddMyDriveParent - Whether the current user can add a parent for the item without removing 
+#                         an existing parent in the same request. 
+#                         Not populated for shared drive files. 
+# + canTrashChildren - Whether the current user can trash children of this folder. 
+#                      This is false when the item is not a folder. 
+#                      Only populated for items in shared drives. 
+# + canAddChildren - Whether the current user can add children to this folder. 
+#                    This is always false when the item is not a folder. 
+# + canListChildren -  Whether the current user can list the children of this folder. 
+#                      This is always false when the item is not a folder.
+# + canTrash - Whether the current user can move this file to trash.  
+# + canRemoveMyDriveParent - Whether the current user can remove a parent from the item without adding 
+#                            another parent in the same request. 
+#                            Not populated for shared drive files. 
+# + canCopy - Whether the current user can copy this file. For an item in a shared drive, 
+#             whether the current user can copy non-folder 
+#             descendants of this item, or this item itself if it is not a folder.
+# + canDownload - Whether the current user can download this file.
+# + canDelete - Whether the current user can delete this file. 
+# + canAddFolderFromAnotherDrive - Whether the current user can add a folder from 
+#                                  another drive (different shared drive or My Drive) to this folder. 
+#                                  This is false when the item is not a folder. Only populated for items 
+#                                  in shared drives. 
 # + canComment - Whether the current user can comment on this file.  
 # + canUntrash - Whether the current user can restore this file from trash.   
-# + canMoveChildrenWithinDrive -   Whether the current user can move children of this folder within this drive. 
-#                                  This is false when the item is not a folder. 
-#                                  Note that a request to move the child may still fail depending on the 
-#                                  current user's access to the child and to the destination folder
-# + canModifyContentRestriction -   Whether the current user can modify restrictions on content of this file  
-# + canChangeCopyRequiresWriterPermission -   Whether the current user can change the copyRequiresWriterPermission 
-#                                             restriction of this file.
-# + canMoveChildrenOutOfDrive -  Whether the current user can move children of this folder outside of the shared drive. 
-#                                This is false when the item is not a folder.Only populated for items in shared drives. 
-# + canReadDrive -  Whether the current user can read the shared drive to which this file belongs. 
-#                   Only populated for items in shared drives. 
-# + canShare -   Whether the current user can modify the sharing settings for this file.
-# + canDeleteChildren -   Whether the current user can delete children of this folder. 
-#                         This is false when the item is not a folder. 
-#                         Only populated for items in shared drives.
-# + canMoveItemWithinDrive -   Whether the current user can move this item within this drive. 
-#                              Note that a request to change the parent of the item may still fail 
-#                              depending on the new parent that is being added and the parent that is being removed. 
-# + canModifyContent -  	Whether the current user can modify the content of this file. 
-# + canRemoveChildren -   Whether the current user can remove children from this folder. 
-#                         This is always false when the item is not a folder. 
-#                         For a folder in a shared drive, use canDeleteChildren or canTrashChildren instead.   
+# + canMoveChildrenWithinDrive - Whether the current user can move children of this folder within this drive. 
+#                                This is false when the item is not a folder. 
+#                                Note that a request to move the child may still fail depending on the 
+#                                current user's access to the child and to the destination folder
+# + canModifyContentRestriction - Whether the current user can modify restrictions on content of this file  
+# + canChangeCopyRequiresWriterPermission - Whether the current user can change the copyRequiresWriterPermission 
+#                                           restriction of this file.
+# + canMoveChildrenOutOfDrive - Whether the current user can move children of this folder outside of the shared drive. 
+#                               This is false when the item is not a folder.Only populated for items in shared drives. 
+# + canReadDrive - Whether the current user can read the shared drive to which this file belongs. 
+#                  Only populated for items in shared drives. 
+# + canShare - Whether the current user can modify the sharing settings for this file.
+# + canDeleteChildren - Whether the current user can delete children of this folder. 
+#                       This is false when the item is not a folder. 
+#                       Only populated for items in shared drives.
+# + canMoveItemWithinDrive - Whether the current user can move this item within this drive. 
+#                            Note that a request to change the parent of the item may still fail 
+#                            depending on the new parent that is being added and the parent that is being removed. 
+# + canModifyContent - Whether the current user can modify the content of this file. 
+# + canRemoveChildren - Whether the current user can remove children from this folder. 
+#                       This is always false when the item is not a folder. 
+#                       For a folder in a shared drive, use canDeleteChildren or canTrashChildren instead.   
 public type Capabilities record {
     boolean	canAddChildren;
     boolean canAddFolderFromAnotherDrive;
@@ -577,25 +577,25 @@ public type Capabilities record {
 # A permission grants a user, group, domain or the world access to a file or a folder hierarchy.
 #
 # + role - The role granted by this permission.    
-# + kind -  Identifies what kind of resource this is. Value: the fixed string "drive#permission". 
-# + displayName -  The "pretty" name of the value of the permission.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#permission". 
+# + displayName - The "pretty" name of the value of the permission.
 # + emailAddress - The email address of the user or group to which this permission refers.  
-# + view -    	Indicates the view for this permission. 
-#               Only populated for permissions that belong to a view. published is the only supported value.
-# + deleted -   Whether the account associated with this permission has been deleted. 
-#               This field only pertains to user and group permissions.
-# + permissionDetails -  Details of whether the permissions on this shared drive item 
-#                        are inherited or directly on this item. 
-#                        This is an output-only field which is present only for shared drive items.
-# + expirationTime -   The time at which this permission will expire (RFC 3339 date-time). 
+# + view - Indicates the view for this permission. 
+#          Only populated for permissions that belong to a view. published is the only supported value.
+# + deleted - Whether the account associated with this permission has been deleted. 
+#             This field only pertains to user and group permissions.
+# + permissionDetails - Details of whether the permissions on this shared drive item 
+#                       are inherited or directly on this item. 
+#                       This is an output-only field which is present only for shared drive items.
+# + expirationTime - The time at which this permission will expire (RFC 3339 date-time). 
 # + domain - The domain to which this permission refers.  
-# + id -   The ID of this permission. This is a unique identifier for the grantee, 
-#          and is published in User resources as permissionId. 
-#          IDs should be treated as opaque values.
-# + photoLink -   A link to the user's profile photo, if available.
-# + type -  The type of the grantee.  
-# + allowFileDiscovery -  Whether the permission allows the file to be discovered through search. 
-#                         This is only applicable for permissions of type domain or anyone.
+# + id - The ID of this permission. This is a unique identifier for the grantee, 
+#        and is published in User resources as permissionId. 
+#        IDs should be treated as opaque values.
+# + photoLink - A link to the user's profile photo, if available.
+# + type - The type of the grantee.  
+# + allowFileDiscovery - Whether the permission allows the file to be discovered through search. 
+#                        This is only applicable for permissions of type domain or anyone.
 public type Permissions record {
     string kind;
     string id;
@@ -630,31 +630,32 @@ public type PermissionDetails record {
 
 # Optionals used in Lists or searches files.
 #
-# + includeItemsFromAllDrives -  Whether both My Drive and shared drive items. 
-#                                should be included in results. (Default: false).  
-# + q -  A query for filtering the file results. See the "Search for files" guide for the supported syntax. 
-# + driveId -  ID of the shared drive to search. 
-# + spaces -  A comma-separated list of spaces to query within the corpus. 
+# + includeItemsFromAllDrives - Whether both My Drive and shared drive items. 
+#                               should be included in results. (Default: false).  
+# + q - A query for filtering the file results. See the "Search for files" guide for the supported syntax.
+#       https://developers.google.com/drive/api/v3/search-files
+# + driveId - ID of the shared drive to search. 
+# + spaces - A comma-separated list of spaces to query within the corpus. 
 #             Supported values are 'drive', 'appDataFolder' and 'photos'.  
-# + corpora -  Groupings of files to which the query applies. 
-#              Supported groupings are: 'user' (files created by, opened by, or shared directly with the user),
-#              'drive' (files in the specified shared drive as indicated by the 'driveId'), 
-#              'domain' (files shared to the user's domain), and 'allDrives' 
-#              (A combination of 'user' and 'drive' for all drives where the user is a member). 
-#              When able, use 'user' or 'drive', instead of 'allDrives', for efficiency.  
+# + corpora - Groupings of files to which the query applies. 
+#             Supported groupings are: 'user' (files created by, opened by, or shared directly with the user),
+#             'drive' (files in the specified shared drive as indicated by the 'driveId'), 
+#             'domain' (files shared to the user's domain), and 'allDrives' 
+#             (A combination of 'user' and 'drive' for all drives where the user is a member). 
+#             When able, use 'user' or 'drive', instead of 'allDrives', for efficiency.  
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
 #                               Only 'published' is supported.
 # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 
 #             'modifiedByMeTime', 'modifiedTime', 'name', 
 #            'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', and 'viewedByMeTime'. 
 #             Each key sorts ascending by default, but may be reversed with the 'desc' modifier   
-# + pageSize -  The maximum number of files to return per page
-#               Partial or empty result pages are possible even before the end of the files list has been reached
-#               Acceptable values are 1 to 1000, inclusive. (Default: 100).  
-# + pageToken -   The token for continuing a previous list request on the next page
-#                 This should be set to the value of 'nextPageToken' from the previous response.
-# + fields -   The paths of the fields you want included in the response
-#              If not specified, the response includes a default set of fields specific to this method.
+# + pageSize - The maximum number of files to return per page
+#              Partial or empty result pages are possible even before the end of the files list has been reached
+#              Acceptable values are 1 to 1000, inclusive. (Default: 100).  
+# + pageToken - The token for continuing a previous list request on the next page
+#               This should be set to the value of 'nextPageToken' from the previous response.
+# + fields - The paths of the fields you want included in the response
+#            If not specified, the response includes a default set of fields specific to this method.
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false) 
 public type ListFilesOptional record {
     string? corpora = (); 
