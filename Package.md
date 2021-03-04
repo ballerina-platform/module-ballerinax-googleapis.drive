@@ -1,10 +1,10 @@
 # module-ballerinax-googleapis.drive
 Connector repository for Google Drive API V3.
 
-### Google Drive Connecter
+### Google drive connecter
 Connects to Google Drive from Ballerina.
 
-# Package Overview
+# Package overview
 The Google Drive connector allows you to access Google Drive operations through the Google Drive REST API. 
 It also allows you to create, retreive, search, and delete drive files and folders.
 
@@ -22,7 +22,7 @@ The HTTP client config has built-in support for OAuth 2.0. Google Drive uses OAu
 and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the 
 access token or the client ID, client secret, and refresh token.
 
-**Obtaining Tokens to Run the Sample**
+**Obtaining tokens to run the sample**
 
 1. Visit [Google API Console](https://console.developers.google.com), click **Create Project**, and 
 follow the wizard to create a new project.
@@ -50,7 +50,7 @@ clientSecret = "<client_secret>"
 refreshToken = "<refresh_token>"
 
 ```
-**Example Code**
+**Example code**
 
 Creating a drive:driveClient by giving the HTTP client config details. 
 
@@ -62,12 +62,13 @@ Creating a drive:driveClient by giving the HTTP client config details.
     configurable string clientId = ?;
     configurable string clientSecret = ?;
     configurable string refreshToken = ?;
+    configurable string refreshUrl = ?;
 
     Configuration config = {
         clientConfig: {
             clientId: clientId,
             clientSecret: clientSecret,
-            refreshUrl: REFRESH_URL,
+            refreshUrl: refreshUrl,
             refreshToken: refreshToken
         }
     };
@@ -76,7 +77,7 @@ Creating a drive:driveClient by giving the HTTP client config details.
 
 ```
 
-### Get File By Id
+### Get file by id
 More details : https://developers.google.com/drive/api/v3/reference/files/get
 ```ballerina
 
@@ -84,7 +85,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/get
 
 ```
 
-### Get File By Id with optionals
+### Get file by id with optionals
 More details : https://developers.google.com/drive/api/v3/reference/files/get
 ```ballerina
 
@@ -154,7 +155,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/copy
 
 ```
 
-### Update Metadata in a file
+### Update metadata in a file
 More details : https://developers.google.com/drive/api/v3/reference/files/update
 ```ballerina
     
@@ -170,7 +171,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 
 ```
 
-### Delete File by ID
+### Delete file by id
 More details : https://developers.google.com/drive/api/v3/reference/files/delete
 ```ballerina
     DeleteFileOptional delete_optional = {
@@ -181,7 +182,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/delete
     json | error res = driveClient->deleteFileById(fileId, delete_optional);
 ```
 
-### Create Folder with Metadata
+### Create folder with metadata
 More details : https://developers.google.com/drive/api/v3/reference/files/update
 ```ballerina
     CreateFileOptional optionals_create_folder = {
@@ -194,7 +195,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
     File|error res = driveClient->createMetaDataFile(optionals_create_folder, payload_create_folder);
 ```
 
-### Upload File
+### Upload file
 More details : https://developers.google.com/drive/api/v3/reference/files/create
 ```ballerina
     UpdateFileMetadataOptional optionals_ = {
@@ -208,7 +209,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/create
      File|error res = driveClient->uploadFile(filePath, optionals_, payload_);
 ```
 
-### Upload File Using a Byte Array
+### Upload file using a byte array
 More details : https://developers.google.com/drive/api/v3/reference/files/create
 ```ballerina
     UpdateFileMetadataOptional optionals_ = {
@@ -223,8 +224,8 @@ More details : https://developers.google.com/drive/api/v3/reference/files/create
     File|error res = driveClient->uploadFileUsingByteArray(byteArray, optionals_, payload_);
 ```
 
-#### How to Get a ID for a file or folder in Google drive
-1. Go to Gdrive https://drive.google.com/drive/u/0/my-drive
+#### How to get a id from a file or folder in Google drive
+1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
 2. Right click on a folder or file.
 3. Click 'Get link'. Then copy the link.
 4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
