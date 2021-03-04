@@ -50,7 +50,6 @@ public type About record {
     string[] folderColorPalette?;
     StringKeyValuePairs driveThemes?;
     boolean canCreateDrives?;
-
 };
 
 # File Record Type
@@ -204,7 +203,6 @@ public type File record {
     StringKeyValuePairs exportLinks?;
     ShortcutDetails shortcutDetails?;
     ContentRestrictions contentRestrictions?;
-
 };
  
 # Record Type to accpet string values  
@@ -533,7 +531,6 @@ public type User record {
 #                               This is false when the item is not a folder.Only populated for items in shared drives. 
 # + canReadDrive - Whether the current user can read the shared drive to which this file belongs. 
 #                  Only populated for items in shared drives. 
-# + canShare - Whether the current user can modify the sharing settings for this file.
 # + canDeleteChildren - Whether the current user can delete children of this folder. 
 #                       This is false when the item is not a folder. 
 #                       Only populated for items in shared drives.
@@ -541,9 +538,10 @@ public type User record {
 #                            Note that a request to change the parent of the item may still fail 
 #                            depending on the new parent that is being added and the parent that is being removed. 
 # + canModifyContent - Whether the current user can modify the content of this file. 
-# + canRemoveChildren - Whether the current user can remove children from this folder. 
-#                       This is always false when the item is not a folder. 
-#                       For a folder in a shared drive, use canDeleteChildren or canTrashChildren instead.   
+# + canRemoveChildren - Whether the current user can remove children from this folder. This is always false when the 
+#                       item is not a folder. For a folder in a shared drive, use canDeleteChildren or canTrashChildren 
+#                       instead.   
+# + canShare - Whether the current user can modify the sharing settings for this file.
 public type Capabilities record {
     boolean	canAddChildren;
     boolean canAddFolderFromAnotherDrive;
