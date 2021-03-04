@@ -50,7 +50,7 @@ function sendRequest(http:Client httpClient, string path) returns @tainted json|
 # + return - boolean or error if not suceeded, True if Deleted successfully.
 function deleteRequest(http:Client httpClient, string path) returns @tainted boolean|error {
     var httpResponse = httpClient->delete(<@untainted>path);
-    json resp = check checkAndSetErrors(httpResponse);
+    _ = check checkAndSetErrors(httpResponse);
     return true;
 }
 
@@ -654,10 +654,10 @@ function uploadFile(http:Client httpClient, string filePath, UpdateFileMetadataO
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);  
     json response = check uploadFiles(httpClient, path, filePath);  
     //update metadata
-    json|error respId = response.id;
+    json|error responseId = response.id;
     string fileId = EMPTY_STRING;
-    if (respId is json) {
-        fileId = respId.toString();
+    if (responseId is json) {
+        fileId = responseId.toString();
     }
     string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
     json payload = check fileMetadata.cloneWithType(json);
@@ -703,13 +703,12 @@ function getFiles(http:Client httpClient, ListFilesOptional? optional = ()) retu
 function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, UpdateFileMetadataOptional? optional = (), 
                                   File? fileMetadata = ()) returns @tainted File|error {    
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);
-    log:print(path.toString());
     json response = check uploadFileWithByteArray(httpClient, path, byteArray);
     //update metadata
-    json|error respId = response.id;
+    json|error responseId = response.id;
     string fileId = EMPTY_STRING;
-    if (respId is json) {
-        fileId = respId.toString();
+    if (responseId is json) {
+        fileId = responseId.toString();
     }
     string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
     json payload = check fileMetadata.cloneWithType(json);
