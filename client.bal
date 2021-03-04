@@ -33,14 +33,6 @@ public client class Client {
         });
     }
 
-    # Gets information about the user, the user's Drive, and system capabilities.
-    # 
-    # + fields - The paths of the fields you want included in the response
-    # + return - If successful, returns `About`. Else returns `error`
-    remote function getAbout(string? fields) returns @tainted About|error {
-        return getDriveInfo(self.httpClient , fields);
-    }
-
     # Retrieve file using the fileID.
     # 
     # + fileId - ID of the file to retreive
@@ -119,5 +111,13 @@ public client class Client {
     remote function uploadFileUsingByteArray(byte[] byteArray, UpdateFileMetadataOptional? optional = (), 
                                             File? fileMetadata = ()) returns @tainted File|error {
         return uploadFileUsingByteArray(self.httpClient, byteArray, optional, fileMetadata);
+    }
+
+    # Gets information about the user, the user's Drive, and system capabilities.
+    # 
+    # + fields - The paths of the fields you want included in the response
+    # + return - If successful, returns `About`. Else returns `error`
+    remote function getAbout(string? fields) returns @tainted About|error {
+        return getDriveInfo(self.httpClient , fields);
     }
 } 
