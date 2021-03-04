@@ -10,7 +10,7 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 ###################################################################################
 # Get files
 # ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/get
+# More details : https://developers.google.com/drive/api/v3/reference/files/list
 # #################################################################################
 
 public function main() {
@@ -26,11 +26,11 @@ public function main() {
 
     drive:Client driveClient = new (config);
 
-    drive:ListFilesOptional optional_search = {
+    drive:ListFilesOptional optionalSearch = {
         pageSize : 3
     };
     
-    stream<drive:File>|error res = driveClient->getFiles(optional_search);
+    stream<drive:File>|error res = driveClient->getFiles(optionalSearch);
     if (res is stream<drive:File>){
         error? e = res.forEach(function (drive:File file) {
             json|error jsonObject = file.cloneWithType(json);
