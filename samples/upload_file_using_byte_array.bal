@@ -1,9 +1,11 @@
 import ballerina/log;
-import ballerinax/googleapis_drive as drive;
+import ballerina/os;
+import nuwantissera/googleapis_drive as drive;
 
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshToken = ?;
+configurable string clientId = os:getEnv("CLIENT_ID");
+configurable string clientSecret = os:getEnv("CLIENT_SECRET");
+configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
+configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
 ###################################################
 # Upload file using Byte Array
@@ -17,7 +19,7 @@ public function main() {
         clientConfig: {
             clientId: clientId,
             clientSecret: clientSecret,
-            refreshUrl: REFRESH_URL,
+            refreshUrl: refreshUrl,
             refreshToken: refreshToken
         }
     };
@@ -27,18 +29,13 @@ public function main() {
     };
 
     drive:File payload = {
-        name : "test123.jpeg"
-    };
+        name : "SAMPLE_FILE"
+    };  
 
-    drive:File payload = {
-        mimeType : "application/vnd.google-apps.folder",
-        name : "folderInTheRoot"
-    };
     drive:Client driveClient = new (config);
     
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
 
-    // Issue : ballerina: too many arguments.
     drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, optionals, payload);
 
     //Print file ID
