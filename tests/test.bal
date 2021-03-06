@@ -66,7 +66,7 @@ function testdriveGetAbout() {
 }
 function testGetFileById() {
     log:print("Gdrive Client -> testGetFileById()");
-    File|error response = driveClient->getFileById(fileId);
+    File|error response = driveClient->getFile(fileId);
     if(response is File){
         test:assertNotEquals(response?.id, "", msg = "Expect File id");
         log:print(response?.id.toString());
@@ -76,16 +76,32 @@ function testGetFileById() {
     }
 }
 
+################
+# Download File
+# ##############
+
+@test:Config {
+    dependsOn: [testCreateFile]
+}
+function testDownloadFileById() {
+    log:print("Gdrive Client -> testDownloadFileById()");
+    string|error response = driveClient->downloadFile(fileId);
+    if(response is string){
+        test:assertNotEquals(response, "", msg = "Expect download URL link");
+        log:print(response);
+    } else {
+        test:assertFail(response.message());
+    }
+}
+
 #######################
 # Delete File by ID
 # #####################
 
-@test:Config {
-    dependsOn: [testCopyFile]
-}
+// @test:AfterSuite {}
 function testDeleteFileById(){
     log:print("Gdrive Client -> testDeleteFileById()");
-    boolean|error response = driveClient->deleteFileById(fileId);
+    boolean|error response = driveClient->deleteFile(fileId);
     if (response is boolean) {
         log:print("File Deleted");
         test:assertTrue(response, msg = "Expects true on success");
@@ -216,7 +232,6 @@ function testCreateFolder() {
 }
 function testCreateFile() {
     log:print("Gdrive Client -> testCreateFile()");
-    log:print(parentFolderId);
     File|error response = driveClient->createFile(fileName);
     // File|error response = driveClient->createFile(fileName, "application/vnd.google-apps.document");
     // File|error response = driveClient->createFile(fileName, "application/vnd.google-apps.document", parentFolderId);
@@ -232,48 +247,40 @@ function testCreateFile() {
     }
 }
 
-// ############################
-// # Create file with metadata
-// # #########################
-
-// @test:Config {
-//     dependsOn: [testCreateFolder]
-// }
-// function testMetadataFile() {
-//     log:print("Gdrive Client -> testCreateFile()");
-//     CreateFileOptional optionalsCreateFile = {
-//         ignoreDefaultVisibility : false
-//     };
-//     File payloadCreateFile = {
-//         mimeType : "application/vnd.google-apps.document",
-//         name : fileName,
-//         description : "hello"
-//     };
-//     File|error response = driveClient->createMetaDataFile(optionalsCreateFile, payloadCreateFile);
-//     //Assertions
-//     if(response is File){
-//         test:assertNotEquals(response?.id, "", msg = "Expect File id");
-//         log:print(response?.id.toString());
-//         //Set variable fileId for other unit tests
-//         fileId = response?.id.toString();
-//     } else {
-//         test:assertFail(response.message());
-//         log:printError(response.message());
-//     }
-// }
-
 ###################
 # Get files
 # #################
 
 @test:Config {}
-function testGetFiles() { //check for trash
+function testGetFiles() { 
     log:print("Gdrive Client -> testGetFiles()");
     ListFilesOptional optionalSearch = {
         pageSize : 3,
         orderBy : "createdTime"
     };
     stream<File>|error response = driveClient->getFiles(optionalSearch);
+    if (response is stream<File>){
+        error? e = response.forEach(isolated function (File response) {
+            test:assertNotEquals(response?.id, "", msg = "Expect File id");
+            log:print(response?.id.toString());
+        });
+    } else {
+        test:assertFail(response.message());
+        log:printError(response.message());
+    }
+}
+
+###################
+# Filter files
+# #################
+
+@test:Config {}
+function testFilterFiles() { 
+    log:print("Gdrive Client -> testFilterFiles()");
+    string filterString = "name contains 'hello'";
+    // stream<File>|error response = driveClient->filterFiles(filterString);
+    // stream<File>|error response = driveClient->filterFiles(filterString, 2);
+    stream<File>|error response = driveClient->filterFiles(filterString, 4, "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");

@@ -39,9 +39,19 @@ public client class Client {
     # 
     # + fileId - ID of the file to retreive
     # + return - If successful, returns `File`. Else returns `error`
-    remote function getFileById(string fileId) returns @tainted File|error {
+    remote function getFile(string fileId) returns @tainted File|error {
         GetFileOptional optional = {supportsAllDrives : true};
         return getFileById(self.httpClient , fileId, optional);
+    }
+
+    # Download file using the fileID.
+    # 
+    # + fileId - ID of the file to retreive
+    # + return - If successful, returns `string`. Else returns `error`
+    remote function downloadFile(string fileId) returns @tainted string|error {
+        GetFileOptional optional = {supportsAllDrives : true, fields : "webContentLink"};
+        File fileResponse = check getFileById(self.httpClient , fileId, optional);
+        return fileResponse?.webContentLink.toString();
     }
 
     # Retrieve files.
@@ -49,6 +59,29 @@ public client class Client {
     # + optional - 'ListFilesOptional' used to add query parameters to the request
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     remote function getFiles(ListFilesOptional? optional = ()) returns @tainted stream<File>|error {
+        return getFiles(self.httpClient, optional);
+    }
+
+    # Filter and retreive files using filter string
+    # 
+    # + filterString - Query used to find what you need. Read documentation for query string patterns.
+    # + noOfFiles - Number of files to retreive 
+    # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
+    #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
+    #              and 'viewedByMeTime'
+    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    remote function filterFiles(string filterString, int? noOfFiles = (), string? orderBy = ()) returns @tainted 
+                                stream<File>|error {
+        ListFilesOptional optional = {};
+        optional.q = filterString;
+        optional.supportsAllDrives = true;
+        optional.includeItemsFromAllDrives = true;
+        if (noOfFiles is int){
+            optional.pageSize = noOfFiles;
+        }
+        if (orderBy is string){
+            optional.orderBy = orderBy;
+        }
         return getFiles(self.httpClient, optional);
     }
 
@@ -200,7 +233,7 @@ public client class Client {
     # 
     # + fileId - ID of the file to delete
     # + return - If successful, returns `boolean` as true. Else returns `error`
-    remote function deleteFileById(string fileId) returns @tainted boolean|error {
+    remote function deleteFile(string fileId) returns @tainted boolean|error {
         DeleteFileOptional deleteOptional = {supportsAllDrives : true};
         return deleteFileById(self.httpClient, fileId, deleteOptional);
     }
