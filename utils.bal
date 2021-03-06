@@ -600,11 +600,22 @@ function uploadFile(http:Client httpClient, string filePath, File? fileMetadata 
 # + httpClient - The HTTP Client
 # + optional - 'ListFilesOptional' used to add query parameters to the request
 # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-function getFiles(http:Client httpClient, ListFilesOptional? optional = ()) returns @tainted stream<File>|error {
-    string path = prepareUrlwithFileListOptional(optional);
-    json response = check sendRequest(httpClient, path);
+function getFiles(http:Client httpClient, ListFilesOptional? optional) returns @tainted stream<File>|error {
     File[] files = [];
-    FilesResponse|error res = response.cloneWithType(FilesResponse);
+    return getFilesStream(httpClient, files, optional);
+}
+
+# Get files stream.
+# 
+# + httpClient - The HTTP Client
+# + files - File array
+# + optional - 'ListFilesOptional' used to add query parameters to the request
+# + return - File stream on success, else an error
+function getFilesStream(http:Client httpClient, @tainted File[] files, ListFilesOptional? optional = ()) 
+                            returns @tainted stream<File>|error {
+    string path = prepareUrlwithFileListOptional(optional);
+    json resp = check sendRequest(httpClient, path);
+    FilesResponse|error res = resp.cloneWithType(FilesResponse);
     if (res is FilesResponse) {
         int i = files.length();
         foreach File item in res.files {
@@ -612,6 +623,12 @@ function getFiles(http:Client httpClient, ListFilesOptional? optional = ()) retu
             i = i + 1;
         }        
         stream<File> filesStream = (<@untainted>files).toStream();
+        string? nextPageToken = res?.nextPageToken;
+        if (nextPageToken is string && optional is ListFilesOptional && optional.pageToken is () && 
+                optional.pageSize is ()) {
+            optional.pageToken = nextPageToken;
+            var streams = check getFilesStream(httpClient, files, optional);
+        }
         return filesStream;
     } else {
         return error(ERR_FILE_RESPONSE, res);

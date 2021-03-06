@@ -299,9 +299,9 @@ function testFilterFiles() {
 @test:Config {}
 function testGetFilesByName() {
     log:print("Gdrive Client -> testGetFilesByName()");
-    // stream<File>|error response = driveClient->getFilesByName("ballerina");
+    stream<File>|error response = driveClient->getFilesByName("ballerina");
     // stream<File>|error response = driveClient->getFilesByName("ballerina", 2);
-    stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -326,7 +326,7 @@ function testGetFoldersByName() {
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
-            log:print(response?.id.toString());
+            log:print(response?.name.toString());
         });
     } else {
         test:assertFail(response.message());
@@ -334,6 +334,25 @@ function testGetFoldersByName() {
     }
 }
 
+
+#############################
+# Get All Google spreadsheets 
+# ###########################
+
+@test:Config {}
+function testGetAllSpreadsheets() {
+    log:print("Gdrive Client -> testGetAllSpreadsheets()");
+    stream<File>|error response = driveClient->getAllSpreadsheets();
+    if (response is stream<File>){
+        error? e = response.forEach(isolated function (File response) {
+            test:assertNotEquals(response?.id, "", msg = "Expect File id");
+            log:print(response?.id.toString());
+        });
+    } else {
+        test:assertFail(response.message());
+        log:printError(response.message());
+    }
+}
 
 ######################################################
 # Search Google spreadsheets by name (Partial search)
@@ -364,7 +383,7 @@ function testSpreadsheetsByName() {
 function testDocumentsByName() {
     log:print("Gdrive Client -> testDocumentsByName()");
     stream<File>|error response = driveClient->getDocumentsByName("ballerina");
-    // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 2);
+    // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 3);
     // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 2, "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {

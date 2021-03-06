@@ -106,6 +106,18 @@ public client class Client {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
+    } 
+
+    # Retrieve all Google spreadsheets
+    # 
+    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    remote function getAllSpreadsheets() returns @tainted stream<File>|error {
+        ListFilesOptional optional = {};
+        string searchString = string `trashed = false and mimeType = 'application/vnd.google-apps.spreadsheet'`;
+        optional.q = searchString;
+        optional.supportsAllDrives = true;
+        optional.includeItemsFromAllDrives = true;
+        return getFiles(self.httpClient, optional);
     }
 
     # Retrieve Google spreadsheets by Name
