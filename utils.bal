@@ -460,25 +460,6 @@ function uploadFileWithByteArray(http:Client httpClient, string path, byte[] byt
         }
 }
 
-# Get File ID from a File Response
-# 
-# + file - file or error
-# + return - retuens a a 'string' value 
-isolated function getIdFromFileResponse(File|error file) returns string {
-    string fileOrFolderId = EMPTY_STRING;
-    if(file is File){
-        json|error created_response = file.cloneWithType(json); 
-        if (created_response is json){
-            json|error id = created_response.id;
-            if(id is json) {
-                log:print(id.toString());   
-                return <@untainted> id.toString();
-            }
-        }
-    }
-    return fileOrFolderId;
-}
-
 # Gets information about the user, the user's Drive, and system capabilities.
 # 
 # + httpClient - The HTTP Client 
@@ -557,8 +538,8 @@ function copyFile(http:Client httpClient, string fileId, CopyFileOptional? optio
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
 # + fileResource - 'File' can added as a payload to change metadata
 # + return - If successful, returns `File`. Else returns `error`
-function updateFileById(http:Client httpClient, string fileId, UpdateFileMetadataOptional? optional = (), 
-                        File? fileResource = ()) returns @tainted File|error {
+function updateFileById(http:Client httpClient, string fileId, File? fileResource = (), 
+                            UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
     json payload = check fileResource.cloneWithType(json);
     string path = prepareUrlWithUpdateOptional(fileId, optional);
     json response = check updateRequestWithPayload(httpClient, path, payload);
@@ -576,7 +557,7 @@ function updateFileById(http:Client httpClient, string fileId, UpdateFileMetadat
 # + optional - 'CreateFileOptional' used to add query parameters to the request
 # + fileData - 'File' Metadata is send to in the payload 
 # + return - If successful, returns `File`. Else returns `error`
-function createMetaDataFile(http:Client httpClient, CreateFileOptional? optional = (), File? fileData = ()) 
+function createMetaDataFile(http:Client httpClient, File? fileData = (), CreateFileOptional? optional = ()) 
                                 returns @tainted File|error {
     json payload = check fileData.cloneWithType(json);
     string path = prepareUrlwithMetadataFileOptional(optional);
@@ -596,16 +577,13 @@ function createMetaDataFile(http:Client httpClient, CreateFileOptional? optional
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
 # + fileMetadata - 'File' Metadata is send to in the payload 
 # + return - If successful, returns `File`. Else returns `error`
-function uploadFile(http:Client httpClient, string filePath, UpdateFileMetadataOptional? optional = (), 
-                                File? fileMetadata = ()) returns @tainted File|error {    
+function uploadFile(http:Client httpClient, string filePath, File? fileMetadata = (), 
+                        UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {    
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);  
     json response = check uploadFiles(httpClient, path, filePath);  
     //update metadata
-    json|error responseId = response.id;
-    string fileId = EMPTY_STRING;
-    if (responseId is json) {
-        fileId = responseId.toString();
-    }
+    json responseId = check response.id;
+    string fileId = responseId.toString();
     string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
     json payload = check fileMetadata.cloneWithType(json);
     json changeResponse = check updateRequestWithPayload(httpClient, newFileUrl, payload);
@@ -647,8 +625,8 @@ function getFiles(http:Client httpClient, ListFilesOptional? optional = ()) retu
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
 # + fileMetadata - 'File' Metadata is send to in the payload 
 # + return - If successful, returns `File`. Else returns `error`
-function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, UpdateFileMetadataOptional? optional = (), 
-                                  File? fileMetadata = ()) returns @tainted File|error {    
+function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, File? fileMetadata = (), 
+                                    UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {    
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);
     json response = check uploadFileWithByteArray(httpClient, path, byteArray);
     //update metadata
