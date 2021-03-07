@@ -197,7 +197,6 @@ Creating a drive:driveClient by giving the HTTP client config details.
     stream<File>|error response = driveClient->getSlidesByName("ballerina", 2, "createdTime");
 ```
 ### Update metadata in a file
-More details : https://developers.google.com/drive/api/v3/reference/files/update
 ```ballerina
     UpdateFileMetadataOptional optionalsFileMetadata = {
         addParents : parentFolder
@@ -233,9 +232,9 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 ```
 
 ### Upload file using a byte array
-More details : https://developers.google.com/drive/api/v3/reference/files/create
 ```ballerina
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
+    File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
 ```
 #### How to get a id from a file or folder in Google drive
