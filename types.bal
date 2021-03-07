@@ -245,8 +245,8 @@ public type ContentRestrictions record {
 # + targetMimeType - The MIME type of the file that this shortcut points to. The value of this field is a snapshot of 
 #                    the target's MIME type, captured when the shortcut is created.  
 public type ShortcutDetails record {
-    string targetId;
-    string targetMimeType;
+    string targetId?;
+    string targetMimeType?;
 };
 
 # Additional metadata about video media. This may not be available immediately upon upload.
@@ -255,9 +255,9 @@ public type ShortcutDetails record {
 # + durationMillis - The duration of the video in milliseconds.  
 # + height - The height of the video in pixels.  
 public type VideoMediaMetadata record {
-    int width;
-    int height;
-    float durationMillis;
+    int width?;
+    int height?;
+    float durationMillis?;
 };
 
 # Additional metadata about image media, if available.
@@ -284,27 +284,27 @@ public type VideoMediaMetadata record {
 # + height - The height of the image in pixels.
 # + focalLength - The focal length used to create the photo, in millimeters.
 public type ImageMediaMetadata record {
-    int width;
-    int height;
-    int rotation;
-    Location location;
-    string time;
-    string cameraMake;
-    string cameraModel;
-    int exposureTime;
-    int aperture;
-    boolean flashUsed;
-    int focalLength;
-    int isoSpeed;
-    string meteringMode;
-    string sensor;
-    string exposureMode;
-    string colorSpace;
-    string whiteBalance;
-    int exposureBias;
-    int maxApertureValue;
-    int subjectDistance;
-    string lens;
+    int width?;
+    int height?;
+    int rotation?;
+    Location location?;
+    string time?;
+    string cameraMake?;
+    string cameraModel?;
+    int exposureTime?;
+    int aperture?;
+    boolean flashUsed?;
+    int focalLength?;
+    int isoSpeed?;
+    string meteringMode?;
+    string sensor?;
+    string exposureMode?;
+    string colorSpace?;
+    string whiteBalance?;
+    int exposureBias?;
+    int maxApertureValue?;
+    int subjectDistance?;
+    string lens?;
 };
 
 # Geographic location information stored in the image.
@@ -313,9 +313,9 @@ public type ImageMediaMetadata record {
 # + latitude - The latitude stored in the image  
 # + longitude - The longitude stored in the image.  
 public type Location record {
-    float latitude; 
-    float longitude; 
-    float altitude;
+    float latitude?; 
+    float longitude?; 
+    float altitude?;
 };
 
 # Additional information about the content of the file. These fields are never populated in responses.
@@ -324,8 +324,8 @@ public type Location record {
 # + indexableText - Text to be indexed for the file to improve fullText queries. 
 #                   This is limited to 128KB in length and may contain HTML elements.  
 public type ContentHints record {
-    Thumbnail thumbnail;
-    string indexableText;
+    Thumbnail thumbnail?;
+    string indexableText?;
 };
 
 # A thumbnail for the file. This will only be used if Google Drive cannot generate a standard thumbnail.
@@ -333,8 +333,8 @@ public type ContentHints record {
 # + image - The thumbnail data encoded with URL-safe Base64 (RFC 4648 section 5). 
 # + mimeType - The MIME type of the thumbnail.  
 public type Thumbnail record {
-    byte image;
-    string mimeType;
+    byte image?;
+    string mimeType?;
 };
 
 # Response from File search 
@@ -354,7 +354,7 @@ public type Thumbnail record {
 public type FilesResponse record {
     string kind;
     string nextPageToken?;
-    boolean incompleteSearch;
+    boolean incompleteSearch?;
     File[] files;
 };
 
@@ -364,16 +364,16 @@ public type FilesResponse record {
 #                      This is only applicable when alt=media. (Default: false)  
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
 #                               Only 'published' is supported. 
-# + fields - The paths of the fields you want included in the response. 
+# + fields ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssThe paths of the fields you want included in the response. 
 #            If not specified, the response includes a default set of fields specific to this method. For development 
 #            you can use the special value * to return all fields, but you'll achieve greater performance by only 
 #            selecting the fields you need  
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 public type GetFileOptional record {
-    boolean? acknowledgeAbuse = ();
-    string? fields = ();
-    string? includePermissionsForView = ();
-    boolean? supportsAllDrives = ();
+    boolean acknowledgeAbuse?;
+    string fields?;
+    string includePermissionsForView?;
+    boolean supportsAllDrives?;
 };
 
 # Optional Query Parameters in DELETE files
@@ -381,7 +381,7 @@ public type GetFileOptional record {
 #
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 public type DeleteFileOptional record {
-    boolean? supportsAllDrives = ();
+    boolean supportsAllDrives?;
 };
 
 # Optional Query Parameters in COPY files
@@ -405,12 +405,12 @@ public type DeleteFileOptional record {
 #            but you'll achieve greater performance by only selecting the fields you need   
 # + supportsAllDrives -   Whether the requesting application supports both My Drives and shared drives.(Default: false)
 public type CopyFileOptional record {
-    string? fields = ();
-    boolean? ignoreDefaultVisibility = ();
-    string? includePermissionsForView = ();
-    boolean? keepRevisionForever = ();
-    string? ocrLanguage = ();
-    boolean? supportsAllDrives = ();
+    string fields?;
+    boolean ignoreDefaultVisibility?;
+    string includePermissionsForView?;
+    boolean keepRevisionForever?;
+    string ocrLanguage?;
+    boolean supportsAllDrives?;
 };
 
 # Optional Query Parameters in Create files
@@ -433,12 +433,12 @@ public type CopyFileOptional record {
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)
 public type CreateFileOptional record {
     never uploadType?; 
-    boolean? ignoreDefaultVisibility = ();
-    string? includePermissionsForView = (); 
-    boolean? keepRevisionForever = (); 
-    string? ocrLanguage = ();  
-    boolean? supportsAllDrives = (); 
-    boolean? useContentAsIndexableText = (); 
+    boolean ignoreDefaultVisibility?;
+    string includePermissionsForView?; 
+    boolean keepRevisionForever?; 
+    string ocrLanguage?;  
+    boolean supportsAllDrives?; 
+    boolean useContentAsIndexableText?; 
 };
 
 # Description
@@ -455,13 +455,13 @@ public type CreateFileOptional record {
 # + addParents - A comma-separated list of parent IDs to add.
 # + supportsAllDrives -   
 public type UpdateFileMetadataOptional record {
-   string? addParents = (); 
-   string? includePermissionsForView = (); 
-   boolean? keepRevisionForever = (); 
-   string? ocrLanguage = (); 
-   string? removeParents = (); 
-   boolean? supportsAllDrives = (); 
-   boolean? useContentAsIndexableText = (); 
+   string addParents?; 
+   string includePermissionsForView?; 
+   boolean keepRevisionForever?; 
+   string ocrLanguage?; 
+   string removeParents?; 
+   boolean supportsAllDrives?; 
+   boolean useContentAsIndexableText?; 
 };
 
 # User Record
@@ -474,16 +474,16 @@ public type UpdateFileMetadataOptional record {
 # + me - Whether this user is the requesting user. 
 # + photoLink - A link to the user's profile photo, if available.
 public type User record {
-    string kind;
-    string displayName;
-    string photoLink;
-    boolean me;
-    string permissionId;
-    string emailAddress;
+    string kind?;
+    string displayName?;
+    string photoLink?;
+    boolean me?;
+    string permissionId?;
+    string emailAddress?;
 };
 
-#  	Capabilities the current user has on this file. 
-#   Each capability corresponds to a fine-grained action that a user may take.
+# Capabilities the current user has on this file. 
+# Each capability corresponds to a fine-grained action that a user may take.
 #
 # + canReadRevisions - Whether the current user can read the revisions resource of this file. For a shared drive item, 
 #                      whether revisions of non-folder descendants of this item, 
@@ -543,7 +543,7 @@ public type User record {
 #                       instead.   
 # + canShare - Whether the current user can modify the sharing settings for this file.
 public type Capabilities record {
-    boolean	canAddChildren;
+    boolean	canAddChildren?;
     boolean canAddFolderFromAnotherDrive;
     boolean canAddMyDriveParent;
     boolean canChangeCopyRequiresWriterPermission;
@@ -656,16 +656,30 @@ public type PermissionDetails record {
 #            If not specified, the response includes a default set of fields specific to this method.
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false) 
 public type ListFilesOptional record {
-    string? corpora = (); 
-    string? driveId = ();
-    string? fields = (); 
-    boolean? includeItemsFromAllDrives = (); 
-    string? includePermissionsForView = ();  
-    string? orderBy = (); 
-    int? pageSize = (); 
-    string? pageToken = ();
-    string? q = ();
-    string? spaces = ();
-    boolean? supportsAllDrives = ();
+    string corpora?; 
+    string driveId?;
+    string fields?; 
+    boolean includeItemsFromAllDrives?; 
+    string includePermissionsForView?;  
+    string orderBy?; 
+    int pageSize?; 
+    string pageToken?;
+    string q?;
+    string spaces?;
+    boolean supportsAllDrives?;
 };
 
+# Mime types for file operations
+# 
+# + DOCS - Google documents MIME type
+# + SHEETS - Google spreadsheets MIME type
+# + SLIDES - Google presentations MIME type
+# + FORMS - Google Forms MIME type
+# + FOLDERS - Folder MIME type
+enum MimeTypes {
+    DOCS = "'application/vnd.google-apps.document'",
+    SHEETS = "'application/vnd.google-apps.spreadsheet'",
+    SLIDES = "'application/vnd.google-apps.presentation'",
+    FORMS = "'application/vnd.google-apps.form'",
+    FOLDERS = "'application/vnd.google-apps.folder'"
+}
