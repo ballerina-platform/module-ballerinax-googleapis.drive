@@ -48,14 +48,12 @@ This file should have following configurations. Add the tokens obtained in the p
 clientId = "<client_id">
 clientSecret = "<client_secret>"
 refreshToken = "<refresh_token>"
-
 ```
 **Example code**
 
 Creating a drive:driveClient by giving the HTTP client config details. 
 
 ```ballerina
-
     import ballerina/config;   
     import ballerinax/googleapis_drive as drive;
 
@@ -74,45 +72,67 @@ Creating a drive:driveClient by giving the HTTP client config details.
     };
 
     drive:Client driveClient = new (config);
-
 ```
-
 ### Get file by id
-More details : https://developers.google.com/drive/api/v3/reference/files/get
 ```ballerina
-
-    drive:File|error file = driveClient->getFileById(fileId);
-
+    File|error response = driveClient->getFile(fileId);
 ```
-
-### Get file by id with optionals
-More details : https://developers.google.com/drive/api/v3/reference/files/get
+### Download file
 ```ballerina
-
-    GetFileOptional optional = {
-        acknowledgeAbuse: false,
-        fields: "*",
-        supportsAllDrives : false
-    };
-
-    drive:File|error file = driveClient->getFileById(fileId, optional);
-
+    string|error response = driveClient->downloadFile(fileId);
 ```
-
-### Get files
-More details : https://developers.google.com/drive/api/v3/reference/files/list
+### Delete File by id
 ```ballerina
-
-    ListFilesOptional optional_search = {
-        pageSize : 3
-    };
-    drive:stream<File>|error res = driveClient->getFiles(optional_search);
-
+    boolean|error response = driveClient->deleteFile(fileId);
 ```
-
+### Copy File
+```ballerina
+    File|error response = driveClient->copyFile(sourceFileId);
+    File|error response = driveClient->copyFile(sourceFileId, destinationFolderId);
+    File|error response = driveClient->copyFile(sourceFileId, destinationFolderId, newFileName);
+```
+### Move File
+```ballerina
+    File|error response = driveClient->moveFile(sourceFileId, destinationFolderId);
+```
+### Rename File
+```ballerina
+    File|error response = driveClient->renameFile(fileId, newFileName);
+```
+### Rename File
+```ballerina
+    File|error response = driveClient->renameFile(fileId, newFileName);
+```
+### Create folder
+```ballerina
+    File|error response = driveClient->createFolder(folderName);
+    File|error response = driveClient->createFolder(folderName, parentFolderId);
+```
+### Create file
+```ballerina
+    File|error response = driveClient->createFile(fileName);
+    File|error response = driveClient->createFile(fileName, mimeType);
+    File|error response = driveClient->createFile(fileName, mimeType, parentFolderId);
+```
+### Filter files
+```ballerina
+    stream<File>|error response = driveClient->filterFiles(filterString);
+    stream<File>|error response = driveClient->filterFiles(filterString, 2);
+    stream<File>|error response = driveClient->filterFiles(filterString, 4, "createdTime");
+```
+### Search files by name (Partial search)
+```ballerina
+    stream<File>|error response = driveClient->getFilesByName("ballerina");
+    stream<File>|error response = driveClient->getFilesByName("ballerina", 2);
+    stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
+```
+### Search folders by name (Partial search)
+```ballerina
+    stream<File>|error response = driveClient->getFoldersByName("ballerina");
+    stream<File>|error response = driveClient->getFoldersByName("ballerina", 2);
+    stream<File>|error response = driveClient->getFoldersByName("ballerina", 2, "createdTime");
+```
 ### Search files
-More details : https://developers.google.com/drive/api/v3/reference/files/list
-More details : https://developers.google.com/drive/api/v3/search-files
 
 | What you want to query                                               |    Example                                                             |
 | ---------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -140,48 +160,57 @@ More details : https://developers.google.com/drive/api/v3/search-files
     drive:stream<File>|error res = driveClient->getFiles(optional_search);
 
 ```
-
-### Copy file
-More details : https://developers.google.com/drive/api/v3/reference/files/copy
+## Workspace related functions
+### Get All Google spreadsheets
 ```ballerina
-
-    CopyFileOptional optionals_copy_file = {"includePermissionsForView" : "published"};
-
-    File payload_copy_file = {
-        name : "testfile.pdf" //New name
-    };
-
-    drive:File|error file = driveClient->copyFile(fileId ,optionals_copy_file ,payload_copy_file );
-
+    stream<File>|error response = driveClient->getAllSpreadsheets();
+     if (response is stream<File>){
+        error? e = response.forEach(isolated function (File response) {
+            log:print(response?.id.toString());
+        });
+    } else {
+        log:printError(response.message());
+    }
 ```
-
-### Update metadata in a file
-More details : https://developers.google.com/drive/api/v3/reference/files/update
+### Search Google spreadsheets by name (Partial search)
 ```ballerina
-    
-    UpdateFileMetadataOptional optionals_file_metadata = {
+    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina");
+    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2);
+    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2, "createdTime");
+```
+### Search Google documents by name (Partial search)
+```ballerina
+    stream<File>|error response = driveClient->getDocumentsByName("ballerina");
+    stream<File>|error response = driveClient->getDocumentsByName("ballerina", 3);
+    stream<File>|error response = driveClient->getDocumentsByName("ballerina", 2, "createdTime");
+```
+### Search Google forms by name (Partial search)
+```ballerina
+    stream<File>|error response = driveClient->getFormsByName("ballerina");
+    stream<File>|error response = driveClient->getFormsByName("ballerina", 2);
+    stream<File>|error response = driveClient->getFormsByName("ballerina", 2, "createdTime");
+```
+### Search Google slides by name (Partial search)
+```ballerina
+    stream<File>|error response = driveClient->getSlidesByName("ballerina");
+    stream<File>|error response = driveClient->getSlidesByName("ballerina", 2);
+    stream<File>|error response = driveClient->getSlidesByName("ballerina", 2, "createdTime");
+```
+### Update metadata in a file
+```ballerina
+    UpdateFileMetadataOptional optionalsFileMetadata = {
         addParents : parentFolder
     };
-
-    File payload__file_metadata = {
+    File payloadFileMetadata = {
         name : "test"
     };
-
-    File|error res = driveClient->updateFileMetadataById(fileId, optionals_file_metadata, payload__file_metadata);
-
+    File|error res = driveClient->updateFileMetadataById(fileId, optionalsFileMetadata, payloadFileMetadata);
 ```
-
 ### Delete file by id
 More details : https://developers.google.com/drive/api/v3/reference/files/delete
 ```ballerina
-    DeleteFileOptional delete_optional = {
-
-        supportsAllDrives : false
-
-    };
-    json | error res = driveClient->deleteFileById(fileId, delete_optional);
+    boolean|error response = driveClient->deleteFile(fileId);   
 ```
-
 ### Create folder with metadata
 More details : https://developers.google.com/drive/api/v3/reference/files/update
 ```ballerina
@@ -196,37 +225,25 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 ```
 
 ### Upload file
-More details : https://developers.google.com/drive/api/v3/reference/files/create
 ```ballerina
-    UpdateFileMetadataOptional optionals_ = {
-        addParents : parentFolder //Parent folderID
-    };
-
-    File payload_ = {
-        name : "test123.jpeg"
-    };
-    string filePath = "./tests/resources/bar.jpeg";
-     File|error res = driveClient->uploadFile(filePath, optionals_, payload_);
+    File|error response = driveClient->uploadFile(localFilePath);
+    File|error response = driveClient->uploadFile(localFilePath, fileName);
+    File|error response = driveClient->uploadFile(localFilePath, fileName, parentFolderId);
 ```
 
 ### Upload file using a byte array
-More details : https://developers.google.com/drive/api/v3/reference/files/create
 ```ballerina
-    UpdateFileMetadataOptional optionals_ = {
-        addParents : parentFolder //Parent folderID
-    };
-
-    File payload_ = {
-        name : "test123.jpeg"
-    };
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
-
-    File|error res = driveClient->uploadFileUsingByteArray(byteArray, optionals_, payload_);
+    File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
+    File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
 ```
-
 #### How to get a id from a file or folder in Google drive
 1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
 2. Right click on a folder or file.
 3. Click 'Get link'. Then copy the link.
 4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
 ![alt text](/metadata/extractIDfromUrl.jpeg?raw=true)
+
+#### Limitations
+Currently, Google drive connecter supports operations related to files only.
+Google api supports Files, Permissions, Replies, Revisions, Drives and Channels.
