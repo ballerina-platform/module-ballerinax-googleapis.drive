@@ -208,17 +208,17 @@ isolated function prepareUrlWithFileOptional(string fileId , GetFileOptional? op
     map<string> optionalMap = {};
     string path = prepareUrl([DRIVE_PATH, FILES, fileId]);
     if (optional is GetFileOptional) {
-        if (optional.acknowledgeAbuse is boolean) {
-            optionalMap[ACKKNOWLEDGE_ABUSE] = optional.acknowledgeAbuse.toString();
+        if (optional?.acknowledgeAbuse is boolean) {
+            optionalMap[ACKKNOWLEDGE_ABUSE] = optional?.acknowledgeAbuse.toString();
         }
-        if (optional.fields is string) {
-            optionalMap[FIELDS] = optional.fields.toString();
+        if (optional?.fields is string) {
+            optionalMap[FIELDS] = optional?.fields.toString();
         }
-        if (optional.includePermissionsForView is string) {
-            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional.includePermissionsForView.toString();
+        if (optional?.includePermissionsForView is string) {
+            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional?.includePermissionsForView.toString();
         }
-        if (optional.supportsAllDrives is boolean) {
-            optionalMap[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        if (optional?.supportsAllDrives is boolean) {
+            optionalMap[SUPPORTS_ALL_DRIVES] = optional?.supportsAllDrives.toString();
         }
         foreach var val in optionalMap {
             value.push(val);
@@ -238,8 +238,8 @@ isolated function prepareUrlWithDeleteOptional(string fileId , DeleteFileOptiona
     map<string> optionalMap = {};
     string path = prepareUrl([DRIVE_PATH, FILES, fileId]);
     if (optional is DeleteFileOptional) {
-        if (optional.supportsAllDrives is boolean) {
-            optionalMap[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        if (optional?.supportsAllDrives is boolean) {
+            optionalMap[SUPPORTS_ALL_DRIVES] = optional?.supportsAllDrives.toString();
         }
         foreach var val in optionalMap {
             value.push(val);
@@ -259,23 +259,23 @@ isolated function prepareUrlWithCopyOptional(string fileId , CopyFileOptional? o
     map<string> optionalMap = {};
     string path = prepareUrl([DRIVE_PATH, FILES, fileId, COPY]);
     if (optional is CopyFileOptional) {
-        if (optional.fields is string) {
-            optionalMap[FIELDS] = optional.fields.toString();
+        if (optional?.fields is string) {
+            optionalMap[FIELDS] = optional?.fields.toString();
         }
-        if (optional.ignoreDefaultVisibility is boolean) {
-            optionalMap[IGNORE_DEFAULT_VISIBILITY] = optional.ignoreDefaultVisibility.toString();
+        if (optional?.ignoreDefaultVisibility is boolean) {
+            optionalMap[IGNORE_DEFAULT_VISIBILITY] = optional?.ignoreDefaultVisibility.toString();
         }
-        if (optional.includePermissionsForView is string) {
-            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional.includePermissionsForView.toString();
+        if (optional?.includePermissionsForView is string) {
+            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional?.includePermissionsForView.toString();
         }
-        if (optional.keepRevisionForever is boolean) {
-            optionalMap[KEEP_REVISION_FOREVER] = optional.keepRevisionForever.toString();
+        if (optional?.keepRevisionForever is boolean) {
+            optionalMap[KEEP_REVISION_FOREVER] = optional?.keepRevisionForever.toString();
         }
-        if (optional.ocrLanguage is string) {
-            optionalMap[OCR_LANGUAGE] = optional.ocrLanguage.toString();
+        if (optional?.ocrLanguage is string) {
+            optionalMap[OCR_LANGUAGE] = optional?.ocrLanguage.toString();
         }
-        if (optional.supportsAllDrives is boolean) {
-            optionalMap[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        if (optional?.supportsAllDrives is boolean) {
+            optionalMap[SUPPORTS_ALL_DRIVES] = optional?.supportsAllDrives.toString();
         }
         foreach var val in optionalMap {
             value.push(val);
@@ -297,26 +297,26 @@ isolated function prepareUrlWithUpdateOptional(string fileId , UpdateFileMetadat
     string path = prepareUrl([DRIVE_PATH, FILES, fileId]);
     if (optional is UpdateFileMetadataOptional) {
         // Optional Query Params
-        if (optional.addParents is string) {
-            optionalMap[ADD_PARENTS] = optional.addParents.toString();
+        if (optional?.addParents is string) {
+            optionalMap[ADD_PARENTS] = optional?.addParents.toString();
         }
-        if (optional.includePermissionsForView is string) {
-            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional.includePermissionsForView.toString();
+        if (optional?.includePermissionsForView is string) {
+            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional?.includePermissionsForView.toString();
         }
-        if (optional.keepRevisionForever is boolean) {
-            optionalMap[KEEP_REVISION_FOREVER] = optional.keepRevisionForever.toString();
+        if (optional?.keepRevisionForever is boolean) {
+            optionalMap[KEEP_REVISION_FOREVER] = optional?.keepRevisionForever.toString();
         }
-        if (optional.ocrLanguage is string) {
-            optionalMap[OCR_LANGUAGE] = optional.ocrLanguage.toString();
+        if (optional?.ocrLanguage is string) {
+            optionalMap[OCR_LANGUAGE] = optional?.ocrLanguage.toString();
         }
-        if (optional.removeParents is string) {
-            optionalMap[REMOVE_PARENTS] = optional.removeParents.toString();
+        if (optional?.removeParents is string) {
+            optionalMap[REMOVE_PARENTS] = optional?.removeParents.toString();
         }
-        if (optional.supportsAllDrives is boolean) {
-            optionalMap[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        if (optional?.supportsAllDrives is boolean) {
+            optionalMap[SUPPORTS_ALL_DRIVES] = optional?.supportsAllDrives.toString();
         }
-        if (optional.useContentAsIndexableText is boolean) {
-            optionalMap[USE_CONTENT_AS_INDEXABLE_TEXT] = optional.useContentAsIndexableText.toString();
+        if (optional?.useContentAsIndexableText is boolean) {
+            optionalMap[USE_CONTENT_AS_INDEXABLE_TEXT] = optional?.useContentAsIndexableText.toString();
         }
     }
     foreach var val in optionalMap {
@@ -336,23 +336,23 @@ isolated function prepareUrlwithMetadataFileOptional(CreateFileOptional? optiona
     string path = prepareUrl([DRIVE_PATH, FILES]);
     if (optional is CreateFileOptional) {
         //Optional Params
-        if (optional.ignoreDefaultVisibility is boolean) {
-            optionalMap[IGNORE_DEFAULT_VISIBILITY] = optional.ignoreDefaultVisibility.toString();
+        if (optional?.ignoreDefaultVisibility is boolean) {
+            optionalMap[IGNORE_DEFAULT_VISIBILITY] = optional?.ignoreDefaultVisibility.toString();
         }
-        if (optional.includePermissionsForView is string) {
-            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional.includePermissionsForView.toString();
+        if (optional?.includePermissionsForView is string) {
+            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional?.includePermissionsForView.toString();
         }
-        if (optional.keepRevisionForever is boolean) {
-            optionalMap[KEEP_REVISION_FOREVER] = optional.keepRevisionForever.toString();
+        if (optional?.keepRevisionForever is boolean) {
+            optionalMap[KEEP_REVISION_FOREVER] = optional?.keepRevisionForever.toString();
         }
-        if (optional.ocrLanguage is string) {
-            optionalMap[OCR_LANGUAGE] = optional.ocrLanguage.toString();
+        if (optional?.ocrLanguage is string) {
+            optionalMap[OCR_LANGUAGE] = optional?.ocrLanguage.toString();
         }
-        if (optional.supportsAllDrives is boolean) {
-            optionalMap[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        if (optional?.supportsAllDrives is boolean) {
+            optionalMap[SUPPORTS_ALL_DRIVES] = optional?.supportsAllDrives.toString();
         }
-        if (optional.useContentAsIndexableText is boolean) {
-            optionalMap[USE_CONTENT_AS_INDEXABLE_TEXT] = optional.useContentAsIndexableText.toString();
+        if (optional?.useContentAsIndexableText is boolean) {
+            optionalMap[USE_CONTENT_AS_INDEXABLE_TEXT] = optional?.useContentAsIndexableText.toString();
         }
         foreach var val in optionalMap {
             value.push(val);
@@ -372,38 +372,38 @@ isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = (
     string path = prepareUrl([DRIVE_PATH, FILES]);
     if (optional is ListFilesOptional) {
         //Optional Params
-        if (optional.corpora is string){
-           optionalMap[UPLOAD_TYPE] = optional.corpora.toString();
+        if (optional?.corpora is string){
+           optionalMap[UPLOAD_TYPE] = optional?.corpora.toString();
         }
-        if (optional.driveId is string) {
-            optionalMap[DRIVE_ID] = optional.driveId.toString();
+        if (optional?.driveId is string) {
+            optionalMap[DRIVE_ID] = optional?.driveId.toString();
         }
-        if (optional.fields is string) {
-            optionalMap[FIELDS] = optional.fields.toString();
+        if (optional?.fields is string) {
+            optionalMap[FIELDS] = optional?.fields.toString();
         }
-        if (optional.includeItemsFromAllDrives is boolean) {
-            optionalMap[INCLUDE_ITEMS_FROM_ALL_DRIVES] = optional.includeItemsFromAllDrives.toString();
+        if (optional?.includeItemsFromAllDrives is boolean) {
+            optionalMap[INCLUDE_ITEMS_FROM_ALL_DRIVES] = optional?.includeItemsFromAllDrives.toString();
         }
-        if (optional.includePermissionsForView is string) {
-            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional.includePermissionsForView.toString();
+        if (optional?.includePermissionsForView is string) {
+            optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional?.includePermissionsForView.toString();
         }
-        if (optional.orderBy is string) {
-            optionalMap[ORDER_BY] = optional.orderBy.toString();
+        if (optional?.orderBy is string) {
+            optionalMap[ORDER_BY] = optional?.orderBy.toString();
         }
-        if (optional.pageSize is int) {
-            optionalMap[PAGE_SIZE] = optional.pageSize.toString();
+        if (optional?.pageSize is int) {
+            optionalMap[PAGE_SIZE] = optional?.pageSize.toString();
         }
-        if (optional.pageToken is string) {
-            optionalMap[PAGE_TOKEN] = optional.pageToken.toString();
+        if (optional?.pageToken is string) {
+            optionalMap[PAGE_TOKEN] = optional?.pageToken.toString();
         }
-        if (optional.q is string) {
-            optionalMap[Q] = optional.q.toString();
+        if (optional?.q is string) {
+            optionalMap[Q] = optional?.q.toString();
         }
-        if (optional.spaces is string) {
-            optionalMap[SPACES] = optional.spaces.toString();
+        if (optional?.spaces is string) {
+            optionalMap[SPACES] = optional?.spaces.toString();
         }
-        if (optional.supportsAllDrives is boolean) {
-            optionalMap[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        if (optional?.supportsAllDrives is boolean) {
+            optionalMap[SUPPORTS_ALL_DRIVES] = optional?.supportsAllDrives.toString();
         }
         foreach var val in optionalMap {
             value.push(val);
@@ -624,8 +624,8 @@ function getFilesStream(http:Client httpClient, @tainted File[] files, ListFiles
         }        
         stream<File> filesStream = (<@untainted>files).toStream();
         string? nextPageToken = res?.nextPageToken;
-        if (nextPageToken is string && optional is ListFilesOptional && optional.pageToken is () && 
-                optional.pageSize is ()) {
+        if (nextPageToken is string && optional is ListFilesOptional && optional?.pageToken is () && 
+                optional?.pageSize is ()) {
             optional.pageToken = nextPageToken;
             var streams = check getFilesStream(httpClient, files, optional);
         }
