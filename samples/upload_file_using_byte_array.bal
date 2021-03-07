@@ -14,7 +14,6 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 # #################################################
 
 public function main() {
-
     drive:Configuration config = {
         clientConfig: {
             clientId: clientId,
@@ -23,21 +22,13 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-
-    drive:UpdateFileMetadataOptional optionals = {
-        // addParents : parentFolder //Parent folderID
-    };
-
-    drive:File payload = {
-        name : "SAMPLE_FILE"
-    };  
-
-    drive:Client driveClient = new (config);
     
+    drive:Client driveClient = new (config);
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
+    string fileName = "fileName";
 
-    drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, optionals, payload);
-
+    drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName);
+    // drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
     //Print file ID
     if(res is drive:File){
         string id = res?.id.toString();

@@ -32,14 +32,10 @@ public function main() {
 
     drive:Client driveClient = new (config);
 
-    drive:DeleteFileOptional delete_optional = {
-        supportsAllDrives : false
-    };
-
     //Do not supply a request body with this method.
     //If successful, this method returns an empty response body.
 
-    boolean|error res = driveClient->deleteFileById(fileId, delete_optional);
+    boolean|error res = driveClient->deleteFile(fileId);
 
     if(res is boolean){
         log:print("File Deleted");

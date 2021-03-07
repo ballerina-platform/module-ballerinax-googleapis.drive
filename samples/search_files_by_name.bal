@@ -43,14 +43,11 @@ public function main() {
     };
 
     drive:Client driveClient = new (config);
-
-    drive:ListFilesOptional optionalSearch = {
-        // q: "mimeType = 'application/vnd.google-apps.folder'" //Get Folders
-        q: "name = 'hello'" // Get Files with name 'hello'
-        // q: "sharedWithMe and name contains 'hello'" // Files shared with the authorized user with "hello" in the name
-    };
     
-    stream<drive:File>|error res = driveClient->getFiles(optionalSearch);
+    stream<drive:File>|error res = driveClient->getFilesByName("ballerina");
+    // stream<drive:File>|error res = driveClient->getFilesByName("ballerina", 2);
+    // stream<drive:File>|error res = driveClient->getFilesByName("ballerina", 2, "createdTime");
+
     if (res is stream<drive:File>){
         error? e = res.forEach(function (drive:File file) {
             json|error jsonObject = file.cloneWithType(json);

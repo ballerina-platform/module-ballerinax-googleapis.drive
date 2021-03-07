@@ -32,16 +32,10 @@ public function main() {
 
     drive:Client driveClient = new (config);
 
-    drive:CreateFileOptional optionals = {
-        ignoreDefaultVisibility : false
-    };
-
-    drive:File payload = {
-        mimeType : "application/vnd.google-apps.folder",
-        name : "folderInTheRoot"
-    };
+    string name = "folderInTheRoot";
     
-    drive:File|error res = driveClient->createMetaDataFile(optionals, payload);
+    drive:File|error res = driveClient->createFolder(name);
+    // drive:File|error response = driveClient->createFolder(folderName, parentFolderId);
 
     //Print folder ID
     if(res is drive:File){

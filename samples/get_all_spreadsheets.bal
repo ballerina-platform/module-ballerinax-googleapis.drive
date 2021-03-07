@@ -7,11 +7,10 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string locaFilePath = "<PATH_TO_FILE_TO_BE_UPLOADED>";
+#######################
+# Get all spreadsheets
+# #####################
 
-###################################################
-# Upload file 
-# #################################################
 
 public function main() {
 
@@ -23,17 +22,15 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = new (config);
-    
-    drive:File|error res = driveClient->uploadFile(locaFilePath);
-    // drive:File|error res = driveClient->uploadFile(locaFilePath, fileName);
-    // drive:File|error res = driveClient->uploadFile(locaFilePath, fileName, parentFolderId);
 
-    //Print file ID
-    if(res is drive:File){
-        string id = res?.id.toString();
-        log:print(id);
-    } else {
-        log:printError(res.message());
+    drive:Client driveClient = new (config);
+
+    stream<drive:File>|error res = driveClient->getAllSpreadsheets();
+
+    if (res is stream<drive:File>){
+        error? e = res.forEach(function (drive:File file) {
+            log:print(res?.id.toString());
+        });
     }
+
 }

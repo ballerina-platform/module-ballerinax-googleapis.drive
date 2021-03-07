@@ -38,7 +38,9 @@ public function main() {
         name : "testfile.pdf" //New name
     };
 
-    drive:File|error res = driveClient->copyFile(fileId ,optionals_copy_file ,payload_copy_file );
+    drive:File|error res = driveClient->copyFile(sourceFileId);
+    // drive:File|error response = driveClient->copyFile(sourceFileId, destinationFolderId);
+    // drive:File|error response = driveClient->copyFile(sourceFileId, destinationFolderId, newFileName);
 
     //Print file ID
     if(res is drive:File){
