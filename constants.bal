@@ -31,16 +31,8 @@ const string COLON = ":";
 const string EXCLAMATION_MARK = "!";
 const string EQUAL = "=";
 const string _ALL = "*";
-
-// Regex constants
-const string _FILE = "/file/";
-const string _FOLDER = "/folders/";
-const string _WORKSPACE_DOC = "/edit";
-const int INT_VALUE_8 = 8;
-const int INT_VALUE_39 = 39;
-const int INT_VALUE_41 = 41;
-const int INT_VALUE_42 = 42;
-const int INT_VALUE_83 = 83;
+const string TRUE = "true";
+const string FALSE = "false";
 
 // Drive
 const string DRIVE_URL = "https://www.googleapis.com";
@@ -58,9 +50,9 @@ const string COPY = "/copy";
 const string CHANNELS = "/channels";
 const string STOP = "/stop";
 const string Q = "q";
-const string MIME_TYPE = "mimeType";
 const string AMPERSAND = "&";
 const string PAGE_TOKEN = "pageToken";
+const string WEB_CONTENT_LINK = "webContentLink";
 
 // Error
 const string ERR_FILE_RESPONSE = "Error occurred while constructing DriveResponse record.";
@@ -92,6 +84,17 @@ const string PAGE_SIZE = "pageSize";
 const string SPACES = "spaces";
 const string INCLUDE_ITEMS_FROM_ALL_DRIVES = "includeItemsFromAllDrives";
 
-//Headers
+// Headers
 const string CONTENT_TYPE = "Content-Type";
 const string CONTENT_LENGTH = "Content-Length";
+
+// Filter strings
+const string FOLDER = "folder";
+const string TRASH_FALSE = "trashed = false";
+const string AND = "and";
+const string SPACE = " ";
+const string MIME_TYPE = "mimeType";
+const string MIME_PREFIX = "application/vnd.google-apps.";
+const string CONTAINS = "contains";
+const string NAME = "name";
+const string SINGLE_QUOTE = "'";

@@ -16,7 +16,6 @@
 
 import ballerina/file;
 import ballerina/http;
-import ballerina/log;
 
 # Google Drive Client. 
 #
@@ -49,7 +48,7 @@ public client class Client {
     # + fileId - ID of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
     remote function downloadFile(string fileId) returns @tainted string|error {
-        GetFileOptional optional = {supportsAllDrives : true, fields : "webContentLink"};
+        GetFileOptional optional = {supportsAllDrives : true, fields : WEB_CONTENT_LINK};
         File fileResponse = check getFileById(self.httpClient , fileId, optional);
         return fileResponse?.webContentLink.toString();
     }
@@ -93,9 +92,11 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getFilesByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
+    remote function getFilesByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
+                                    returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `name contains '${fileName}' and trashed = false`;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
+                                SPACE + TRASH_FALSE;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -113,7 +114,7 @@ public client class Client {
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     remote function getAllSpreadsheets() returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `trashed = false and mimeType = 'application/vnd.google-apps.spreadsheet'`;
+        string searchString = TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -128,10 +129,11 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getSpreadsheetsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
+    remote function getSpreadsheetsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
+                                            returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `name contains '${fileName}' and trashed = false
-                                and mimeType = 'application/vnd.google-apps.spreadsheet'`;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
+                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -152,10 +154,11 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getDocumentsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
+    remote function getDocumentsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
+                                        returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `name contains '${fileName}' and trashed = false
-                                and mimeType = 'application/vnd.google-apps.document'`;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
+                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + DOCS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -178,8 +181,8 @@ public client class Client {
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     remote function getFormsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `name contains '${fileName}' and trashed = false
-                                and mimeType = 'application/vnd.google-apps.form'`;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
+                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FORMS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -202,8 +205,8 @@ public client class Client {
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     remote function getSlidesByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `name contains '${fileName}' and trashed = false
-                                and mimeType = 'application/vnd.google-apps.presentation'`;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
+                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SLIDES;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -227,8 +230,8 @@ public client class Client {
     remote function getFoldersByName(string folderName, int? noOfFolders = (), string? orderBy = ()) 
                                         returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = string `name contains '${folderName}' and trashed = false 
-                                and mimeType = 'application/vnd.google-apps.folder'`;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + folderName + SINGLE_QUOTE + SPACE + AND + 
+                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FOLDERS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -258,7 +261,7 @@ public client class Client {
     # + return - If successful, returns `File`. Else returns `error`
     remote function copyFile(string fileId, string? destinationFolderId = (), string? newFileName = ()) returns @tainted 
                                 File|error {
-        CopyFileOptional optional = {supportsAllDrives : true}; //Think how to replace values in the record
+        CopyFileOptional optional = {supportsAllDrives : true};
         File fileResource = {};
         if (newFileName is string){
             fileResource.name = newFileName;
@@ -269,6 +272,11 @@ public client class Client {
         return copyFile(self.httpClient, fileId, optional, fileResource);
     }
 
+    # Move file using the fileID.
+    # 
+    # + fileId - ID of the file to move
+    # + destinationFolderId - Folder ID of the destination
+    # + return - If successful, returns `File`. Else returns `error`
     remote function moveFile(string fileId, string destinationFolderId) returns @tainted File|error {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
@@ -297,7 +305,7 @@ public client class Client {
         return updateFileById(self.httpClient, fileId, fileResource, optional);
     }
 
-    # Create new file (with only metadata).
+    # Create new file.
     # 
     # + optional - 'CreateFileOptional' used to add query parameters to the request
     # + fileData - 'File' Metadata is send to in the payload 
@@ -307,12 +315,20 @@ public client class Client {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
+    # Create new file.
+    # 
+    # + fileName - Name of the new file to be created.
+    # + mime - Type of file that is going to create. refer https://developers.google.com/drive/api/v3/mime-types
+    #          You need to only specify the last word in the MIME type. 
+    #          For an example, If you want to create a Google document.. The value for this parameter should be
+    #          "document" .. Google sheets -> "spreadsheet" etc.
+    # + folderId - Id of the parent folder that the new file wants to get created. 
+    # + return - If successful, returns `File`. Else returns `error`
     remote function createFile(string fileName, string? mime = (), string? folderId = ()) returns @tainted File|error {
         CreateFileOptional optional = {supportsAllDrives : true};
         File fileData = {name : fileName};
         if (mime is string){
-            log:print(mime);
-            fileData.mimeType = mime;
+            fileData.mimeType = MIME_PREFIX + mime;
         }
         if (folderId is string){
             fileData.parents = [folderId];
@@ -320,8 +336,13 @@ public client class Client {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
+    # Create new folder.
+    # 
+    # + folderName - Name of the new folder to be created.
+    # + parentFolderId - Id of the parent folder.
+    # + return - If successful, returns `File`. Else returns `error`
     remote function createFolder(string folderName, string? parentFolderId = ()) returns @tainted File|error {
-        File fileData = {name : folderName, mimeType : "application/vnd.google-apps.folder"};
+        File fileData = {name : folderName, mimeType : MIME_PREFIX + FOLDER};
         CreateFileOptional optional = {supportsAllDrives : true};
         if (parentFolderId is string){
             fileData.parents = [parentFolderId];
