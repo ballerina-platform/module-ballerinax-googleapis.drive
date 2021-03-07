@@ -281,7 +281,7 @@ public client class Client {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
         };
-        return updateFileById(self.httpClient, fileId, optionalsFileMetadata);
+        return updateFileById(self.httpClient, fileId, );
     }
 
     # Rename a file
@@ -299,7 +299,7 @@ public client class Client {
     # + fileId - ID of the file to be updated
     # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
     # + fileResource - 'File' can added as a payload to change metadata
-    # + return - If successful, returns `File`. Else returns `error`
+    # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
     remote function updateFileMetadataById(string fileId, File? fileResource = (), 
                                             UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
         return updateFileById(self.httpClient, fileId, fileResource, optional);
