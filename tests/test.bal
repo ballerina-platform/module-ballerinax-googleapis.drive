@@ -255,7 +255,7 @@ function testCreateFile() {
 function testGetFiles() { 
     log:print("Gdrive Client -> testGetFiles()");
     ListFilesOptional optionalSearch = {
-        pageSize : 3,
+        pageSize : 2,
         orderBy : "createdTime"
     };
     stream<File>|error response = driveClient->getFiles(optionalSearch);
