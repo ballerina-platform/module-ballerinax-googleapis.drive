@@ -233,7 +233,7 @@ function testCreateFolder() {
 function testCreateFile() {
     log:print("Gdrive Client -> testCreateFile()");
     File|error response = driveClient->createFile(fileName);
-    // File|error response = driveClient->createFile(fileName, "application/vnd.google-apps.document");
+    // File|error response = driveClient->createFile("ballerina", "presentation");
     // File|error response = driveClient->createFile(fileName, "application/vnd.google-apps.document", parentFolderId);
     //Assertions
     if(response is File){
@@ -418,7 +418,7 @@ function testFormsByName() {
 }
 
 ##############################################
-# Search Google Slides by name (Partial search)
+# Search Google slides by name (Partial search)
 # ############################################
 
 @test:Config {}
@@ -470,7 +470,8 @@ function testNewUpload() {
 function testNewUploadByteArray() {
     log:print("Gdrive Client -> testNewUploadByteArray()");
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
-    File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
+    File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
+    // File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
     // Assertions 
     if(response is File){
         string id = response?.id.toString();
