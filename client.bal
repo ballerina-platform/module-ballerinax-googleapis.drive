@@ -281,7 +281,7 @@ public client class Client {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
         };
-        return updateFileById(self.httpClient, fileId, );
+        return updateFileById(self.httpClient, fileId, optionalsFileMetadata);
     }
 
     # Rename a file
