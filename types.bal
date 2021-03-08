@@ -675,21 +675,66 @@ public type ListFilesOptional record {
 # + SHEETS - Google spreadsheets MIME type
 # + SLIDES - Google presentations MIME type
 # + FORMS - Google Forms MIME type
-# + FOLDERS - Folder MIME type
+# + AUDIO - Audio MIME type
+# + DRIVE_SDK - Drive SDK MIME type
+# + DRAWING - Drawing MIME type
+# + FILE - File MIME type
+# + FUSIONTABLE - Fusiontable MIME type
+# + MAP - Map MIME type
+# + PHOTO - Photo MIME type
+# + SCRIPT - Script MIME type
+# + SHORTCUT - Shortcut MIME type
+# + SITE - Site MIME type
+# + UNKNOWN - Unknown MIME type
+# + VIDEO - Video MIME type
 enum MimeTypes {
     DOCUMENT = "application/vnd.google-apps.document",
     SPREADSHEET = "application/vnd.google-apps.spreadsheet",
     PRESENTATION = "application/vnd.google-apps.presentation",
-    FORM = "application/vnd.google-apps.form"
+    FORM = "application/vnd.google-apps.form",
+    AUDIO = "application/vnd.google-apps.audio",
+    DRIVE_SDK = "application/vnd.google-apps.drive-sdk",
+    DRAWING = "application/vnd.google-apps.drawing",
+    FILE = "application/vnd.google-apps.file",
+    FUSIONTABLE = "application/vnd.google-apps.fusiontable",
+    MAP = "application/vnd.google-apps.map",
+    PHOTO = "application/vnd.google-apps.photo",
+    SCRIPT = "application/vnd.google-apps.script",
+    SHORTCUT = "application/vnd.google-apps.shortcut",
+    SITE = "application/vnd.google-apps.site",
+    UNKNOWN = "application/vnd.google-apps.unknown",
+    VIDEO = "application/vnd.google-apps.video"
 }
 
+# Optional parameters for the watch files.
+#
+# + acknowledgeAbuse - Whether the user is acknowledging the risk of downloading known malware or other abusive files. 
+#                      This is only applicable when alt=media. (Default: false)  
+# + pageToken - Page Token   
+# + fields - The paths of the fields you want included in the response. If not specified, the response includes a 
+#            default set of fields specific to this method  
+# + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 public type WatchFileOptional record {
     boolean acknowledgeAbuse?;
     string fields?;
     boolean supportsAllDrives?;
-    string pageToken?; //added external to API doc
+    string pageToken?;
 };
 
+# Response in watch request. 
+#
+# + resourceId - A UUID or similar unique string that identifies this channel.  
+# + address - The address where notifications are delivered for this channel.  
+# + payload - A Boolean value to indicate whether payload is wanted.  
+# + kind - 	Identifies this as a notification channel used to watch for changes to a resource, which is "api#channel".  
+# + expiration - Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds.  
+# + startPageToken - The starting page token for listing changes.  
+# + id - A UUID or similar unique string that identifies this channel.  
+# + resourceUri - A version-specific identifier for the watched resource.  
+# + params - Additional parameters controlling delivery channel behavior  
+# + type - The type of delivery mechanism used for this channel. Valid values are "web_hook" (or "webhook"). 
+#          Both values refer to a channel where Http requests are used to deliver messages. 
+# + token - An arbitrary string delivered to the target address with each notification delivered over this channel.  
 public type WatchResponse record {
     string kind?;
     string id?;
@@ -700,9 +745,32 @@ public type WatchResponse record {
     string 'type?;
     string address?;
     boolean payload?;
+    string startPageToken?;
     StringKeyValuePairs params?;
 };
  
+# Optional parameters used in listing changes
+#
+# + includeItemsFromAllDrives - Whether both My Drive and shared drive items should be included in results.
+#                               (Default: false)
+# + pageSize - The maximum number of changes to return per page. Acceptable values are 1 to 1000, inclusive. 
+#              (Default: 100)
+# + driveId - The shared drive from which changes are returned. If specified the change IDs will be reflective of the 
+#             shared drive; use the combined drive ID and change ID as an identifier.  
+# + restrictToMyDrive - Whether to restrict the results to changes inside the My Drive hierarchy. This omits changes 
+#                       to files such as those in the Application Data folder or shared files which have not been added 
+#                       to My Drive. (Default: false)
+# + includeCorpusRemovals - Whether changes should include the file resource if the file is still accessible by the user 
+#                           at the time of the request, even when a file was removed from the list of changes and there 
+#                           will be no further change entries for this file. (Default: false) 
+# + spaces - A comma-separated list of spaces to query within the user corpus. Supported values are 'drive', 
+#            'appDataFolder' and 'photos'. 
+# + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
+# + includeRemoved - Whether to include changes indicating that items have been removed from the list of changes, 
+#                    for example by deletion or loss of access. (Default: true) 
+# + fields - The paths of the fields you want included in the response. If not specified, the response includes a 
+#            default set of fields specific to this method.  
+# + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)
 public type ChangesListOptional record {
     string driveId?;
     string fields?;
@@ -716,11 +784,26 @@ public type ChangesListOptional record {
     boolean supportsAllDrives?;
 };
 
+# Record which maps the response from list changes request.
+#
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#changeList".  
+# + nextPageToken - The page token for the next page of changes. This will be absent if the end of the changes list has 
+#                   been reached. If the token is rejected for any reason, it should be discarded, and pagination should 
+#                   be restarted from the first page of results.  
+# + changes - The list of changes. If nextPageToken is populated, then this list may be incomplete and an additional 
+#             page of results should be fetched.  
+# + newStartPageToken - The starting page token for future changes. This will be present only if the end of the current 
+#                       changes list has been reached.  
 public type ChangesListResponse record {
     string kind?;
     string nextPageToken?;
     string newStartPageToken?;
     Change[] changes?;
+};
+
+type StartPageTokenResponse record {
+    string kind?;
+    string startPageToken;
 };
 
 # A change to a file or shared drive.
@@ -742,9 +825,4 @@ public type Change record {
     string fileId?;
     File file?;
     string driveId?;
-};
-
-type StartPageTokenResponse record {
-    string kind?;
-    string startPageToken;
 };
