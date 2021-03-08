@@ -76,30 +76,12 @@ function testGetFileById() {
     }
 }
 
-################
-# Download File
-# ##############
-
-@test:Config {
-    dependsOn: [testCreateFile]
-}
-function testDownloadFileById() {
-    log:print("Gdrive Client -> testDownloadFileById()");
-    string|error response = driveClient->downloadFile(fileId);
-    if(response is string){
-        test:assertNotEquals(response, "", msg = "Expect download URL link");
-        log:print(response);
-    } else {
-        test:assertFail(response.message());
-    }
-}
-
 #######################
 # Delete File by ID
 # #####################
 
 // @test:AfterSuite {}
-function testDeleteFileById(){
+function testDeleteFileById() {
     log:print("Gdrive Client -> testDeleteFileById()");
     boolean|error response = driveClient->deleteFile(fileId);
     if (response is boolean) {
@@ -118,7 +100,7 @@ function testDeleteFileById(){
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testCopyFile(){
+function testCopyFile() {
     log:print("Gdrive Client -> testCopyFile()");
     string sourceFileId = fileId;
     string destinationFolderId = parentFolderId;
@@ -210,7 +192,8 @@ function testUpdateFiles() {
 @test:Config {}
 function testCreateFolder() {
     log:print("Gdrive Client -> testCreateFolder()");
-    File|error response = driveClient->createFolder(folderName, "1mskwVJ1v02L1u7O8AhPNswVstWjOXctT");
+     File|error response = driveClient->createFolder(folderName);
+    //File|error response = driveClient->createFolder(folderName, "1mskwVJ1v02L1u7O8AhPNswVstWjOXctT");
     //Assertions
     if(response is File){
         test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -233,8 +216,8 @@ function testCreateFolder() {
 function testCreateFile() {
     log:print("Gdrive Client -> testCreateFile()");
     File|error response = driveClient->createFile(fileName);
-    // File|error response = driveClient->createFile("ballerina", "presentation");
-    // File|error response = driveClient->createFile(fileName, "application/vnd.google-apps.document", parentFolderId);
+    //File|error response = driveClient->createFile("ballerina123", DOCUMENT);
+    // File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
     //Assertions
     if(response is File){
         test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -299,8 +282,8 @@ function testFilterFiles() {
 @test:Config {}
 function testGetFilesByName() {
     log:print("Gdrive Client -> testGetFilesByName()");
-    stream<File>|error response = driveClient->getFilesByName("ballerina");
-    // stream<File>|error response = driveClient->getFilesByName("ballerina", 2);
+    // stream<File>|error response = driveClient->getFilesByName("ballerina");
+    stream<File>|error response = driveClient->getFilesByName("ballerina", 500);
     // stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
@@ -460,6 +443,24 @@ function testNewUpload() {
     }
 }
 
+################
+# Download File
+# ##############
+
+@test:Config {
+    dependsOn: [testCreateFile]
+}
+function testDownloadFileById() {
+    log:print("Gdrive Client -> testDownloadFileById()");
+    string|error response = driveClient->downloadFile("1ao7BmPt5AgTPArteVW7UVOrAHrMo7HH9");
+    if(response is string){
+        test:assertNotEquals(response, "", msg = "Expect download URL link");
+        log:print(response);
+    } else {
+        test:assertFail(response.message());
+    }
+}
+
 ###############################
 # Upload File using Byte Array
 # #############################
@@ -480,5 +481,73 @@ function testNewUploadByteArray() {
     } else {
         test:assertFail(response.message());
         log:printError(response.message());
+    }
+}
+
+##############################################
+# Subcribe for changes - Single File Resource
+# ############################################
+
+@test:Config {}
+function testWatchFilesById() {
+    string fileIdToBeWatched = "1zfMDanIe5erdY_Vjle8vczBK2bdYnAZwhlZ56DmN29M";
+    string address = "https://www.syntax.lk/";
+    WatchResponse|error res = driveClient->watchFilesById(fileIdToBeWatched, address);
+    if(res is WatchResponse){
+        log:print(res.toString());
+    } else {
+        log:print(res.toString());
+    }
+}
+
+########################################
+# Subcribe for all changes in resources
+# ######################################
+
+@test:Config {}
+function testWatchAllFiles() {
+    string address = "https://www.syntax.lk/";
+    WatchResponse|error res = driveClient->watchFiles(address);
+    if(res is WatchResponse){
+        log:print(res.toString());
+    } else {
+        log:print(res.message());
+    }
+}
+
+##########################
+# Stop watching resources 
+# ########################
+
+@test:Config {}
+function testStopWatching() {
+    // WatchResponse payload = {
+    //     kind: "api#channel",
+    //     id: "01234567-ewew-cdef-frrt", // Your channel ID.
+    //     'type: "web_hook",
+    //     address: "https://www.syntax.lk/notifications"// Your receiving URL.
+    // };
+    string channelId = "01eb8019-4844-1376-83a3-f7a3dfdece1f";
+    string resourceId = "GYFfeabdbAp2FoyZm2KDfQMKd1Q";
+    boolean|error res = driveClient->watchStop(channelId, resourceId);
+    if (res is boolean) {
+        log:print("Watch channel stopped");
+    } else {
+        log:print("Error");
+    }
+}
+
+##########################
+# List changes  
+# ########################
+
+@test:Config {}
+function testListChanges() {
+    string pageToken = "120363";
+    ChangesListResponse|error res = driveClient->listChanges(pageToken);
+    if (res is ChangesListResponse) {
+        log:print(res.toString());
+    } else {
+        log:print(res.message());
     }
 }
