@@ -46,6 +46,7 @@ const string TYPE_MULTIPART = "multipart";
 const string TYPE_RESUMABLE = "resumable";
 const string FILES = "/files";
 const string CHANGES = "/changes";
+const string WATCH = "/watch";
 const string COPY = "/copy";
 const string CHANNELS = "/channels";
 const string STOP = "/stop";
@@ -53,9 +54,12 @@ const string Q = "q";
 const string AMPERSAND = "&";
 const string PAGE_TOKEN = "pageToken";
 const string WEB_CONTENT_LINK = "webContentLink";
+const string WEB_HOOK = "web_hook";
+const string START_PAGE_TOKEN = "startPageToken";
 
 // Error
 const string ERR_FILE_RESPONSE = "Error occurred while constructing DriveResponse record.";
+const string ERR_WATCH_RESPONSE = "Error occurred while constructing WatchResponse record.";
 const string ERR_DRIVE_INFO_RESPONSE = "Error occurred while constructing DriveInfo record.";
 const string ERR_JSON_TO_FILE_CONVERT = "Error occurred while constructing File record.";
 const string UNABLE_TO_ENCODE = "Unable to encode value: ";
@@ -83,6 +87,9 @@ const string ORDER_BY = "orderBy";
 const string PAGE_SIZE = "pageSize";
 const string SPACES = "spaces";
 const string INCLUDE_ITEMS_FROM_ALL_DRIVES = "includeItemsFromAllDrives";
+const string INCLUDE_CORPUS_REMOVALS = "includeCorpusRemovals";
+const string INCLUDE_REMOVED = "includeRemoved";
+const string RESTRICT_TO_MY_DRIVE = "restrictToMyDrive";
 
 // Headers
 const string CONTENT_TYPE = "Content-Type";
@@ -98,3 +105,8 @@ const string MIME_PREFIX = "application/vnd.google-apps.";
 const string CONTAINS = "contains";
 const string NAME = "name";
 const string SINGLE_QUOTE = "'";
+const string DOCS = "'application/vnd.google-apps.document'";
+const string SHEETS = "'application/vnd.google-apps.spreadsheet'";
+const string SLIDES = "'application/vnd.google-apps.presentation'";
+const string FORMS = "'application/vnd.google-apps.form'";
+const string FOLDERS = "'application/vnd.google-apps.folder'";
