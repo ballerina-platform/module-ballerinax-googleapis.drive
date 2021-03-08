@@ -17,7 +17,6 @@
 import ballerina/file;
 import ballerina/http;
 import ballerina/uuid;
-import ballerina/log;
 
 # Google Drive Client. 
 #
@@ -426,7 +425,6 @@ public client class Client {
         WatchResponse payload = {};
         WatchFileOptional optional = {};
         payload.id = uuid:createType1AsString();
-        log:print(payload?.id.toString());
         payload.'type = WEB_HOOK;
         payload.address = address;
         if (expiration is int) {
