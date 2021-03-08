@@ -16,6 +16,8 @@
 
 import ballerina/file;
 import ballerina/http;
+import ballerina/uuid;
+import ballerina/log;
 
 # Google Drive Client. 
 #
@@ -324,11 +326,11 @@ public client class Client {
     #          "document" .. Google sheets -> "spreadsheet" etc.
     # + folderId - Id of the parent folder that the new file wants to get created. 
     # + return - If successful, returns `File`. Else returns `error`
-    remote function createFile(string fileName, string? mime = (), string? folderId = ()) returns @tainted File|error {
+    remote function createFile(string fileName, MimeTypes? mime = (), string? folderId = ()) returns @tainted File|error {
         CreateFileOptional optional = {supportsAllDrives : true};
         File fileData = {name : fileName};
         if (mime is string){
-            fileData.mimeType = MIME_PREFIX + mime;
+            fileData.mimeType = mime;
         }
         if (folderId is string){
             fileData.parents = [folderId];
@@ -360,11 +362,11 @@ public client class Client {
                                 returns @tainted File|error {
         string originalFileName = check file:basename(localPath);
         File fileMetadata = {name : originalFileName};
-        if (fileName is string){
+        if (fileName is string) {
             fileMetadata.name = fileName;
         }
         UpdateFileMetadataOptional optional = {};
-        if (parentFolderId is string){
+        if (parentFolderId is string) {
             optional.addParents = parentFolderId;
         }
         return uploadFile(self.httpClient, localPath, fileMetadata, optional);
@@ -392,5 +394,74 @@ public client class Client {
     # + return - If successful, returns `About`. Else returns `error`
     remote function getAbout(string? fields) returns @tainted About|error {
         return getDriveInfo(self.httpClient , fields);
+    }
+
+    # Subscribes to in a specific file.
+    # 
+    # + fileId - Id of the file that needs to be subscribed for watching.
+    # + address - The address where notifications are delivered for this channel.
+    # + expiration - 
+    # + return - If successful, returns `WatchResponse`. Else returns `error` 
+    remote function watchFilesById(string fileId, string address, int? expiration = ()) returns @tainted 
+                                    WatchResponse|error {
+        WatchResponse payload = {};
+        payload.id = uuid:createType1AsString();
+        payload.'type = WEB_HOOK;
+        payload.address = address;
+        if (expiration is int) {
+            payload.expiration = expiration;
+        }
+        WatchFileOptional optional = {supportsAllDrives : true};
+        return watchFilesById(self.httpClient, fileId, payload, optional);
+    }
+
+    # Subscribes to changes in all files.
+    # 
+    # + address - The address where notifications are delivered for this channel.
+    # + pageToken - 
+    # + expiration - 
+    # + return - If successful, returns `WatchResponse`. Else returns `error`
+    remote function watchFiles(string address, string? pageToken = (), int? expiration = ()) returns @tainted 
+                                WatchResponse|error {
+        WatchResponse payload = {};
+        WatchFileOptional optional = {};
+        payload.id = uuid:createType1AsString();
+        log:print(payload?.id.toString());
+        payload.'type = WEB_HOOK;
+        payload.address = address;
+        if (expiration is int) {
+            payload.expiration = expiration;
+        }
+        if (pageToken is string) {
+            optional = {pageToken : pageToken};
+        } else {
+            optional = {pageToken : check getStartPageToken(self.httpClient)};
+        }
+        return watchAllFiles(self.httpClient, payload, optional);
+    }
+
+    # Stop watching resources through this channel.
+    # 
+    # + channelId - A UUID or similar unique string that identifies this channel.
+    # + resourceId - An opaque ID that identifies the resource being watched on this channel.
+    #                Stable across different API versions.
+    # + return - If successful, returns `boolean`. Else returns `error`.
+    remote function watchStop(string channelId, string resourceId) returns @tainted boolean|error {
+        WatchResponse payload = {};
+        payload.id = channelId;
+        payload.resourceId = resourceId;
+        return stopWatch(self.httpClient, payload);
+    }
+
+    # Lists the changes for a user or shared drive.
+    # 
+    # + pageToken - The token for continuing a previous list request on the next page. 
+    #               This should be set to the value of 'nextPageToken' from the previous response or to the response 
+    #               from the getStartPageToken method.
+    # + optional - 'ChangesListOptional' object with optionals.
+    # + return - If successful, returns `ChangesListResponse`. Else returns `error`.
+    remote function listChanges(string pageToken, ChangesListOptional? optional = ()) returns @tainted 
+                                    ChangesListResponse|error {
+        return listChangesByPageToken(self.httpClient, pageToken, optional);
     }
 } 
