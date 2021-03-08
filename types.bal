@@ -677,9 +677,74 @@ public type ListFilesOptional record {
 # + FORMS - Google Forms MIME type
 # + FOLDERS - Folder MIME type
 enum MimeTypes {
-    DOCS = "'application/vnd.google-apps.document'",
-    SHEETS = "'application/vnd.google-apps.spreadsheet'",
-    SLIDES = "'application/vnd.google-apps.presentation'",
-    FORMS = "'application/vnd.google-apps.form'",
-    FOLDERS = "'application/vnd.google-apps.folder'"
+    DOCUMENT = "application/vnd.google-apps.document",
+    SPREADSHEET = "application/vnd.google-apps.spreadsheet",
+    PRESENTATION = "application/vnd.google-apps.presentation",
+    FORM = "application/vnd.google-apps.form"
 }
+
+public type WatchFileOptional record {
+    boolean acknowledgeAbuse?;
+    string fields?;
+    boolean supportsAllDrives?;
+    string pageToken?; //added external to API doc
+};
+
+public type WatchResponse record {
+    string kind?;
+    string id?;
+    string resourceId?;
+    string resourceUri?;
+    string token?;
+    int expiration?;
+    string 'type?;
+    string address?;
+    boolean payload?;
+    StringKeyValuePairs params?;
+};
+ 
+public type ChangesListOptional record {
+    string driveId?;
+    string fields?;
+    boolean includeCorpusRemovals?;
+    boolean includeItemsFromAllDrives?;
+    string includePermissionsForView?;
+    boolean includeRemoved?;
+    int pageSize?;
+    boolean restrictToMyDrive?;
+    string spaces?;
+    boolean supportsAllDrives?;
+};
+
+public type ChangesListResponse record {
+    string kind?;
+    string nextPageToken?;
+    string newStartPageToken?;
+    Change[] changes?;
+};
+
+# A change to a file or shared drive.
+#
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#change".  
+# + driveId - The ID of the shared drive associated with this change.  
+# + removed - Whether the file or shared drive has been removed from this list of changes, for example by deletion or 
+#             loss of access.  
+# + file - The updated state of the file. Present if the type is file and the file has not been removed from this 
+#          list of changes. 
+# + changeType - The type of the change. Possible values are file and drive.  
+# + time - The time of this change (RFC 3339 date-time).  
+# + fileId - The ID of the file which has changed.  
+public type Change record {
+    string kind?;
+    string changeType?;
+    string time?;
+    boolean removed?;
+    string fileId?;
+    File file?;
+    string driveId?;
+};
+
+type StartPageTokenResponse record {
+    string kind?;
+    string startPageToken;
+};
