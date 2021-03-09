@@ -23,10 +23,15 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-##########################
-# Search Gslides by name
-# ########################
+string sourceFileId = "<PLACE_YOUR_FILE_ID_HERE>";
+string destinationFolderId = "<PLACE_YOUR_DESTINATION_FOLDER_ID_HERE>";
 
+###################################################################################
+# Move file by ID
+###################################################################################
+# Move file from one place to another folder. You need to specify the destination
+# folderId
+# ################################################################################
 
 public function main() {
     drive:Configuration config = {
@@ -38,15 +43,12 @@ public function main() {
         }
     };
     drive:Client driveClient = new (config);
-    stream<drive:File>|error res = driveClient->getSlidesByName("ballerina");
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2);
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2, "createdTime");
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            json|error jsonObject = file.cloneWithType(json);
-            if (jsonObject is json) {
-                log:print(jsonObject.toString());
-            }
-        });
-    }
+    drive:File|error res = driveClient->moveFile(sourceFileId, destinationFolderId);
+    //Print file ID
+    if(res is drive:File){
+        string id = res?.id.toString();
+        log:print(id);
+    } else {
+        log:printError(res.message());
+    }   
 }

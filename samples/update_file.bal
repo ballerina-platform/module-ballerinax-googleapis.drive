@@ -23,10 +23,25 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-##########################
-# Search Gslides by name
-# ########################
+drive:UpdateFileMetadataOptional optionalsFileMetadata = {
+    addParents : "<GIVE_PARENT_FOLDER_ID>"
+};
+drive:File payloadFileMetadata = {
+    name : "<GIVE_THE_FILE_NAME>",
+    mimeType : "<GIVE_MIME_TYPE>",
+    description : "<GIVE_THE_DESCRIPTION>"
+};
 
+###################################################################################
+# Update file with metadata
+###################################################################################
+# Update a file with any metadata that is supported by the Drive API.
+# e.g :You can update the description of a file, MIME type of a file..
+# This function is a more generalized function to update a file.
+# You can use this method to do many updates at once.
+# But if you want to do only one change, You can use other specified functions also.
+# E.g : If you want to rename/move a file. There are specified functions.
+# #################################################################################
 
 public function main() {
     drive:Configuration config = {
@@ -38,15 +53,12 @@ public function main() {
         }
     };
     drive:Client driveClient = new (config);
-    stream<drive:File>|error res = driveClient->getSlidesByName("ballerina");
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2);
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2, "createdTime");
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            json|error jsonObject = file.cloneWithType(json);
-            if (jsonObject is json) {
-                log:print(jsonObject.toString());
-            }
-        });
-    }
+    drive:File|error res = updateFileMetadataById(fileId, payloadFileMetadata, optionalsFileMetadata);
+    //Print file ID
+    if(res is drive:File){
+        string id = res?.id.toString();
+        log:print(id);
+    } else {
+        log:printError(res.message());
+    }  
 }

@@ -23,10 +23,19 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-##########################
-# Search Gslides by name
-# ########################
+####################################################################################
+# Filter files
+# ##################################################################################
+# Filtering can be done giving the filter string.
+# This is also somewhat generalized function that accpets a filter string as the 
+# paramter. 
+# But if you want to do operations like, getfilebyname, there are specified functions
+# availble for that.
+# The filter string should be formatted string.
+# Refer README.md for more information.
+# ##################################################################################
 
+string filterString = "<PLACE_QUERY_STRING>";
 
 public function main() {
     drive:Configuration config = {
@@ -38,15 +47,12 @@ public function main() {
         }
     };
     drive:Client driveClient = new (config);
-    stream<drive:File>|error res = driveClient->getSlidesByName("ballerina");
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2);
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2, "createdTime");
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            json|error jsonObject = file.cloneWithType(json);
-            if (jsonObject is json) {
-                log:print(jsonObject.toString());
-            }
+    stream<drive:File>|error response = driveClient->filterFiles(filterString);
+    if (response is stream<drive:File>){
+        error? e = response.forEach(isolated function (drive:File response) {
+            log:print(response?.id.toString());
         });
+    } else {
+        log:printError(response.message());
     }
 }

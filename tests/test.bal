@@ -45,7 +45,7 @@ string parentFolderId = EMPTY_STRING;
 # ######################
 
 @test:Config {}
-function testdriveGetAbout() {    
+function testGetDriveInformation() {    
     log:print("Gdrive Client -> testdriveGetAbout()");
     About|error response = driveClient->getAbout("user");
     if (response is About){
@@ -164,8 +164,8 @@ function testRenameFile() {
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testUpdateFiles() {
-    log:print("Gdrive Client -> testUpdateFiles()");
+function testUpdateFile() {
+    log:print("Gdrive Client -> testUpdateFile()");
     UpdateFileMetadataOptional optionalsFileMetadata = {
         addParents : parentFolderId
     };
@@ -282,8 +282,8 @@ function testFilterFiles() {
 @test:Config {}
 function testGetFilesByName() {
     log:print("Gdrive Client -> testGetFilesByName()");
-    // stream<File>|error response = driveClient->getFilesByName("ballerina");
-    stream<File>|error response = driveClient->getFilesByName("ballerina", 500);
+    stream<File>|error response = driveClient->getFilesByName("ballerina");
+    // stream<File>|error response = driveClient->getFilesByName("ballerina", 500);
     // stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
@@ -342,8 +342,8 @@ function testGetAllSpreadsheets() {
 # ####################################################
 
 @test:Config {}
-function testSpreadsheetsByName() {
-    log:print("Gdrive Client -> testSpreadsheetsByName()");
+function testGetSpreadsheetsByName() {
+    log:print("Gdrive Client -> testGetSpreadsheetsByName()");
     stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina");
     // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2);
     // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2, "createdTime");
@@ -363,8 +363,8 @@ function testSpreadsheetsByName() {
 # ################################################
 
 @test:Config {}
-function testDocumentsByName() {
-    log:print("Gdrive Client -> testDocumentsByName()");
+function testGetDocumentsByName() {
+    log:print("Gdrive Client -> testGetDocumentsByName()");
     stream<File>|error response = driveClient->getDocumentsByName("ballerina");
     // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 3);
     // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 2, "createdTime");
@@ -384,8 +384,8 @@ function testDocumentsByName() {
 # ############################################
 
 @test:Config {}
-function testFormsByName() {
-    log:print("Gdrive Client -> testFormsByName()");
+function testGetFormsByName() {
+    log:print("Gdrive Client -> testGetFormsByName()");
     stream<File>|error response = driveClient->getFormsByName("ballerina");
     // stream<File>|error response = driveClient->getFormsByName("ballerina", 2);
     // stream<File>|error response = driveClient->getFormsByName("ballerina", 2, "createdTime");
@@ -405,8 +405,8 @@ function testFormsByName() {
 # ############################################
 
 @test:Config {}
-function testSlidesByName() {
-    log:print("Gdrive Client -> testSlidesByName()");
+function testGetSlidesByName() {
+    log:print("Gdrive Client -> testGetSlidesByName()");
     stream<File>|error response = driveClient->getSlidesByName("ballerina");
     // stream<File>|error response = driveClient->getSlidesByName("ballerina", 2);
     // stream<File>|error response = driveClient->getSlidesByName("ballerina", 2, "createdTime");
@@ -428,8 +428,8 @@ function testSlidesByName() {
 @test:Config {
     dependsOn: [testCreateFolder]
 }
-function testNewUpload() {
-    log:print("Gdrive Client -> testNewUpload()");
+function testUploadFile() {
+    log:print("Gdrive Client -> testUploadFile()");
     File|error response = driveClient->uploadFile(localFilePath);
     // File|error response = driveClient->uploadFile(localFilePath, fileName);
     // File|error response = driveClient->uploadFile(localFilePath, fileName, parentFolderId);
@@ -468,8 +468,8 @@ function testDownloadFileById() {
 @test:Config {
     dependsOn: [testCreateFolder]
 }
-function testNewUploadByteArray() {
-    log:print("Gdrive Client -> testNewUploadByteArray()");
+function testUploadFileUsingByteArray() {
+    log:print("Gdrive Client -> testUploadFileUsingByteArray()");
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
     // File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);

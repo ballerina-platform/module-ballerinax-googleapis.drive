@@ -709,6 +709,9 @@ function watchAllFiles(http:Client httpClient, WatchResponse fileWatchRequest, W
     json resp = check sendRequestWithPayload(httpClient, path, payload);
     log:print(resp.toString());
     WatchResponse response = check mapJsonToWatchResponse(<map<json>>resp);
+    if (optional?.pageToken is string){
+        response.startPageToken = optional?.pageToken.toString();
+    }
     return response;
 }
 

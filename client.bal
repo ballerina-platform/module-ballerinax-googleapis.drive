@@ -133,8 +133,8 @@ public client class Client {
     remote function getSpreadsheetsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
                                             returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
-                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
+                                + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
@@ -325,7 +325,8 @@ public client class Client {
     #          "document" .. Google sheets -> "spreadsheet" etc.
     # + folderId - Id of the parent folder that the new file wants to get created. 
     # + return - If successful, returns `File`. Else returns `error`
-    remote function createFile(string fileName, MimeTypes? mime = (), string? folderId = ()) returns @tainted File|error {
+    remote function createFile(string fileName, MimeTypes? mime = (), string? folderId = ()) 
+                                returns @tainted File|error {
         CreateFileOptional optional = {supportsAllDrives : true};
         File fileData = {name : fileName};
         if (mime is string){
@@ -424,17 +425,19 @@ public client class Client {
                                 WatchResponse|error {
         WatchResponse payload = {};
         WatchFileOptional optional = {};
+        string token = EMPTY_STRING;
         payload.id = uuid:createType1AsString();
         payload.'type = WEB_HOOK;
         payload.address = address;
         if (expiration is int) {
             payload.expiration = expiration;
         }
-        if (pageToken is string) {
-            optional = {pageToken : pageToken};
+        if (pageToken is ()) {
+            token = check getStartPageToken(self.httpClient);
         } else {
-            optional = {pageToken : check getStartPageToken(self.httpClient)};
+            token = pageToken;
         }
+        optional = {pageToken : token};
         return watchAllFiles(self.httpClient, payload, optional);
     }
 
