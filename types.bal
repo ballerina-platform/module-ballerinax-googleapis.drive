@@ -364,7 +364,7 @@ public type FilesResponse record {
 #                      This is only applicable when alt=media. (Default: false)  
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
 #                               Only 'published' is supported. 
-# + fields ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssThe paths of the fields you want included in the response. 
+# + fields - The paths of the fields you want included in the response. 
 #            If not specified, the response includes a default set of fields specific to this method. For development 
 #            you can use the special value * to return all fields, but you'll achieve greater performance by only 
 #            selecting the fields you need  
@@ -373,7 +373,7 @@ public type GetFileOptional record {
     boolean acknowledgeAbuse?;
     string fields?;
     string includePermissionsForView?;
-    boolean supportsAllDrives?;
+    boolean? supportsAllDrives = true;
 };
 
 # Optional Query Parameters in DELETE files
@@ -381,7 +381,7 @@ public type GetFileOptional record {
 #
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 public type DeleteFileOptional record {
-    boolean supportsAllDrives?;
+    boolean? supportsAllDrives = true;
 };
 
 # Optional Query Parameters in COPY files
@@ -410,7 +410,7 @@ public type CopyFileOptional record {
     string includePermissionsForView?;
     boolean keepRevisionForever?;
     string ocrLanguage?;
-    boolean supportsAllDrives?;
+    boolean? supportsAllDrives = true;
 };
 
 # Optional Query Parameters in Create files
@@ -437,7 +437,7 @@ public type CreateFileOptional record {
     string includePermissionsForView?; 
     boolean keepRevisionForever?; 
     string ocrLanguage?;  
-    boolean supportsAllDrives?; 
+    boolean? supportsAllDrives = true; 
     boolean useContentAsIndexableText?; 
 };
 
@@ -460,7 +460,7 @@ public type UpdateFileMetadataOptional record {
    boolean keepRevisionForever?; 
    string ocrLanguage?; 
    string removeParents?; 
-   boolean supportsAllDrives?; 
+   boolean? supportsAllDrives = true; 
    boolean useContentAsIndexableText?; 
 };
 
@@ -666,7 +666,7 @@ public type ListFilesOptional record {
     string pageToken?;
     string q?;
     string spaces?;
-    boolean supportsAllDrives?;
+    boolean? supportsAllDrives = true;
 };
 
 # Mime types for file operations
@@ -717,7 +717,7 @@ enum MimeTypes {
 public type WatchFileOptional record {
     boolean acknowledgeAbuse?;
     string fields?;
-    boolean supportsAllDrives?;
+    boolean? supportsAllDrives = true;
     string pageToken?;
 };
 
@@ -781,7 +781,7 @@ public type ChangesListOptional record {
     int pageSize?;
     boolean restrictToMyDrive?;
     string spaces?;
-    boolean supportsAllDrives?;
+    boolean? supportsAllDrives = true;
 };
 
 # Record which maps the response from list changes request.
