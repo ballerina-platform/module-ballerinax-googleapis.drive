@@ -402,16 +402,22 @@ public client class Client {
     # + address - The address where notifications are delivered for this channel.
     # + expiration - 
     # + return - If successful, returns `WatchResponse`. Else returns `error` 
-    remote function watchFilesById(string fileId, string address, int? expiration = ()) returns @tainted 
-                                    WatchResponse|error {
+    remote function watchFilesById(string fileId, string address, string? pageToken = (), int? expiration = ()) 
+                                    returns @tainted WatchResponse|error {
         WatchResponse payload = {};
         payload.id = uuid:createType1AsString();
+        string token = EMPTY_STRING;
         payload.'type = WEB_HOOK;
         payload.address = address;
         if (expiration is int) {
             payload.expiration = expiration;
         }
-        WatchFileOptional optional = {supportsAllDrives : true};
+        if (pageToken is ()) {
+            token = check getStartPageToken(self.httpClient);
+        } else {
+            token = pageToken;
+        }
+        WatchFileOptional optional = {supportsAllDrives : true, pageToken : token};
         return watchFilesById(self.httpClient, fileId, payload, optional);
     }
 

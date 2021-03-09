@@ -694,6 +694,9 @@ function watchFilesById(http:Client httpClient, string fileId, WatchResponse? fi
     json payload = check fileWatchRequest.cloneWithType(json);
     json resp = check sendRequestWithPayload(httpClient, path, payload);
     WatchResponse response = check mapJsonToWatchResponse(<map<json>>resp);
+    if (optional?.pageToken is string){
+        response.startPageToken = optional?.pageToken.toString();
+    }
     return response;
 }
 
