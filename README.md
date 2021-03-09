@@ -245,5 +245,6 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 ![alt text](/metadata/extractIDfromUrl.jpeg?raw=true)
 
 #### Limitations
-Currently, Google drive connecter supports operations related to files only.
-Google api supports Files, Permissions, Replies, Revisions, Drives and Channels.
+Google api supports Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
+Currently, Google drive connecter supports operations related to Files, Channels and Changes only.
+
