@@ -39,8 +39,12 @@ public client class Client {
     # 
     # + fileId - ID of the file to retreive
     # + return - If successful, returns `File`. Else returns `error`
-    remote function getFile(string fileId) returns @tainted File|error {
-        GetFileOptional optional = {supportsAllDrives : true};
+    remote function getFile(string fileId, string? fields = ()) returns @tainted File|error {
+        GetFileOptional optional = {};
+        optional.supportsAllDrives = true;
+        if (fields is string){
+            optional.fields = fields;
+        }
         return getFileById(self.httpClient , fileId, optional);
     }
 

@@ -69,9 +69,10 @@ function testGetDriveInformation() {
 function testGetFileById() {
     log:print("Gdrive Client -> testGetFileById()");
     File|error response = driveClient->getFile(fileId);
+    // File|error response = driveClient->getFile(fileId, "createdTime,modifiedTime");
     if(response is File){
         test:assertNotEquals(response?.id, "", msg = "Expect File id");
-        log:print(response?.id.toString());
+        log:print(response.toString());
     } else {
         test:assertFail(response.message());
         log:printError(response.message());
