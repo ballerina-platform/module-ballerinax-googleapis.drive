@@ -39,6 +39,8 @@ Client driveClient = check new (config);
 
 string fileId = EMPTY_STRING;
 string parentFolderId = EMPTY_STRING;
+string channelId = EMPTY_STRING;
+string resourceId = EMPTY_STRING;
 
 ########################
 # Get Drive Information
@@ -492,11 +494,14 @@ function testUploadFileUsingByteArray() {
 function testWatchFilesById() {
     string fileIdToBeWatched = "1zfMDanIe5erdY_Vjle8vczBK2bdYnAZwhlZ56DmN29M";
     string address = "https://www.syntax.lk/";
-    WatchResponse|error res = driveClient->watchFilesById(fileIdToBeWatched, address);
-    if(res is WatchResponse){
-        log:print(res.toString());
+    WatchResponse|error response = driveClient->watchFilesById(fileIdToBeWatched, address);
+    if(response is WatchResponse){
+        channelId = response?.id.toString();
+        resourceId = response?.resourceId.toString();
+        test:assertNotEquals(channelId, "", msg = "Expect File id");
+        log:print(response.toString());
     } else {
-        log:print(res.toString());
+        log:print(response.toString());
     }
 }
 
@@ -507,11 +512,15 @@ function testWatchFilesById() {
 @test:Config {}
 function testWatchAllFiles() {
     string address = "https://www.syntax.lk/";
-    WatchResponse|error res = driveClient->watchFiles(address);
-    if(res is WatchResponse){
-        log:print(res.toString());
+    WatchResponse|error response = driveClient->watchFiles(address);
+    if(response is WatchResponse){
+        channelId = response?.id.toString();
+        resourceId = response?.resourceId.toString();
+        test:assertNotEquals(channelId, "", msg = "Expect channelId");
+        log:print(response.toString());
     } else {
-        log:print(res.message());
+        test:assertFail(response.message());
+        log:print(response.message());
     }
 }
 
@@ -519,21 +528,17 @@ function testWatchAllFiles() {
 # Stop watching resources 
 # ########################
 
-@test:Config {}
+@test:Config {
+    dependsOn: [testWatchFilesById, testWatchAllFiles]
+}
 function testStopWatching() {
-    // WatchResponse payload = {
-    //     kind: "api#channel",
-    //     id: "01234567-ewew-cdef-frrt", // Your channel ID.
-    //     'type: "web_hook",
-    //     address: "https://www.syntax.lk/notifications"// Your receiving URL.
-    // };
-    string channelId = "01eb8019-4844-1376-83a3-f7a3dfdece1f";
-    string resourceId = "GYFfeabdbAp2FoyZm2KDfQMKd1Q";
-    boolean|error res = driveClient->watchStop(channelId, resourceId);
-    if (res is boolean) {
+    boolean|error response = driveClient->watchStop(channelId, resourceId);
+    if (response is boolean) {
         log:print("Watch channel stopped");
+        test:assertTrue(response, msg = "Expects true on success");
     } else {
-        log:print("Error");
+        log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -541,13 +546,18 @@ function testStopWatching() {
 # List changes  
 # ########################
 
-@test:Config {}
+@test:Config {
+    dependsOn: [testWatchFilesById, testWatchAllFiles]
+}
 function testListChanges() {
     string pageToken = "120363";
-    ChangesListResponse|error res = driveClient->listChanges(pageToken);
-    if (res is ChangesListResponse) {
-        log:print(res.toString());
+    ChangesListResponse|error response = driveClient->listChanges(pageToken);
+    if (response is ChangesListResponse) {
+        test:assertEquals(response?.kind, "drive#changeList", 
+                            msg = "Expects kind as drive#changeList in ChangesListResponse");
+        log:print(response.toString());
     } else {
-        log:print(res.message());
+        log:print(response.message());
+        test:assertFail(response.message());
     }
 }
