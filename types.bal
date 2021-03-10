@@ -170,7 +170,8 @@ public type File record {
     boolean hasThumbnail?;
     string thumbnailLink?;
     int thumbnailVersion?;
-    string viewedByMe?;
+    boolean viewedByMe?;
+    boolean modifiedByMe?;
     string viewedByMeTime?;
     string createdTime?;
     string modifiedTime?;
