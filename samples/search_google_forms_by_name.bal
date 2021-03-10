@@ -27,7 +27,6 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 # Search Google forms by name
 # ###########################
 
-
 public function main() {
     drive:Configuration config = {
         clientConfig: {
