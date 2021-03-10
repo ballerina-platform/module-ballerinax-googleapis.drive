@@ -110,7 +110,8 @@ public type About record {
 #                    The supported colors are published in the folderColorPalette field of the About resource.  
 # + headRevisionId - The ID of the file's head revision. This is currently only available for files with binary content 
 #                    in Google Drive.  
-# + modifiedByMeTime - The last time the file was modified by the user (RFC 3339 date-time).  
+# + modifiedByMeTime - The last time the file was modified by the user (RFC 3339 date-time). 
+# + modifiedByMe - Whether the file has been modified by this user.
 # + shared - Whether the file has been shared. Not populated for items in shared drives.  
 # + hasAugmentedPermissions - Whether there are permissions directly on this file. 
 #                             This field is only populated for items in shared drives.  
@@ -816,7 +817,8 @@ type StartPageTokenResponse record {
 # + file - The updated state of the file. Present if the type is file and the file has not been removed from this 
 #          list of changes. 
 # + changeType - The type of the change. Possible values are file and drive.  
-# + time - The time of this change (RFC 3339 date-time).  
+# + time - The time of this change (RFC 3339 date-time). 
+# + mimeType - The MIME type of the file.
 # + fileId - The ID of the file which has changed.  
 public type Change record {
     string kind?;
