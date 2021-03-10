@@ -34,7 +34,6 @@ string sourceFileId = "<PLACE_YOUR_FILE_ID_HERE>";
 # More details : https://developers.google.com/drive/api/v3/reference/files/copy
 # #################################################################################
 # 
-
 public function main() {
     drive:Configuration config = {
         clientConfig: {
@@ -54,6 +53,5 @@ public function main() {
         log:print(id);
     } else {
         log:printError(res.message());
-    }
-    
+    }  
 }
