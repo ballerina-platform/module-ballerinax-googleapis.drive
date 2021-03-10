@@ -821,6 +821,7 @@ type StartPageTokenResponse record {
 public type Change record {
     string kind?;
     string changeType?;
+    string mimeType?;
     string time?;
     boolean removed?;
     string fileId?;
