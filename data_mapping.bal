@@ -16,11 +16,12 @@
 // under the License.
 
 isolated function mapJsonToWatchResponse(map<json> jsonPayload) returns WatchResponse|error {
-    WatchResponse response = {};
-    response.kind = jsonPayload["kind"].toString();
-    response.id = jsonPayload["id"].toString();
-    response.resourceId = jsonPayload["resourceId"].toString();
-    response.resourceUri = jsonPayload["resourceUri"].toString();
-    response.expiration = check int:fromString(jsonPayload["expiration"].toString());
+    WatchResponse response = {
+        kind: jsonPayload["kind"].toString(),
+        id: jsonPayload["id"].toString(),
+        resourceId: jsonPayload["resourceId"].toString(),
+        resourceUri: jsonPayload["resourceUri"].toString(),
+        expiration: check int:fromString(jsonPayload["expiration"].toString())
+    };
     return response;
 }
