@@ -642,8 +642,7 @@ function getFilesStream(http:Client httpClient, @tainted File[] files, ListFiles
         }        
         stream<File> filesStream = (<@untainted>files).toStream();
         string? nextPageToken = res?.nextPageToken;
-        if (nextPageToken is string && optional is ListFilesOptional && optional?.pageToken is () && 
-                optional?.pageSize is ()) {
+        if (nextPageToken is string && optional is ListFilesOptional) {
             optional.pageToken = nextPageToken;
             var streams = check getFilesStream(httpClient, files, optional);
         }
