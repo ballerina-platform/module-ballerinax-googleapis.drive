@@ -241,7 +241,6 @@ function testCreateFile() {
 function testGetFiles() { 
     log:print("Gdrive Client -> testGetFiles()");
     ListFilesOptional optionalSearch = {
-        pageSize : 2,
         orderBy : "createdTime"
     };
     stream<File>|error response = driveClient->getFiles(optionalSearch);
@@ -264,9 +263,7 @@ function testGetFiles() {
 function testFilterFiles() { 
     log:print("Gdrive Client -> testFilterFiles()");
     string filterString = "name contains 'hello'";
-    // stream<File>|error response = driveClient->filterFiles(filterString);
-    // stream<File>|error response = driveClient->filterFiles(filterString, 2);
-    stream<File>|error response = driveClient->filterFiles(filterString, 4, "createdTime");
+    stream<File>|error response = driveClient->filterFiles(filterString);
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -286,8 +283,7 @@ function testFilterFiles() {
 function testGetFilesByName() {
     log:print("Gdrive Client -> testGetFilesByName()");
     stream<File>|error response = driveClient->getFilesByName("ballerina");
-    // stream<File>|error response = driveClient->getFilesByName("ballerina", 500);
-    // stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getFilesByName("ballerina", "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -307,8 +303,7 @@ function testGetFilesByName() {
 function testGetFoldersByName() {
     log:print("Gdrive Client -> testGetFoldersByName()");
     stream<File>|error response = driveClient->getFoldersByName("ballerina");
-    // stream<File>|error response = driveClient->getFoldersByName("ballerina", 2);
-    // stream<File>|error response = driveClient->getFoldersByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getFoldersByName("ballerina", "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -320,6 +315,27 @@ function testGetFoldersByName() {
     }
 }
 
+###################
+# Get all files
+# #################
+
+@test:Config {}
+function testAllGetFiles() { 
+    log:print("Gdrive Client -> testAllGetFiles()");
+    ListFilesOptional optionalSearch = {
+        orderBy : "createdTime"
+    };
+    stream<File>|error response = driveClient->getAllFiles();
+    if (response is stream<File>){
+        error? e = response.forEach(isolated function (File response) {
+            test:assertNotEquals(response?.id, "", msg = "Expect File id");
+            log:print(response?.id.toString());
+        });
+    } else {
+        test:assertFail(response.message());
+        log:printError(response.message());
+    }
+}
 
 #############################
 # Get All Google spreadsheets 
@@ -348,8 +364,7 @@ function testGetAllSpreadsheets() {
 function testGetSpreadsheetsByName() {
     log:print("Gdrive Client -> testGetSpreadsheetsByName()");
     stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina");
-    // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2);
-    // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina","createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -369,8 +384,7 @@ function testGetSpreadsheetsByName() {
 function testGetDocumentsByName() {
     log:print("Gdrive Client -> testGetDocumentsByName()");
     stream<File>|error response = driveClient->getDocumentsByName("ballerina");
-    // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 3);
-    // stream<File>|error response = driveClient->getDocumentsByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getDocumentsByName("ballerina", "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -390,8 +404,7 @@ function testGetDocumentsByName() {
 function testGetFormsByName() {
     log:print("Gdrive Client -> testGetFormsByName()");
     stream<File>|error response = driveClient->getFormsByName("ballerina");
-    // stream<File>|error response = driveClient->getFormsByName("ballerina", 2);
-    // stream<File>|error response = driveClient->getFormsByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getFormsByName("ballerina", "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
@@ -411,8 +424,7 @@ function testGetFormsByName() {
 function testGetSlidesByName() {
     log:print("Gdrive Client -> testGetSlidesByName()");
     stream<File>|error response = driveClient->getSlidesByName("ballerina");
-    // stream<File>|error response = driveClient->getSlidesByName("ballerina", 2);
-    // stream<File>|error response = driveClient->getSlidesByName("ballerina", 2, "createdTime");
+    // stream<File>|error response = driveClient->getSlidesByName("ballerina", "createdTime");
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, "", msg = "Expect File id");
