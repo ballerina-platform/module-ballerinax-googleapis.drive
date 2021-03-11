@@ -58,32 +58,47 @@ public client class Client {
         return fileResponse?.webContentLink.toString();
     }
 
-    # Retrieve files.
+    # Retrieve files. (To be Deprecated in next release ..)
     # 
     # + optional - 'ListFilesOptional' used to add query parameters to the request
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     remote function getFiles(ListFilesOptional? optional = ()) returns @tainted stream<File>|error {
+        if (optional is ListFilesOptional) {
+            optional.pageSize = 1000;
+            optional.supportsAllDrives = false;
+        }
+        return getFiles(self.httpClient, optional);
+    }
+
+    # Retrieve all the files in the drive.
+    # 
+    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    remote function getAllFiles(string? filterString = ()) returns @tainted stream<File>|error {
+        ListFilesOptional optional = {
+            pageSize : 1000,
+            supportsAllDrives : false
+        };
+        if (filterString is string) {
+            optional.q = filterString;
+        }
         return getFiles(self.httpClient, optional);
     }
 
     # Filter and retreive files using filter string
     # 
     # + filterString - Query used to find what you need. Read documentation for query string patterns.
-    # + noOfFiles - Number of files to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function filterFiles(string filterString, int? noOfFiles = (), string? orderBy = ()) returns @tainted 
-                                stream<File>|error {
-        ListFilesOptional optional = {};
-        optional.q = filterString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
-        if (noOfFiles is int){
-            optional.pageSize = noOfFiles;
-        }
-        if (orderBy is string){
+    remote function filterFiles(string filterString, string? orderBy = ()) returns @tainted stream<File>|error {
+        ListFilesOptional optional = {
+            q : filterString,
+            supportsAllDrives: true,
+            includeItemsFromAllDrives: true,
+            pageSize: 1000
+        };
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
@@ -92,23 +107,18 @@ public client class Client {
     # Retrieve files by Name
     # 
     # + fileName - Name of the file to search (Partial search)
-    # + noOfFiles - Number of files to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getFilesByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
-                                    returns @tainted stream<File>|error {
+    remote function getFilesByName(string fileName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
-                                SPACE + TRASH_FALSE;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
+                    + SPACE + TRASH_FALSE;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
-        if (noOfFiles is int){
-            optional.pageSize = noOfFiles;
-        }
-        if (orderBy is string){
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
@@ -129,23 +139,18 @@ public client class Client {
     # Retrieve Google spreadsheets by Name
     # 
     # + fileName - Name of the file to search (Partial search)
-    # + noOfFiles - Number of files to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getSpreadsheetsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
-                                            returns @tainted stream<File>|error {
+    remote function getSpreadsheetsByName(string fileName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
                                 + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
-        if (noOfFiles is int){
-            optional.pageSize = noOfFiles;
-        }
-        if (orderBy is string){
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
@@ -154,23 +159,18 @@ public client class Client {
     # Retrieve Google documents by Name
     # 
     # + fileName - Name of the file to search (Partial search)
-    # + noOfFiles - Number of files to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getDocumentsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) 
-                                        returns @tainted stream<File>|error {
+    remote function getDocumentsByName(string fileName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
-                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + DOCS;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
+                    + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + DOCS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
-        if (noOfFiles is int){
-            optional.pageSize = noOfFiles;
-        }
-        if (orderBy is string){
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
@@ -179,22 +179,18 @@ public client class Client {
     # Retrieve Google forms by Name
     # 
     # + fileName - Name of the file to search (Partial search)
-    # + noOfFiles - Number of files to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getFormsByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
+    remote function getFormsByName(string fileName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
-                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FORMS;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND
+                     + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FORMS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
-        if (noOfFiles is int){
-            optional.pageSize = noOfFiles;
-        }
-        if (orderBy is string){
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
@@ -203,22 +199,18 @@ public client class Client {
     # Retrieve Google slides by Name
     # 
     # + fileName - Name of the file to search (Partial search)
-    # + noOfFiles - Number of files to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getSlidesByName(string fileName, int? noOfFiles = (), string? orderBy = ()) returns @tainted stream<File>|error {
+    remote function getSlidesByName(string fileName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND + 
-                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SLIDES;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND
+                         + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SLIDES;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
-        if (noOfFiles is int){
-            optional.pageSize = noOfFiles;
-        }
-        if (orderBy is string){
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
@@ -227,23 +219,18 @@ public client class Client {
     # Retrieve folders by Name
     # 
     # + folderName - Name of the folder to search (Partial search)
-    # + noOfFolders - Number of folders to retreive 
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'.  
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    remote function getFoldersByName(string folderName, int? noOfFolders = (), string? orderBy = ()) 
-                                        returns @tainted stream<File>|error {
+    remote function getFoldersByName(string folderName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + folderName + SINGLE_QUOTE + SPACE + AND + 
-                                SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FOLDERS;
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + folderName + SINGLE_QUOTE + SPACE + AND 
+                        +  SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FOLDERS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
-        if (noOfFolders is int){
-            optional.pageSize = noOfFolders;
-        }
-        if (orderBy is string){
+        if (orderBy is string) {
             optional.orderBy = orderBy;
         }
         return getFiles(self.httpClient, optional);
