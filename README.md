@@ -114,12 +114,7 @@ Creating a drive:driveClient by giving the HTTP client config details.
     File|error response = driveClient->createFile(fileName, mimeType);
     File|error response = driveClient->createFile(fileName, mimeType, parentFolderId);
 ```
-### Filter files
-```ballerina
-    stream<File>|error response = driveClient->filterFiles(filterString);
-    stream<File>|error response = driveClient->filterFiles(filterString, 2);
-    stream<File>|error response = driveClient->filterFiles(filterString, 4, "createdTime");
-```
+
 ### Search files by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getFilesByName("ballerina");
@@ -132,7 +127,13 @@ Creating a drive:driveClient by giving the HTTP client config details.
     stream<File>|error response = driveClient->getFoldersByName("ballerina", 2);
     stream<File>|error response = driveClient->getFoldersByName("ballerina", 2, "createdTime");
 ```
-### Search files
+
+### Filter files
+```ballerina
+    stream<File>|error response = driveClient->filterFiles(filterString);
+    stream<File>|error response = driveClient->filterFiles(filterString, 2);
+    stream<File>|error response = driveClient->filterFiles(filterString, 4, "createdTime");
+```
 
 | What you want to query                                               |    Example                                                             |
 | ---------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -152,14 +153,11 @@ Creating a drive:driveClient by giving the HTTP client config details.
 |Files modified after a given date	                                   |      modifiedTime > '2012-06-04T12:00:00' // default time zone is UTC  |
 |Files shared with the authorized user with "hello" in the name	       |      sharedWithMe and name contains 'hello'                            |
 
+### Get All files
 ```ballerina
-
-    ListFilesOptional optional_search = {
-        q: "name = 'hello'" // Get Files with name 'hello'
-    };
-    drive:stream<File>|error res = driveClient->getFiles(optional_search);
-
+    drive:stream<File>|error res = driveClient->getAllFiles();
 ```
+
 ## Workspace related functions
 ### Get All Google spreadsheets
 ```ballerina
