@@ -38,10 +38,10 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = new (config);
     drive:ListFilesOptional optionalSearch = {
-        pageSize : 3
-    };   
+        orderBy : "createdTime"
+    };
+    drive:Client driveClient = new (config);
     stream<drive:File>|error res = driveClient->getFiles(optionalSearch);
     if (res is stream<drive:File>){
         error? e = res.forEach(function (drive:File file) {
