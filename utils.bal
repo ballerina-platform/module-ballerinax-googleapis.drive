@@ -699,7 +699,7 @@ function watchFilesById(http:Client httpClient, string fileId, WatchResponse? fi
     return response;
 }
 
-# Subscribes to all the changes.
+# 
 # 
 # + httpClient - The HTTP Client
 # + fileWatchRequest - 'WatchResponse' object
