@@ -689,7 +689,7 @@ public type ListFilesOptional record {
 # + SITE - Site MIME type
 # + UNKNOWN - Unknown MIME type
 # + VIDEO - Video MIME type
-enum MimeTypes {
+public enum MimeTypes {
     DOCUMENT = "application/vnd.google-apps.document",
     SPREADSHEET = "application/vnd.google-apps.spreadsheet",
     PRESENTATION = "application/vnd.google-apps.presentation",
