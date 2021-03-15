@@ -14,7 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerinax/googleapis_drive as drive;
+import nuwantissera/googleapis_drive as drive;
 import ballerina/log;
 import ballerina/time;
 import ballerina/regex;

@@ -17,7 +17,7 @@
 import ballerina/http;
 import ballerina/log;
 import ballerina/test;
-import ballerinax/googleapis_drive as drive;
+import nuwantissera/googleapis_drive as drive;
 
 configurable string callbackURL = ?;
 configurable string clientId = ?;
