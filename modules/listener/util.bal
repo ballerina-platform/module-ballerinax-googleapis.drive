@@ -110,15 +110,15 @@ function identifyFolderEvent(string folderId, OnEventService eventService, drive
     if (isTrashed is boolean) {
         if (!isExisitingFolder && !isTrashed) {
             if (isSepcificFolder && parent == specFolderId.toString()) {
-                var x = eventService.onNewFolderCreatedInSpecificFolderEvent(folderId);
+                _ = eventService.onNewFolderCreatedInSpecificFolderEvent(folderId);
             } else if (!isSepcificFolder) {
-                var x = eventService.onNewFolderCreatedEvent(folderId);
+                _ = eventService.onNewFolderCreatedEvent(folderId);
             }
         } else if (isExisitingFolder && isTrashed) {
             if (isSepcificFolder && parent == specFolderId.toString()) {
-                var x = eventService.onFolderDeletedInSpecificFolderEvent(folderId);
+                _ = eventService.onFolderDeletedInSpecificFolderEvent(folderId);
             } else if (!isSepcificFolder) {
-                var x = eventService.onFolderDeletedEvent(folderId);
+                _ = eventService.onFolderDeletedEvent(folderId);
             }
         }
     } else {
@@ -144,15 +144,15 @@ function identifyFileEvent(string fileId, OnEventService eventService, drive:Cli
     if (isTrashed is boolean) {
         if (!isExisitingFile && !isTrashed) {
             if (isSepcificFolder && parent == specFolderId.toString()) {
-                var x = eventService.onNewFileCreatedInSpecificFolderEvent(fileId);
+                _ = eventService.onNewFileCreatedInSpecificFolderEvent(fileId);
             } else if (!isSepcificFolder) {
-                var x = eventService.onNewFileCreatedEvent(fileId);
+                _ = eventService.onNewFileCreatedEvent(fileId);
             }
         } else if (isExisitingFile && isTrashed) {
             if (isSepcificFolder && parent == specFolderId.toString()) {
-                var x = eventService.onFileDeletedInSpecificFolderEvent(fileId);
+                _ = eventService.onFileDeletedInSpecificFolderEvent(fileId);
             } else if (!isSepcificFolder) {
-                var x = eventService.onFileDeletedEvent(fileId);
+                _ = eventService.onFileDeletedEvent(fileId);
             }
         }
     } else {
@@ -299,9 +299,9 @@ function mapFileUpdateEvents(string resourceId, drive:ChangesListResponse change
                     boolean isModified = check checkforModificationAftertheLastOne(file?.modifiedTime.toString(), 
                     currentModifedTimeInStore.toString());
                     if (istrashed == true) {
-                        var x = eventService.onFileDeletedEvent(fileOrFolderId);
+                        _ = eventService.onFileDeletedEvent(fileOrFolderId);
                     } else if (isModified) {
-                        var x = eventService.onFileUpdateEvent(fileOrFolderId);
+                        _ = eventService.onFileUpdateEvent(fileOrFolderId);
                     }
                 } else {
                     fail error("Error In json modified time of current status");
