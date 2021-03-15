@@ -22,7 +22,7 @@ Domain used in the CallbackURL need to be registered in google console as a veri
 https://console.cloud.google.com/apis/credentials/domainverification
 
 ## Getting started
-1. Refer the Get Started section to download and install Ballerina.
+1. Refer the [Get Started](https://ballerina.io/v1-1/learn/) section to download and install Ballerina.
 2. Import the Google Drive Listner module to your Ballerina program as follows.
 
 i.e : Client connecter is imported to create a file in the drive here.
@@ -104,5 +104,60 @@ public function main() returns error? {
 }
 
 ```
-The above example is used to listen for file creation. Implement only needed method in `EventTrigger` class.
+## Notes : 
+
+1. The above example is used to listen for file creation only. Implement all needed methods in `EventTrigger` class.
+
+```
+# Event Trigger class  
+public class EventTrigger {
+    
+    public function onNewFolderCreatedEvent(string folderId) {
+        log:print("New folder was created:" + folderId);
+    }
+
+    public function onFolderDeletedEvent(string folderID) {
+        log:print("This folder was removed to the trashed:" + folderID);
+    }
+
+    public function onNewFileCreatedEvent(string fileId) {
+        log:print("New File was created:" + fileId);
+    }
+
+    public function onFileDeletedEvent(string fileId) {
+        log:print("This File was removed to the trashed:" + fileId);
+    }
+
+    public function onNewFileCreatedInSpecificFolderEvent(string fileId) {
+        log:print("A file with Id " + fileId + "was created in side the folder specified");
+    }
+
+    public function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
+        log:print("A folder with Id " + folderId + "was created in side the folder specified");
+    }
+
+    public function onFolderDeletedInSpecificFolderEvent(string folderId) {
+        log:print("A folder with Id " + folderId + "was deleted in side the folder specified");
+    }
+
+    public function onFileDeletedInSpecificFolderEvent(string fileId) {
+        log:print("A file with Id " + fileId + "was deleted in side the folder specified");
+    }
+    public function onFileUpdateEvent(string fileId) {
+        log:print("File updated : " + fileId);
+    }
+}
+```
+
+2. If listener should listen for changes in a specifc folder only, specify the folder Id in `ListenerConfiguration`.
+
+```
+    listen:ListenerConfiguration configuration = {
+        port: 9090,
+        callbackURL: callbackURL,
+        clientConfiguration: config,
+        eventService: new EventTrigger(),
+        specificFolderOrFileId : parentFolderId
+    };
+```
 
