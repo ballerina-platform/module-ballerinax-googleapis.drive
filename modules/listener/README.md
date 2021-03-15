@@ -171,34 +171,34 @@ public class EventTrigger {
 
 ```
 googleapis_drive.listener
-time = 2021-03-15 12:03:15,797 level = INFO  module = nuwantissera/googleapis_drive message = "{"kind":"api#channel","id":"01eb8595-de58-1926-b49b-6cad0df9c80c","resourceId":"GYFfeabdbAp2FoyZm2KDfQMKd1Q","resourceUri":
+time = 2021-03-15 12:03:15,797 level = INFO  module = ballerinax/googleapis_drive message = "{"kind":"api#channel","id":"01eb8595-de58-1926-b49b-6cad0df9c80c","resourceId":"GYFfeabdbAp2FoyZm2KDfQMKd1Q","resourceUri":
 https://www.googleapis.com/drive/v3/changes?includeCorpusRemovals=false&includeItemsFromAllDrives=false
 &includeRemoved=true&includeTeamDriveItems=false&pageSize=100&pageToken=121208&restrictToMyDrive=false&spaces=drive&supportsAllDrives=true&supportsTeamDrives=false&alt=json","expiration":"1615793595000"}" 
-time = 2021-03-15 12:03:40,444 level = INFO  module = nuwantissera/googleapis_drive.listener message = "10475" 
-time = 2021-03-15 12:03:40,445 level = INFO  module = nuwantissera/googleapis_drive.listener message = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
-time = 2021-03-15 12:03:40,445 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:03:40,444 level = INFO  module = ballerinax/googleapis_drive.listener message = "10475" 
+time = 2021-03-15 12:03:40,445 level = INFO  module = ballerinax/googleapis_drive.listener message = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+time = 2021-03-15 12:03:40,445 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "Watch channel started in Google, id : 01eb8595-de58-1926-b49b-6cad0df9c80c" 
-time = 2021-03-15 12:03:40,446 level = INFO  module = nuwantissera/googleapis_drive.listener message = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
+time = 2021-03-15 12:03:40,446 level = INFO  module = ballerinax/googleapis_drive.listener message = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
 [ballerina/http] started HTTP/WS listener 0.0.0.0:9090
-time = 2021-03-15 12:03:40,474 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:03:40,474 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "gDriveClient -> watchFiles()"
 ```
 
 ### Logs on receiving a callback
 
 ```
-time = 2021-03-15 12:06:19,314 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:06:19,314 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "<<<<<<<<<<<<<<< RECEIVING A CALLBACK <<<<<<<<<<<<<<<" 
-time = 2021-03-15 12:06:19,316 level = INFO  module = nuwantissera/googleapis_drive message = 
+time = 2021-03-15 12:06:19,316 level = INFO  module = ballerinax/googleapis_drive message = 
 "/drive/v3/changes?pageToken=121208" 
-time = 2021-03-15 12:06:19,644 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:06:19,644 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "Whole drive watch response processing" 
-time = 2021-03-15 12:06:20,030 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:06:20,030 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 ">>>>> INCOMING TRIGGER >>>>> File change event found file id : 1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk | 
 Mime type : application/vnd.google-apps.document" 
-time = 2021-03-15 12:06:20,448 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:06:20,448 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "This File was removed to the trashed:1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk" 
-time = 2021-03-15 12:06:40,798 level = INFO  module = nuwantissera/googleapis_drive.listener message = "10474" 
-time = 2021-03-15 12:06:40,798 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
+time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_drive.listener message = "10474" 
+time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "<<<<<<<<<<<<<<< RECEIVED >>>>>>>>>>>>>>>" 
 ```

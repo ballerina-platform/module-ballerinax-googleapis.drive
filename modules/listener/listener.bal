@@ -16,7 +16,7 @@
 
 import ballerina/http;
 import ballerina/log;
-import nuwantissera/googleapis_drive as drive;
+import ballerinax/googleapis_drive as drive;
 
 # Listener Configuration. 
 #
