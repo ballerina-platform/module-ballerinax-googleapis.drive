@@ -16,6 +16,10 @@ Listner can be used to track changes on the whole drive or specified folders.
 3. Listen to new folder creation event.
 4. Listen to new folder creation on a specific folder.
 5. Listen to file update event.
+6. Listen to file delete event.
+7. Listen to file delte event on a specific folder.
+8. Listen to folder delete event.
+9. Listen to folder delte event on a specific folder.
 
 ## Prerequisite
 Domain used in the CallbackURL need to be registered in google console as a verified domain.
@@ -31,8 +35,8 @@ i.e : Client connecter is imported to create a file in the drive here.
 	
 import ballerina/http;
 import ballerina/log;
-import nuwantissera/googleapis_drive as drive;
-import nuwantissera/googleapis_drive.'listener as listen;
+import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis_drive.'listener as listen;
 
 configurable string callbackURL = ?;
 configurable string clientId = ?;
