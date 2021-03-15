@@ -136,7 +136,6 @@ public class DriveEventListener {
                     check mapEvents(item, self.driveClient, self.eventService, self.currentFileStatus);
                     check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus);
                 }
-
             }
         }
         log:print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");

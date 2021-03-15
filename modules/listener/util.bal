@@ -351,5 +351,4 @@ function checkMimeType(drive:Client driveClient, string specificParentFolderId) 
         }
 
     }
-
 }
