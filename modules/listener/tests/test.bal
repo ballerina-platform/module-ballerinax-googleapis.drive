@@ -75,8 +75,7 @@ ListenerConfiguration congifuration = {
     port: 9090,
     callbackURL: callbackURL,
     clientConfiguration: clientConfiguration,
-    eventService: new EventTrigger(),
-    specificFolderOrFileId : "1Oka9_InSpDi2WLzCEbks-hI7vMXq8axq"
+    eventService: new EventTrigger()
 };
 
 listener DriveEventListener gDrivelistener = new (congifuration);

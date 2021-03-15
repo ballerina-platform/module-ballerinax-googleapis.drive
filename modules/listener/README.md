@@ -194,7 +194,7 @@ time = 2021-03-15 12:06:19,316 level = INFO  module = nuwantissera/googleapis_dr
 time = 2021-03-15 12:06:19,644 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
 "Whole drive watch response processing" 
 time = 2021-03-15 12:06:20,030 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
-"File change event found file id : 1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk | 
+">>>>> INCOMING TRIGGER >>>>> File change event found file id : 1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk | 
 Mime type : application/vnd.google-apps.document" 
 time = 2021-03-15 12:06:20,448 level = INFO  module = nuwantissera/googleapis_drive.listener message = 
 "This File was removed to the trashed:1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk" 
