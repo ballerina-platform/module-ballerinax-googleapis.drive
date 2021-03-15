@@ -196,7 +196,7 @@ function testUpdateFile() {
 function testCreateFolder() {
     log:print("Gdrive Client -> testCreateFolder()");
      File|error response = driveClient->createFolder(folderName);
-    //File|error response = driveClient->createFolder(folderName, "1mskwVJ1v02L1u7O8AhPNswVstWjOXctT");
+    //File|error response = driveClient->createFolder(folderName, "<PARENT_FOLDER_ID>");
     //Assertions
     if(response is File){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
@@ -219,7 +219,7 @@ function testCreateFolder() {
 function testCreateFile() {
     log:print("Gdrive Client -> testCreateFile()");
     File|error response = driveClient->createFile(fileName);
-    //File|error response = driveClient->createFile("ballerina123", DOCUMENT);
+    //File|error response = driveClient->createFile(fileName, DOCUMENT);
     // File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
     //Assertions
     if(response is File){
@@ -454,7 +454,7 @@ function testUploadFile() {
 }
 function testDownloadFileById() {
     log:print("Gdrive Client -> testDownloadFileById()");
-    string downloadFileId = "1ao7BmPt5AgTPArteVW7UVOrAHrMo7HH9";
+    string downloadFileId = fileId;
     string|error response = driveClient->downloadFile(downloadFileId);
     if(response is string){
         test:assertNotEquals(response, EMPTY_STRING, msg = "Expect download URL link");
@@ -490,10 +490,10 @@ function testUploadFileUsingByteArray() {
 # Subcribe for changes - Single File Resource
 # ############################################
 
-@test:Config {}
+@test:Config { enable: false }
 function testWatchFilesById() {
-    string fileIdToBeWatched = "1zfMDanIe5erdY_Vjle8vczBK2bdYnAZwhlZ56DmN29M";
-    string address = "https://www.syntax.lk/";
+    string fileIdToBeWatched = fileId;
+    string address = "<REGISTERED_DOMAIN_ADDRESS>";
     WatchResponse|error response = driveClient->watchFilesById(fileIdToBeWatched, address);
     if(response is WatchResponse){
         channelId = response?.id.toString();
@@ -509,9 +509,9 @@ function testWatchFilesById() {
 # Subcribe for all changes in resources
 # ######################################
 
-@test:Config {}
+@test:Config { enable: false }
 function testWatchAllFiles() {
-    string address = "https://www.syntax.lk/";
+    string address = "<REGISTERED_DOMAIN_ADDRESS>";
     WatchResponse|error response = driveClient->watchFiles(address);
     if(response is WatchResponse){
         channelId = response?.id.toString();
@@ -529,6 +529,7 @@ function testWatchAllFiles() {
 # ########################
 
 @test:Config {
+    enable: false,
     dependsOn: [testWatchFilesById, testWatchAllFiles]
 }
 function testStopWatching() {
@@ -547,6 +548,7 @@ function testStopWatching() {
 # ########################
 
 @test:Config {
+    enable: false,
     dependsOn: [testWatchFilesById, testWatchAllFiles]
 }
 function testListChanges() {
