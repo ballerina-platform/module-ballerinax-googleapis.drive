@@ -18,7 +18,7 @@
     
     *   Create OAuth Client ID credentials by selecting an application type and giving a name and a redirect URI.
 
-    *Give the redirect URI as (https://developers.google.com/oauthplayground), if you are using [OAuth 2.0 Playground](https://developers.google.com/oauthplayground) to
+    * Give the redirect URI as (https://developers.google.com/oauthplayground), if you are using [OAuth 2.0 Playground](https://developers.google.com/oauthplayground) to
     receive the authorization code and obtain access token and refresh token.*
 
     *   Visit [OAuth 2.0 Playground](https://developers.google.com/oauthplayground) and select the required Gdrive API scopes.
