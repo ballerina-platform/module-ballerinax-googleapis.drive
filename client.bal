@@ -459,7 +459,7 @@ public client class Client {
     # + optional - 'ChangesListOptional' object with optionals.
     # + return - If successful, returns `ChangesListResponse`. Else returns `error`.
     remote function listChanges(string pageToken, ChangesListOptional? optional = ()) returns @tainted 
-                                    ChangesListResponse|error {
+                                ChangesListResponse|error {
         return listChangesByPageToken(self.httpClient, pageToken, optional);
     }
 } 
