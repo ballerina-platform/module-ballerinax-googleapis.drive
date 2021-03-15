@@ -27,3 +27,6 @@ const string VIDEO = "application/vnd.google-apps.video";
 const string audio = "application/vnd.google-apps.audio";
 const string LOG_FILE = "text/x-log";
 const string TEXT_FILE = "text/plain";
+
+// Trigger log
+const string TRIGGER_LOG = ">>>>> INCOMING TRIGGER >>>>> ";
