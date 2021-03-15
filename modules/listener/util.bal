@@ -103,7 +103,7 @@ function identifyFolderEvent(string folderId, OnEventService eventService, drive
     boolean isExisitingFolder = check checkAvailability(folderId, statusStore);
     boolean? isTrashed = folder?.trashed;
     string[]? parentList = folder?.parents;
-    string parent = "";
+    string parent = EMPTY_STRING;
     if (parentList is string[] && parentList.length() > 0) {
         parent = parentList[0].toString();
     }
@@ -137,7 +137,7 @@ function identifyFileEvent(string fileId, OnEventService eventService, drive:Cli
     boolean isExisitingFile = check checkAvailability(fileId, statusStore);
     boolean? isTrashed = file?.trashed;
     string[]? parentList = file?.parents;
-    string parent = "";
+    string parent = EMPTY_STRING;
     if (parentList is string[] && parentList.length() > 0) {
         parent = parentList[0].toString();
     }

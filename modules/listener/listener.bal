@@ -71,7 +71,7 @@ public class DriveEventListener {
             self.isWatchOnSpecificResource = true;
             check getCurrentStatusOfFile(self.driveClient, self.currentFileStatus, self.specificFolderOrFileId);
         } else {
-            self.specificFolderOrFileId = "";
+            self.specificFolderOrFileId = EMPTY_STRING;
             self.watchResponse = check startWatch(config.callbackURL, self.driveClient);
             check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus);
         }

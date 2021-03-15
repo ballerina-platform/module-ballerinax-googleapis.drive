@@ -30,3 +30,6 @@ const string TEXT_FILE = "text/plain";
 
 // Trigger log
 const string TRIGGER_LOG = ">>>>> INCOMING TRIGGER >>>>> ";
+
+// Constants
+const string EMPTY_STRING = "";
