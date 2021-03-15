@@ -48,10 +48,9 @@ accessToken.bal
 temp.bal.ballerina/
 target/
 .DS_Store
-modules
 
-# Modules
-/modules
+# Ignore resource .json files
+**/resources/*.json
 
 # Error log file
 ballerina-internal.log
