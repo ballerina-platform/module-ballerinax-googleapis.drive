@@ -67,17 +67,17 @@ function mapEvents(drive:ChangesListResponse changeList, drive:Client driveClien
             if (fileOrFolder is drive:File) {
                 string mimeType = fileOrFolder?.mimeType.toString();
                 if (mimeType == changeLog?.file?.mimeType.toString()) {
-                    if (mimeType == FILE || mimeType == LOG_FILE || mimeType == TEXT_FILE) {
-                        log:print("File change event found file id : " + fileOrFolderId);
+                    if (mimeType != FOLDER) {
+                        log:print("File change event found file id : " + fileOrFolderId + " | Mime type : " +mimeType);
                         if (changeLog?.removed == true) {
-                            var x = eventService.onFileDeletedEvent(fileOrFolderId);
+                            eventService.onFileDeletedEvent(fileOrFolderId);
                         } else {
                             check identifyFileEvent(fileOrFolderId, eventService, driveClient, statusStore);
                         }
-                    } else if (mimeType == FOLDER) {
+                    } else  {
                         log:print("Folder change event found folder id : " + fileOrFolderId);
                         if (changeLog?.removed == true) {
-                            var x = eventService.onFolderDeletedEvent(fileOrFolderId);
+                            eventService.onFolderDeletedEvent(fileOrFolderId);
                         } else {
                             check identifyFolderEvent(fileOrFolderId, eventService, driveClient, statusStore);
                         }
