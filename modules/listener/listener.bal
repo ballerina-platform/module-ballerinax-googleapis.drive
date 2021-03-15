@@ -109,8 +109,7 @@ public class DriveEventListener {
     # + request - The HTTP request.
     # + return - Returns error, if unsuccessful.
     public function findEventType(http:Caller caller, http:Request request) returns error? {
-        log:print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        log:print("Callback request came");
+        log:print("<<<<<<<<<<<<<<< RECEIVING A CALLBACK <<<<<<<<<<<<<<<");
         string channelID = check request.getHeader("X-Goog-Channel-ID");
         string messageNumber = check request.getHeader("X-Goog-Message-Number");
         string resourceStates = check request.getHeader("X-Goog-Resource-State");
@@ -138,7 +137,7 @@ public class DriveEventListener {
                 }
             }
         }
-        log:print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        log:print("<<<<<<<<<<<<<<< RECEIVED >>>>>>>>>>>>>>>");
     }
 
     # Stop all subscriptions for listening.
