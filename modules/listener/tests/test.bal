@@ -71,7 +71,6 @@ public class EventTrigger {
     }
 }
 
-
 ListenerConfiguration congifuration = {
     port: 9090,
     callbackURL: callbackURL,
@@ -94,7 +93,6 @@ service / on gDrivelistener {
 
 @test:Config {enable: true}
 function testDriveAPITrigger() {
-    log:print("\n ----------------------------------------------------------------");
     log:print("gDriveClient -> watchFiles()");
     int i = 0;
     while (true) {
