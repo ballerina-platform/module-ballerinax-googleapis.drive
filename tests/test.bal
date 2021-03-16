@@ -69,7 +69,6 @@ function testGetDriveInformation() {
 function testGetFileById() {
     log:print("Gdrive Client -> testGetFileById()");
     File|error response = driveClient->getFile(fileId);
-    // File|error response = driveClient->getFile(fileId, "createdTime,modifiedTime");
     if(response is File){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:print(response.toString());
@@ -195,7 +194,7 @@ function testUpdateFile() {
 @test:Config {}
 function testCreateFolder() {
     log:print("Gdrive Client -> testCreateFolder()");
-     File|error response = driveClient->createFolder(folderName);
+    File|error response = driveClient->createFolder(folderName);
     //File|error response = driveClient->createFolder(folderName, "<PARENT_FOLDER_ID>");
     //Assertions
     if(response is File){
@@ -220,7 +219,7 @@ function testCreateFile() {
     log:print("Gdrive Client -> testCreateFile()");
     File|error response = driveClient->createFile(fileName);
     //File|error response = driveClient->createFile(fileName, DOCUMENT);
-    // File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
+    //File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
     //Assertions
     if(response is File){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
@@ -318,10 +317,8 @@ function testGetFoldersByName() {
 @test:Config {}
 function testAllGetFiles() { 
     log:print("Gdrive Client -> testAllGetFiles()");
-    ListFilesOptional optionalSearch = {
-        orderBy : "createdTime"
-    };
-    stream<File>|error response = driveClient->getAllFiles();
+    stream<File>|error response = driveClient->getAllFiles("not name contains 'hello'");
+    // stream<File>|error response = driveClient->getAllFiles();
     if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
