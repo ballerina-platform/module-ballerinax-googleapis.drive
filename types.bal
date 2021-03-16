@@ -233,11 +233,11 @@ public type StorageQuota record {|
 # + type - The type of the content restriction. Currently the only possible value is globalContentRestriction.  
 # + restrictingUser - The user who set the content restriction. Only populated if readOnly is true.  
 public type ContentRestrictions record {
-    boolean readOnly?;
-    string reason?;
-    User restrictingUser?;
-    string restrictionTime?;
-    string 'type?;
+    boolean readOnly;
+    string reason;
+    User restrictingUser;
+    string restrictionTime;
+    string 'type;
 };
 
 # Shortcut file details. Only populated for shortcut files, 
@@ -247,8 +247,8 @@ public type ContentRestrictions record {
 # + targetMimeType - The MIME type of the file that this shortcut points to. The value of this field is a snapshot of 
 #                    the target's MIME type, captured when the shortcut is created.  
 public type ShortcutDetails record {
-    string targetId?;
-    string targetMimeType?;
+    string targetId;
+    string targetMimeType;
 };
 
 # Additional metadata about video media. This may not be available immediately upon upload.
@@ -257,9 +257,9 @@ public type ShortcutDetails record {
 # + durationMillis - The duration of the video in milliseconds.  
 # + height - The height of the video in pixels.  
 public type VideoMediaMetadata record {
-    int width?;
-    int height?;
-    float durationMillis?;
+    int width;
+    int height;
+    float durationMillis;
 };
 
 # Additional metadata about image media, if available.
@@ -286,27 +286,27 @@ public type VideoMediaMetadata record {
 # + height - The height of the image in pixels.
 # + focalLength - The focal length used to create the photo, in millimeters.
 public type ImageMediaMetadata record {
-    int width?;
-    int height?;
-    int rotation?;
-    Location location?;
-    string time?;
-    string cameraMake?;
-    string cameraModel?;
-    int exposureTime?;
-    int aperture?;
-    boolean flashUsed?;
-    int focalLength?;
-    int isoSpeed?;
-    string meteringMode?;
-    string sensor?;
-    string exposureMode?;
-    string colorSpace?;
-    string whiteBalance?;
-    int exposureBias?;
-    int maxApertureValue?;
-    int subjectDistance?;
-    string lens?;
+    int width;
+    int height;
+    int rotation;
+    Location location;
+    string time;
+    string cameraMake;
+    string cameraModel;
+    int exposureTime;
+    int aperture;
+    boolean flashUsed;
+    int focalLength;
+    int isoSpeed;
+    string meteringMode;
+    string sensor;
+    string exposureMode;
+    string colorSpace;
+    string whiteBalance;
+    int exposureBias;
+    int maxApertureValue;
+    int subjectDistance;
+    string lens;
 };
 
 # Geographic location information stored in the image.
@@ -315,9 +315,9 @@ public type ImageMediaMetadata record {
 # + latitude - The latitude stored in the image  
 # + longitude - The longitude stored in the image.  
 public type Location record {
-    float latitude?; 
-    float longitude?; 
-    float altitude?;
+    float latitude; 
+    float longitude; 
+    float altitude;
 };
 
 # Additional information about the content of the file. These fields are never populated in responses.
@@ -326,8 +326,8 @@ public type Location record {
 # + indexableText - Text to be indexed for the file to improve fullText queries. 
 #                   This is limited to 128KB in length and may contain HTML elements.  
 public type ContentHints record {
-    Thumbnail thumbnail?;
-    string indexableText?;
+    Thumbnail thumbnail;
+    string indexableText;
 };
 
 # A thumbnail for the file. This will only be used if Google Drive cannot generate a standard thumbnail.
@@ -335,8 +335,8 @@ public type ContentHints record {
 # + image - The thumbnail data encoded with URL-safe Base64 (RFC 4648 section 5). 
 # + mimeType - The MIME type of the thumbnail.  
 public type Thumbnail record {
-    byte image?;
-    string mimeType?;
+    byte image;
+    string mimeType;
 };
 
 # Response from File search 
@@ -545,7 +545,7 @@ public type User record {
 #                       instead.   
 # + canShare - Whether the current user can modify the sharing settings for this file.
 public type Capabilities record {
-    boolean	canAddChildren?;
+    boolean	canAddChildren;
     boolean canAddFolderFromAnotherDrive;
     boolean canAddMyDriveParent;
     boolean canChangeCopyRequiresWriterPermission;
