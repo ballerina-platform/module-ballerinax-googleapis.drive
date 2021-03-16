@@ -20,7 +20,8 @@ import ballerina/uuid;
 
 # Google Drive Client. 
 #
-# + httpClient - The HTTP Client  
+# + httpClient - The HTTP Client
+@display {label: "Google Drive Client"}
 public client class Client {
     public http:Client httpClient;
     Configuration driveConfiguration;
@@ -39,7 +40,9 @@ public client class Client {
     # 
     # + fileId - ID of the file to retreive
     # + return - If successful, returns `File`. Else returns `error`
-    remote function getFile(string fileId, string? fields = ()) returns @tainted File|error {
+    @display {label: "Get file"}
+    remote function getFile(@display {label: "File id"} string fileId, @display {label: "Fields"} string? fields = ()) 
+                                returns @tainted @display {label: "File"} File|error {
         GetFileOptional optional = {};
         optional.supportsAllDrives = true;
         if (fields is string){
@@ -52,7 +55,9 @@ public client class Client {
     # 
     # + fileId - ID of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
-    remote function downloadFile(string fileId) returns @tainted string|error {
+    @display {label: "Download file"}
+    remote function downloadFile(@display {label: "File id to delete"} string fileId) 
+                                    returns @tainted @display {label: "Downloadable link"} string|error {
         GetFileOptional optional = {supportsAllDrives : true, fields : WEB_CONTENT_LINK};
         File fileResponse = check getFileById(self.httpClient , fileId, optional);
         return fileResponse?.webContentLink.toString();
@@ -62,6 +67,7 @@ public client class Client {
     # 
     # + optional - 'ListFilesOptional' used to add query parameters to the request
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    @display {label: "Download files"}
     remote function getFiles(ListFilesOptional? optional = ()) returns @tainted stream<File>|error {
         if (optional is ListFilesOptional) {
             optional.pageSize = 1000;
@@ -73,6 +79,7 @@ public client class Client {
     # Retrieve all the files in the drive.
     # 
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    @display {label: "Get all files"}
     remote function getAllFiles(string? filterString = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {
             pageSize : 1000,
@@ -91,6 +98,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    @display {label: "Filter files"}
     remote function filterFiles(string filterString, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {
             q : filterString,
@@ -111,6 +119,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    @display {label: "Get files by name"}
     remote function getFilesByName(string fileName, string? orderBy = ()) returns @tainted stream<File>|error {
         ListFilesOptional optional = {};
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
