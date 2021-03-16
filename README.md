@@ -244,5 +244,6 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 
 #### Limitations
 Google api supports Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
-Currently, Google drive connecter supports operations related to Files, Channels and Changes only.
+Currently, Google drive connecter supports operations related to Files, Channels and Changes only. It doesnt support
+admin related operations.
 
