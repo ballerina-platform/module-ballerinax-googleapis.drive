@@ -384,7 +384,7 @@ public client class Client {
     # + folderName - Name of the new folder to be created.
     # + parentFolderId - Id of the parent folder.
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: ""} 
+    @display {label: "Create folder"} 
     remote function createFolder(@display {label: "Folder name"} string folderName, 
                                  @display {label: "Parent folder id (optional)"} string? parentFolderId = ()) 
                                  returns @tainted @display {label: "File"} File|error {

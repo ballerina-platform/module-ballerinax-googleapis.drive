@@ -34,6 +34,7 @@ public type ListenerConfiguration record {
 };
 
 # Drive event listener   
+@display {label: "Google Drive Listener"}
 public class DriveEventListener {
     private http:Listener httpListener;
     private string currentToken;
