@@ -459,7 +459,7 @@ public client class Client {
     remote function watchFilesById(@display {label: "File id"} string fileId, 
                                    @display {label: "Address"} string address, 
                                    @display {label: "Page token (optional)"} string? pageToken = (), 
-                                   @display {label: "Expiration (optional)"} int? expiration = ()) 
+                                   @display {label: "Expiration timestamp (optional)"} int? expiration = ()) 
                                    returns @tainted @display {label: "Watch response"} WatchResponse|error {
         WatchResponse payload = {};
         payload.id = uuid:createType1AsString();
@@ -484,8 +484,11 @@ public client class Client {
     # + pageToken - 
     # + expiration - 
     # + return - If successful, returns `WatchResponse`. Else returns `error`
-    remote function watchFiles(string address, string? pageToken = (), int? expiration = ()) returns @tainted 
-                                WatchResponse|error {
+    @display {label: "Watch all files"} 
+    remote function watchFiles(@display {label: "Address"} string address, 
+                               @display {label: "Page token (optional)"} string? pageToken = (), 
+                               @display {label: "Expiration timestamp (optional)"} int? expiration = ()) 
+                               returns @tainted @display {label: "Watch response"} WatchResponse|error {
         WatchResponse payload = {};
         WatchFileOptional optional = {};
         string token = EMPTY_STRING;
@@ -510,7 +513,9 @@ public client class Client {
     # + resourceId - An opaque ID that identifies the resource being watched on this channel.
     #                Stable across different API versions.
     # + return - If successful, returns `boolean`. Else returns `error`.
-    remote function watchStop(string channelId, string resourceId) returns @tainted boolean|error {
+    @display {label: "Stop all channels"} 
+    remote function watchStop(@display {label: "Channel id"} string channelId, @display {label: "Resource id"} string resourceId) 
+                              returns @tainted @display {label: "Result"} boolean|error {
         WatchResponse payload = {};
         payload.id = channelId;
         payload.resourceId = resourceId;
@@ -524,8 +529,10 @@ public client class Client {
     #               from the getStartPageToken method.
     # + optional - 'ChangesListOptional' object with optionals.
     # + return - If successful, returns `ChangesListResponse`. Else returns `error`.
-    remote function listChanges(string pageToken, ChangesListOptional? optional = ()) returns @tainted 
-                                ChangesListResponse|error {
+    @display {label: "Get list of changes"} 
+    remote function listChanges(@display {label: "Page token"} string pageToken, 
+                                @display {label: "Optional parameters"} ChangesListOptional? optional = ()) 
+                                returns @tainted @display {label: "Changes list"} ChangesListResponse|error {
         return listChangesByPageToken(self.httpClient, pageToken, optional);
     }
 } 
