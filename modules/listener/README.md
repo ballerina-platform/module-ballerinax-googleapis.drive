@@ -89,7 +89,7 @@ public class EventTrigger {
     listener listen:DriveEventListener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        resource function post gsheet(http:Caller caller, http:Request request) returns string|error? {
+        resource function post gdrive(http:Caller caller, http:Request request) returns string|error? {
             error? procesOutput = gDrivelistener.findEventType(caller, request);
             http:Response response = new;
             var result = caller->respond(response);

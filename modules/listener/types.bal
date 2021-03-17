@@ -16,18 +16,6 @@
 
 import ballerina/http;
 
-# Event type on New spreadsheet creation.  
-public type NewSpreadSheetCreatedEvent record {
-};
-
-# Event type on New worksheet creation.  
-public type NewWorkSheetCreatedEvent record {
-};
-
-# Event type on New row addition.  
-public type NewRowAddedEvent record {
-};
-
 # Watch request properties
 #
 # + address - The address where notifications are delivered for this channel.  
