@@ -1,4 +1,4 @@
-# Ballerina Google Sheets Connector
+# Ballerina Google Drive Connector
 
 Connects to Google Drive using Ballerina.
 
@@ -99,7 +99,7 @@ Google API v3 supports resource types Files, Permissions, Changes, Replies, Revi
 Currently, Google drive connecter supports operations related to Files, Channels and Changes only. It doesnt support
 admin related operations.
 
-**Example code**
+## Example code
 
 Creating a drive:driveClient by giving the HTTP client config details. 
 
@@ -134,6 +134,50 @@ Configuration config = {
 };
 
 ```
+
+# Quickstart
+
+## Working with Google Drive Endpoint Actions
+
+You must follow the following steps in order to obtain the tokens needed for the configuration of the Ballerina Connector.
+
+1. Visit [Google API Console](https://console.developers.google.com), click **Create Project**, and follow the wizard to create a new project.
+2. Go to **Credentials -> OAuth consent screen**, enter a product name to be shown to users, and click **Save**.
+3. On the **Credentials** tab, click **Create credentials** and select **OAuth client ID**. 
+4. Select an application type, enter a name for the application, and specify a redirect URI (enter https://developers.google.com/oauthplayground if you want to use 
+[OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the refresh token). 
+5. Click **Create**. Your client ID and client secret appear. 
+6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Spreadsheet scopes, and then click **Authorize APIs**.
+7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the refresh token.
+
+### Step 1: Import the Google Drive Ballerina Library
+First, import the ballerinax/googleapis_drive module into the Ballerina project.
+```ballerina
+import ballerinax/googleapis_drive as drive;
+```
+All the actions return valid response or error. If the action is a success, then the requested resource will be returned. Else error will be returned.
+
+### Step 2: Initialize the Google Drive Client
+In order for you to use the Drive Endpoint, first you need to create a Google Drive Client endpoint.
+```ballerina
+
+configurable string refreshToken = ?;
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshUrl = drive:REFRESH_URL;
+
+Configuration config = {
+    clientConfig: {
+        clientId: clientId,
+        clientSecret: clientSecret,
+        refreshUrl: refreshUrl,
+        refreshToken: refreshToken
+    }
+};
+
+drive:Client driveClient = new (config);
+```
+Then the endpoint actions can be invoked as `var response = driveClient->actionName(arguments)`.
 
 ### Get file by id
 ```ballerina
