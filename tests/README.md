@@ -10,6 +10,8 @@
     * Client Id
     * Client Secret
     * Refresh Token
+    or you can provide
+    * Access Token
 
 * Go through the following steps to obtain client id, client secret, refresh token and access token for Gdrive API.
     *   Go to [Google API Console](https://console.developers.google.com) to create a project and an app for the project to connect with Gdrive API.
@@ -64,6 +66,17 @@ Gdrive:GdriveConfiguration GdriveConfig = {
 };
 
 Client GdriveClient = new(GdriveConfig);
+```
+There is support for providing configuration using access token also.
+
+```
+Access token support
+Configuration config = {
+    clientConfig: {
+        token: os:getEnv("ACCESS_TOKEN")
+    }
+};
+
 ```
 
 Assign values for other necessary parameters to perform api operations in test.bal as follows.
