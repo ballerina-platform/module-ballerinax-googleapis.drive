@@ -231,21 +231,18 @@ Then the endpoint actions can be invoked as `var response = driveClient->actionN
 ### Search files by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getFilesByName("ballerina");
-    stream<File>|error response = driveClient->getFilesByName("ballerina", 2);
-    stream<File>|error response = driveClient->getFilesByName("ballerina", 2, "createdTime");
+    stream<File>|error response = driveClient->getFilesByName("ballerina", "createdTime");
 ```
 ### Search folders by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getFoldersByName("ballerina");
-    stream<File>|error response = driveClient->getFoldersByName("ballerina", 2);
-    stream<File>|error response = driveClient->getFoldersByName("ballerina", 2, "createdTime");
+    stream<File>|error response = driveClient->getFoldersByName("ballerina", "createdTime");
 ```
 
 ### Filter files
 ```ballerina
     stream<File>|error response = driveClient->filterFiles(filterString);
-    stream<File>|error response = driveClient->filterFiles(filterString, 2);
-    stream<File>|error response = driveClient->filterFiles(filterString, 4, "createdTime");
+    stream<File>|error response = driveClient->filterFiles(filterString, "createdTime");
 ```
 
 | What you want to query                                               |    Example                                                             |
@@ -286,26 +283,22 @@ Then the endpoint actions can be invoked as `var response = driveClient->actionN
 ### Search Google spreadsheets by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina");
-    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2);
-    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", 2, "createdTime");
+    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina", "createdTime");
 ```
 ### Search Google documents by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getDocumentsByName("ballerina");
-    stream<File>|error response = driveClient->getDocumentsByName("ballerina", 3);
-    stream<File>|error response = driveClient->getDocumentsByName("ballerina", 2, "createdTime");
+    stream<File>|error response = driveClient->getDocumentsByName("ballerina", "createdTime");
 ```
 ### Search Google forms by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getFormsByName("ballerina");
-    stream<File>|error response = driveClient->getFormsByName("ballerina", 2);
-    stream<File>|error response = driveClient->getFormsByName("ballerina", 2, "createdTime");
+    stream<File>|error response = driveClient->getFormsByName("ballerina", "createdTime");
 ```
 ### Search Google slides by name (Partial search)
 ```ballerina
     stream<File>|error response = driveClient->getSlidesByName("ballerina");
-    stream<File>|error response = driveClient->getSlidesByName("ballerina", 2);
-    stream<File>|error response = driveClient->getSlidesByName("ballerina", 2, "createdTime");
+    stream<File>|error response = driveClient->getSlidesByName("ballerina", "createdTime");
 ```
 ### Update metadata in a file
 ```ballerina
