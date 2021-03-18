@@ -39,6 +39,7 @@ public client class Client {
     # Retrieve file using the fileID.
     # 
     # + fileId - ID of the file to retreive
+    # + fields - Paths of the fields you want included in the reponse.
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get file"}
     remote function getFile(@display {label: "File id"} string fileId, @display {label: "Fields"} string? fields = ()) 
@@ -48,7 +49,7 @@ public client class Client {
         if (fields is string){
             optional.fields = fields;
         }
-        return getFileById(self.httpClient , fileId, optional);
+        return getFileById(self.httpClient, fileId, optional);
     }
 
     # Download file using the fileID.
