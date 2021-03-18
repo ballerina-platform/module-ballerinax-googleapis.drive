@@ -3,10 +3,11 @@ Connector repository for Google Drive API V3.
 
 ### Google drive connecter
 Connects to Google Drive from Ballerina.
+This connecter consists of 2 modules. Client connecter and listener.
 
 # Package overview
-The Google Drive connector allows you to access Google Drive operations through the Google Drive REST API. 
-It also allows you to create, retreive, search, and delete drive files and folders.
+The Google Drive client connecter allows you to access Google Drive operations through the Google Drive REST API while 
+listener provide triggers on creation, deletion and update events for files and folders. 
 
 ## Compatibility
 
@@ -73,6 +74,18 @@ Creating a drive:driveClient by giving the HTTP client config details.
 
     drive:Client driveClient = new (config);
 ```
+There is support for providing configuration using access token also.
+
+```
+Access token support
+Configuration config = {
+    clientConfig: {
+        token: os:getEnv("ACCESS_TOKEN")
+    }
+};
+
+```
+
 ### Get file by id
 ```ballerina
     File|error response = driveClient->getFile(fileId);
