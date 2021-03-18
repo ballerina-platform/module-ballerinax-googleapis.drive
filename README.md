@@ -126,13 +126,11 @@ Creating a drive:driveClient by giving the HTTP client config details.
 There is support for providing configuration using access token also.
 
 ```
-Access token support
 Configuration config = {
     clientConfig: {
         token: os:getEnv("ACCESS_TOKEN")
     }
 };
-
 ```
 
 # Quickstart
@@ -178,6 +176,8 @@ Configuration config = {
 drive:Client driveClient = new (config);
 ```
 Then the endpoint actions can be invoked as `var response = driveClient->actionName(arguments)`.
+
+# Samples
 
 ### Get file by id
 ```ballerina
