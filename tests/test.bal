@@ -549,7 +549,7 @@ function testStopWatching() {
     dependsOn: [testWatchFilesById, testWatchAllFiles]
 }
 function testListChanges() {
-    string pageToken = "120363";
+    string pageToken = "<PAGE_TOKEN>";
     ChangesListResponse|error response = driveClient->listChanges(pageToken);
     if (response is ChangesListResponse) {
         test:assertEquals(response?.kind, "drive#changeList", 

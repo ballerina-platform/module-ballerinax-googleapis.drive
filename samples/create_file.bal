@@ -42,8 +42,8 @@ public function main() {
     };
     drive:Client driveClient = new (config);
     drive:File|error response = driveClient->createFile(fileName);
-    // drive:File|error response = driveClient->createFile(fileName, mimeType);
-    // drive:File|error response = driveClient->createFile(fileName, mimeType, parentFolderId);
+    // drive:File|error response = driveClient->createFile(fileName, DOCUMENT);
+    // drive:File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
     //Print folder ID
     if(res is drive:File){
         string id = res?.id.toString();
