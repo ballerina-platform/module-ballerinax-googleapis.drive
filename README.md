@@ -177,6 +177,13 @@ drive:Client driveClient = new (config);
 ```
 Then the endpoint actions can be invoked as `var response = driveClient->actionName(arguments)`.
 
+#### How to get a id from a file or folder in Google drive
+1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
+2. Right click on a folder or file.
+3. Click 'Get link'. Then copy the link.
+4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
+![alt text](/metadata/extractIDfromUrl.jpeg?raw=true)
+
 # Samples
 
 ### Get file by id
@@ -341,10 +348,62 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
 ```
-#### How to get a id from a file or folder in Google drive
-1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
-2. Right click on a folder or file.
-3. Click 'Get link'. Then copy the link.
-4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
-![alt text](/metadata/extractIDfromUrl.jpeg?raw=true)
 
+## Building from the Source
+
+### Setting Up the Prerequisites
+
+1. Download and install Java SE Development Kit (JDK) version 11 (from one of the following locations).
+
+   * [Oracle](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+
+   * [OpenJDK](https://adoptopenjdk.net/)
+
+        > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
+
+2. Download and install [Ballerina Alpha 2](https://ballerina.io/). 
+
+### Building the Source
+
+Execute the commands below to build from the source after installing Ballerina Alpha 2 version.
+
+1. To clone the repository:
+Clone this repository using the following command:
+```shell
+    git clone https://github.com/ballerina-platform/module-ballerinax-googleapis.drive
+```
+Execute the commands below to build from the source after installing Ballerina SLP8 version.
+
+2. To build the library:
+Run this command from the module-ballerinax-googleapis.drive root directory:
+```shell script
+    bal build
+```
+
+3. To build the module without the tests:
+```shell script
+    bal build --skip-tests
+```
+
+## Contributing to Ballerina
+
+As an open source project, Ballerina welcomes contributions from the community. 
+
+For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/master/CONTRIBUTING.md).
+
+## Code of Conduct
+
+All the contributors are encouraged to read the [Ballerina Code of Conduct](https://ballerina.io/code-of-conduct).
+
+## Useful Links
+
+* Discuss the code changes of the Ballerina project in [ballerina-dev@googlegroups.com](mailto:ballerina-dev@googlegroups.com).
+* Chat live with us via our [Slack channel](https://ballerina.io/community/slack/).
+* Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
+
+## How you can contribute
+
+Clone the repository by running the following command
+`git clone https://github.com/ballerina-platform/module-ballerinax-googleapis.drive.git`
+
+As an open source project, we welcome contributions from the community. Check the [issue tracker](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/issues) for open issues that interest you. We look forward to receiving your contributions.
