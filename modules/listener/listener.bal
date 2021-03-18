@@ -50,7 +50,7 @@ public class DriveEventListener {
     private boolean isAFolder = true;
 
     # Listener initialization
-    public function init(ListenerConfiguration config) returns error? {
+    public function init(ListenerConfiguration config) returns @tainted error? {
         self.eventService = config.eventService;
         self.httpListener = check new (config.port);
         self.driveClient = check new (config.clientConfiguration);
@@ -109,7 +109,7 @@ public class DriveEventListener {
     # + caller - The http caller object for responding to requests 
     # + request - The HTTP request.
     # + return - Returns error, if unsuccessful.
-    public function findEventType(http:Caller caller, http:Request request) returns error? {
+    public function findEventType(http:Caller caller, http:Request request) returns @tainted error? {
         log:print("<<<<<<<<<<<<<<< RECEIVING A CALLBACK <<<<<<<<<<<<<<<");
         string channelID = check request.getHeader("X-Goog-Channel-ID");
         string messageNumber = check request.getHeader("X-Goog-Message-Number");
@@ -123,8 +123,8 @@ public class DriveEventListener {
                 self.currentToken = item?.newStartPageToken.toString();
                 if (self.isWatchOnSpecificResource && self.isAFolder) {
                     log:print("Folder watch response processing");
-                    check mapEventForSpecificResource(self.specificFolderOrFileId, item, self.driveClient, self.
-                    eventService, self.currentFileStatus);
+                    check mapEventForSpecificResource(<@untainted> self.specificFolderOrFileId, <@untainted> item, 
+                    <@untainted> self.driveClient, <@untainted> self.eventService, <@untainted> self.currentFileStatus);
                     check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus, self.specificFolderOrFileId);
                 } else if (self.isWatchOnSpecificResource && self.isAFolder == false) {
                     log:print("File watch response processing");
@@ -144,7 +144,7 @@ public class DriveEventListener {
     # Stop all subscriptions for listening.
     # 
     # + return - Returns error, if unsuccessful.
-    public function stopWatchChannel() returns error? {
+    public function stopWatchChannel() returns @tainted error? {
         boolean|error response = self.driveClient->watchStop(self.channelUuid, self.watchResourceId);
         if (response is boolean) {
             log:print("Watch channel stopped");

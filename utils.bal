@@ -834,7 +834,7 @@ isolated function prepareUrlwithChangesListOptional(string pageToken, ChangesLis
 # 
 # + httpClient - The HTTP Client
 # + return - If successful, returns `string`. Else returns `error` 
-function getStartPageToken(http:Client httpClient) returns string|error {
+function getStartPageToken(http:Client httpClient) returns @tainted string|error {
     string path = prepareUrl([DRIVE_PATH, CHANGES, START_PAGE_TOKEN]);
     json jsonResponse = check sendRequest(httpClient, path);
     StartPageTokenResponse response = check jsonResponse.cloneWithType(StartPageTokenResponse);

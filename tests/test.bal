@@ -26,6 +26,13 @@ const string fileName = "ballerina_temp_file";
 const string folderName = "ballerina_temp_folder";
 const string localFilePath = "./tests/resources/bar.jpeg";
 
+// Access token support
+// Configuration config = {
+//     clientConfig: {
+//         token: os:getEnv("ACCESS_TOKEN")
+//     }
+// };
+
 Configuration config = {
     clientConfig: {
         clientId: clientId,
@@ -201,7 +208,7 @@ function testCreateFolder() {
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:print(response?.id.toString());
         //Set variable fileId for other unit tests
-        parentFolderId = response?.id.toString();
+        parentFolderId = <@untainted> response?.id.toString();
     } else {
         test:assertFail(response.message());
         log:printError(response.message());
@@ -225,7 +232,7 @@ function testCreateFile() {
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:print(response?.id.toString());
         //Set variable fileId for other unit tests
-        fileId = response?.id.toString();
+        fileId = <@untainted> response?.id.toString();
     } else {
         test:assertFail(response.message());
         log:printError(response.message());
@@ -493,8 +500,8 @@ function testWatchFilesById() {
     string address = "<REGISTERED_DOMAIN_ADDRESS>";
     WatchResponse|error response = driveClient->watchFilesById(fileIdToBeWatched, address);
     if(response is WatchResponse){
-        channelId = response?.id.toString();
-        resourceId = response?.resourceId.toString();
+        channelId = <@untainted> response?.id.toString();
+        resourceId = <@untainted> response?.resourceId.toString();
         test:assertNotEquals(channelId, EMPTY_STRING, msg = "Expect File id");
         log:print(response.toString());
     } else {
@@ -511,8 +518,8 @@ function testWatchAllFiles() {
     string address = "<REGISTERED_DOMAIN_ADDRESS>";
     WatchResponse|error response = driveClient->watchFiles(address);
     if(response is WatchResponse){
-        channelId = response?.id.toString();
-        resourceId = response?.resourceId.toString();
+        channelId = <@untainted> response?.id.toString();
+        resourceId = <@untainted> response?.resourceId.toString();
         test:assertNotEquals(channelId, EMPTY_STRING, msg = "Expect channelId");
         log:print(response.toString());
     } else {
