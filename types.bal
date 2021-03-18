@@ -21,7 +21,7 @@ import ballerina/http;
 # + secureSocketConfig - Represents OAuth2 direct token configurations for OAuth2 authentication 
 # + clientConfig - Provides configurations for facilitating secure communication with a remote HTTP endpoint  
 public type Configuration record {
-    http:OAuth2DirectTokenConfig clientConfig;
+    http:BearerTokenConfig|http:OAuth2DirectTokenConfig clientConfig; 
     http:ClientSecureSocket secureSocketConfig?;
 };
 
@@ -54,7 +54,7 @@ public type About record {
 
 # File Record Type
 #
-# + modifiedTime - The last time the file was modified by anyone (RFC 3339 date-time).  
+# + modifiedTime - The last time the file was modified by anyone (RFC 3339 date-time)  
 # + copyRequiresWriterPermission - Whether the options to copy, print, or download this file, should be disabled for 
 #                                  readers and commenters 
 # + owners - The owners of the file. Currently, only certain legacy files may have more than one owner. Not populated 
