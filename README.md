@@ -1,29 +1,61 @@
-# module-ballerinax-googleapis.drive
-Connector repository for Google Drive API V3.
+# Ballerina Google Sheets Connector
 
-### Google drive connecter
-Connects to Google Drive from Ballerina.
-This connecter consists of 2 modules. Client connecter and listener.
+Connects to Google Drive using Ballerina.
 
-# Package overview
-The Google Drive client connecter allows you to access Google Drive operations through the Google Drive REST API while 
-listener provide triggers on creation, deletion and update events for files and folders. 
+# Introduction
 
-## Compatibility
+## What is Google drive?
 
-|                             |            Versions             |
-|:---------------------------:|:-------------------------------:|
-| Ballerina Language          |     Swan Lake Alpha2            |
-| Google Drive API            |             V3                  |
+[Google Drive](https://developers.google.com/drive/api) allows users to store files on their servers, 
+synchronize files across devices, and share files. Google Drive encompasses Google Docs, Google Sheets, and Google 
+Slides, which are a part of the Google Docs Editors office suite that permits collaborative editing of documents, 
+spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are 
+saved in Google Drive.
 
-## Sample
+## Key features of Google Drive
+
+* Easy and secure access to all of your content.
+* Store, share and collaborate on files and folders from any mobile device, tablet or computer.
+* Cloud-native collaboration apps to supercharge teamwork.
+* Drive integrates seamlessly with Docs, Sheets, and Slides, cloud-native apps that enable your team to collaborate 
+effectively in real time.
+* Integration with the tools and apps your team is already using.
+* Drive integrates with and complements your team’s existing technology. 
+* Drive works on all major platforms, enabling you to work seamlessly across your browser, mobile device, tablet 
+and computer.
+
+## Connector Overview
+
+The Google Drive Ballerina Connector allows you to access the 
+[Google Drive API Version v3](https://developers.google.com/drive/api) through Ballerina. The connector can be used to 
+implement some of the most common use cases of Google Drive. The connector provides the capability to programmatically 
+manage files & folders in the drive.
+
+The Google Drive Ballerina Connector supports file and folder management operations related to creating, deleting, 
+updating and retrieving.
+
+# Prerequisites
+
+* Java 11 Installed
+Java Development Kit (JDK) with version 11 is required.
+
+* Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
+Ballerina Swan Lake Alpha 2 is required.
+
+* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Spreadsheet uses OAuth 2.0 to authenticate and authorize requests. The Google Spreadsheet connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
+    * Client ID
+    * Client Secret
+    * Refresh Token
+    * Refresh URL
+
+## Prerequisites
 
 Instantiate the connector by giving authentication details in the HTTP client config. 
 The HTTP client config has built-in support for OAuth 2.0. Google Drive uses OAuth 2.0 to authenticate 
 and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the 
 access token or the client ID, client secret, and refresh token.
 
-**Obtaining tokens to run the sample**
+## Obtaining tokens
 
 1. Visit [Google API Console](https://console.developers.google.com), click **Create Project**, and 
 follow the wizard to create a new project.
@@ -39,17 +71,34 @@ select the required Google Calendar scopes, and then click **Authorize APIs**.
 7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the 
 refresh token and access token. 
 
-**Add project configurations file**
+## Add project configurations file
 
 Add the project configuration file by creating a `Config.toml` file under the root path of the project structure.
 This file should have following configurations. Add the tokens obtained in the previous step to the `Config.toml` file.
 
-```
+#### Config.toml
+```ballerina
 [ballerinax.googleapis_drive]
 clientId = "<client_id">
 clientSecret = "<client_secret>"
 refreshToken = "<refresh_token>"
 ```
+
+# Supported versions & limitations
+
+## Supported Versions
+
+|                             |            Versions             |
+|:---------------------------:|:-------------------------------:|
+| Ballerina Language          |     Swan Lake Alpha2            |
+| Google Drive API            |             V3                  |
+
+## Limitations
+
+Google API v3 supports resource types Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
+Currently, Google drive connecter supports operations related to Files, Channels and Changes only. It doesnt support
+admin related operations.
+
 **Example code**
 
 Creating a drive:driveClient by giving the HTTP client config details. 
@@ -254,9 +303,4 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 3. Click 'Get link'. Then copy the link.
 4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
 ![alt text](/metadata/extractIDfromUrl.jpeg?raw=true)
-
-#### Limitations
-Google api supports Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
-Currently, Google drive connecter supports operations related to Files, Channels and Changes only. It doesnt support
-admin related operations.
 
