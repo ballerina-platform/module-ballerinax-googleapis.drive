@@ -67,7 +67,7 @@ Java Development Kit (JDK) with version 11 is required.
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
 Ballerina Swan Lake Alpha 2 is required.
 
-* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Spreadsheet uses OAuth 2.0 to authenticate and authorize requests. The Google Spreadsheet connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
+* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Spreadsheet uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
     * Client ID
     * Client Secret
     * Refresh Token
@@ -129,7 +129,7 @@ You must follow the following steps in order to obtain the tokens needed for the
 4. Select an application type, enter a name for the application, and specify a redirect URI (enter https://developers.google.com/oauthplayground if you want to use 
 [OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the refresh token). 
 5. Click **Create**. Your client ID and client secret appear. 
-6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Spreadsheet scopes, and then click **Authorize APIs**.
+6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Drive scopes, and then click **Authorize APIs**.
 7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the refresh token.
 
 ### Step 1: Import the Google Drive Ballerina Library
