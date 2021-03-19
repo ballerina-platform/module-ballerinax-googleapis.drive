@@ -71,11 +71,10 @@ Java Development Kit (JDK) with version 11 is required.
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
 Ballerina Swan Lake Alpha 2 is required.
 
-* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Spreadsheet uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
+* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Drive uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
     * Client ID
     * Client Secret
     * Refresh Token
-    * Refresh URL
 
 ## Obtaining tokens
 
@@ -117,9 +116,9 @@ refreshToken = "<refresh_token>"
 
 ## Limitations
 
-Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
-Currently, Google drive connecter supports operations related to Files, Channels and Changes only. .It doesnt support
-admin related operations like creatin new shared drives.
+Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels. Currently, 
+Google drive connecter supports operations related to Files, Channels and Changes only. .It doesnt support admin related 
+operations like creatin new shared drives.
 
 # Quickstart
 
@@ -183,7 +182,7 @@ Creating a drive:driveClient by giving the HTTP client config details.
     configurable string clientId = ?;
     configurable string clientSecret = ?;
     configurable string refreshToken = ?;
-    configurable string refreshUrl = ?;
+    configurable string refreshUrl = drive:REFRESH_URL;
 
     Configuration config = {
         clientConfig: {
