@@ -34,7 +34,7 @@ manage files & folders in the drive.
 The Google Drive Ballerina Connector supports file and folder management operations related to creating, deleting, 
 updating and retrieving.
 
-![alt text](/docs/images/file_id.jpeg?raw=true)
+![alt text](/docs/images/connecter_overview.png?raw=true)
 
 # Prerequisites
 
