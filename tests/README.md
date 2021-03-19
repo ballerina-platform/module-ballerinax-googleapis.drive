@@ -52,13 +52,14 @@ test.bal
 
 ```ballerina
 
-configurable string refreshToken = ?;
 configurable string clientId = ?;
 configurable string clientSecret = ?;
+configurable string refreshToken = ?;
+configurable string refreshUrl = drive:REFRESH_URL;
 
 Gdrive:GdriveConfiguration GdriveConfig = {
     oauthClientConfig: {
-        refreshUrl: REFRESH_URL,
+        refreshUrl: refreshUrl,
         refreshToken: refreshToken,
         clientId: clientId,
         clientSecret: clientSecret

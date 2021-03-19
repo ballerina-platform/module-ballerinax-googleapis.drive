@@ -211,14 +211,6 @@ Configuration config = {
 ```ballerina
     File|error response = driveClient->getFile(fileId);
 ```
-### Download file
-```ballerina
-    string|error response = driveClient->downloadFile(fileId);
-```
-### Delete File by id
-```ballerina
-    boolean|error response = driveClient->deleteFile(fileId);
-```
 ### Copy File
 ```ballerina
     File|error response = driveClient->copyFile(sourceFileId);
@@ -228,10 +220,6 @@ Configuration config = {
 ### Move File
 ```ballerina
     File|error response = driveClient->moveFile(sourceFileId, destinationFolderId);
-```
-### Rename File
-```ballerina
-    File|error response = driveClient->renameFile(fileId, newFileName);
 ```
 ### Rename File
 ```ballerina
@@ -331,10 +319,13 @@ Configuration config = {
     };
     File|error res = driveClient->updateFileMetadataById(fileId, optionalsFileMetadata, payloadFileMetadata);
 ```
-### Delete file by id
-More details : https://developers.google.com/drive/api/v3/reference/files/delete
+### Download file
 ```ballerina
-    boolean|error response = driveClient->deleteFile(fileId);   
+    string|error response = driveClient->downloadFile(fileId);
+```
+### Delete File by id
+```ballerina
+    boolean|error response = driveClient->deleteFile(fileId);
 ```
 ### Create folder with metadata
 More details : https://developers.google.com/drive/api/v3/reference/files/update
@@ -348,14 +339,12 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
     };
     File|error res = driveClient->createMetaDataFile(optionals_create_folder, payload_create_folder);
 ```
-
 ### Upload file
 ```ballerina
     File|error response = driveClient->uploadFile(localFilePath);
     File|error response = driveClient->uploadFile(localFilePath, fileName);
     File|error response = driveClient->uploadFile(localFilePath, fileName, parentFolderId);
 ```
-
 ### Upload file using a byte array
 ```ballerina
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
