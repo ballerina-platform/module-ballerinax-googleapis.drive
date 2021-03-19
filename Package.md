@@ -12,6 +12,8 @@ Slides, which are a part of the Google Docs Editors office suite that permits co
 spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are 
 saved in Google Drive.
 
+![alt text](/docs/images/drive_overview.png?raw=true)
+
 ## Key features of Google Drive
 
 * Easy and secure access to all of your content.
