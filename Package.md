@@ -2,6 +2,27 @@
 
 Connects to Google Drive using Ballerina.
 
+<!-- TOC -->
+
+- [Google Drive Connecter](#markdown-navigation)
+    - [Introduction](#introduction)
+        - [What is Google drive](#what-is-google-drive-?)
+        - [Key features of Google Drive](#key-features-of-google-drive)
+        - [Connector Overview](#connector-overview)
+    - [Prerequisites](#prerequisites)
+        - [Obtaining tokens](#obtaining-tokens)
+        - [Add project configurations file](#add-project-configurations-file)
+    - [Supported versions & limitations](#supported-versions-&-limitations)
+    - [Quickstart](#quickstart)
+    - [Samples](#samples)
+    - [Building from the Source](#building-from-the-source)
+    - [Contributing to Ballerina](#contributing-to-ballerina)
+    - [Code of Conduct](#code-of-conduct)
+    - [Useful Links](#useful-links)
+    - [How you can contribute](#how-you-can-contribute)
+
+<!-- /TOC -->
+
 # Introduction
 
 ## What is Google drive?
@@ -46,18 +67,11 @@ Java Development Kit (JDK) with version 11 is required.
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
 Ballerina Swan Lake Alpha 2 is required.
 
-* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Spreadsheet uses OAuth 2.0 to authenticate and authorize requests. The Google Spreadsheet connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
+* Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Spreadsheet uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
     * Client ID
     * Client Secret
     * Refresh Token
     * Refresh URL
-
-## Prerequisites
-
-Instantiate the connector by giving authentication details in the HTTP client config. 
-The HTTP client config has built-in support for OAuth 2.0. Google Drive uses OAuth 2.0 to authenticate 
-and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the 
-access token or the client ID, client secret, and refresh token.
 
 ## Obtaining tokens
 
@@ -99,9 +113,60 @@ refreshToken = "<refresh_token>"
 
 ## Limitations
 
-Google API v3 supports resource types Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
-Currently, Google drive connecter supports operations related to Files, Channels and Changes only. It doesnt support
-admin related operations.
+Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels.
+Currently, Google drive connecter supports operations related to Files, Channels and Changes only. .It doesnt support
+admin related operations like creatin new shared drives.
+
+# Quickstart
+
+## Working with Google Drive Endpoint Actions
+
+You must follow the following steps in order to obtain the tokens needed for the configuration of the Ballerina Connector.
+
+1. Visit [Google API Console](https://console.developers.google.com), click **Create Project**, and follow the wizard to create a new project.
+2. Go to **Credentials -> OAuth consent screen**, enter a product name to be shown to users, and click **Save**.
+3. On the **Credentials** tab, click **Create credentials** and select **OAuth client ID**. 
+4. Select an application type, enter a name for the application, and specify a redirect URI (enter https://developers.google.com/oauthplayground if you want to use 
+[OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the refresh token). 
+5. Click **Create**. Your client ID and client secret appear. 
+6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Drive scopes, and then click **Authorize APIs**.
+7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the refresh token.
+
+### Step 1: Import the Google Drive Ballerina Library
+First, import the ballerinax/googleapis_drive module into the Ballerina project.
+```ballerina
+import ballerinax/googleapis_drive as drive;
+```
+All the actions return valid response or error. If the action is a success, then the requested resource will be returned. Else error will be returned.
+
+### Step 2: Initialize the Google Drive Client
+In order for you to use the Drive Endpoint, first you need to create a Google Drive Client endpoint.
+```ballerina
+
+configurable string refreshToken = ?;
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshUrl = drive:REFRESH_URL;
+
+drive:Configuration config = {
+    clientConfig: {
+        clientId: clientId,
+        clientSecret: clientSecret,
+        refreshUrl: refreshUrl,
+        refreshToken: refreshToken
+    }
+};
+
+drive:Client driveClient = new (config);
+```
+Then the endpoint actions can be invoked as `var response = driveClient->actionName(arguments)`.
+
+#### How to get a id from a file or folder in Google drive
+1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
+2. Right click on a folder or file.
+3. Click 'Get link'. Then copy the link.
+4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
+![alt text](/docs/images/file_id.jpeg?raw=true)
 
 ## Example code
 
@@ -136,57 +201,6 @@ Configuration config = {
     }
 };
 ```
-
-# Quickstart
-
-## Working with Google Drive Endpoint Actions
-
-You must follow the following steps in order to obtain the tokens needed for the configuration of the Ballerina Connector.
-
-1. Visit [Google API Console](https://console.developers.google.com), click **Create Project**, and follow the wizard to create a new project.
-2. Go to **Credentials -> OAuth consent screen**, enter a product name to be shown to users, and click **Save**.
-3. On the **Credentials** tab, click **Create credentials** and select **OAuth client ID**. 
-4. Select an application type, enter a name for the application, and specify a redirect URI (enter https://developers.google.com/oauthplayground if you want to use 
-[OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the refresh token). 
-5. Click **Create**. Your client ID and client secret appear. 
-6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Spreadsheet scopes, and then click **Authorize APIs**.
-7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the refresh token.
-
-### Step 1: Import the Google Drive Ballerina Library
-First, import the ballerinax/googleapis_drive module into the Ballerina project.
-```ballerina
-import ballerinax/googleapis_drive as drive;
-```
-All the actions return valid response or error. If the action is a success, then the requested resource will be returned. Else error will be returned.
-
-### Step 2: Initialize the Google Drive Client
-In order for you to use the Drive Endpoint, first you need to create a Google Drive Client endpoint.
-```ballerina
-
-configurable string refreshToken = ?;
-configurable string clientId = ?;
-configurable string clientSecret = ?;
-configurable string refreshUrl = drive:REFRESH_URL;
-
-Configuration config = {
-    clientConfig: {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        refreshUrl: refreshUrl,
-        refreshToken: refreshToken
-    }
-};
-
-drive:Client driveClient = new (config);
-```
-Then the endpoint actions can be invoked as `var response = driveClient->actionName(arguments)`.
-
-#### How to get a id from a file or folder in Google drive
-1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
-2. Right click on a folder or file.
-3. Click 'Get link'. Then copy the link.
-4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
-![alt text](/docs/images/file_id.jpeg?raw=true)
 
 # Samples
 
@@ -346,7 +360,7 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
 ```
 
-## Building from the Source
+# Building from the Source
 
 ### Setting Up the Prerequisites
 
