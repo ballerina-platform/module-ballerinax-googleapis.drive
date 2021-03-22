@@ -35,11 +35,11 @@ drive:Configuration clientConfiguration = {clientConfig: {
 # Event Trigger class  
 public class EventTrigger {
     
-    isolated function onNewFolderCreatedEvent(string folderId) {
+    public function onNewFolderCreatedEvent(string folderId) {
         log:print(TRIGGER_LOG + "New folder was created : " + folderId);
     }
 
-    isolated function onFolderDeletedEvent(string folderID) {
+    public function onFolderDeletedEvent(string folderID) {
         log:print(TRIGGER_LOG + "This folder was removed to the trashed : " + folderID);
     }
 
