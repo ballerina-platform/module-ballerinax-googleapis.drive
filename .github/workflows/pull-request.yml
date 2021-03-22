@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [pull_request]
 
 jobs:
     build:
@@ -23,7 +23,7 @@ jobs:
             - name: Ballerina Build
               uses: ballerina-platform/ballerina-action/@master
               with:
-                  args: build -c
+                  args: build -c --skip-tests
               env:
                   WORKING_DIR: ./drive
                   JAVA_HOME: /usr/lib/jvm/default-jvm
@@ -31,3 +31,5 @@ jobs:
                   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
                   REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
                   REFRESH_URL: ${{ secrets.REFRESH_URL }}
+                  
+                  
