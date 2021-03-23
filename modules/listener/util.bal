@@ -226,7 +226,7 @@ function getCurrentStatusOfFile(drive:Client driveClient, json[] curretStatus, s
 # + itemID - Id that uniquely represents a resource. 
 # + statusStore - JSON object to check the existence of the provided item.
 # + return - If it is available, returns boolean(true). Else error.
-function checkAvailability(string itemID, json[] statusStore) returns boolean|error {
+isolated function checkAvailability(string itemID, json[] statusStore) returns boolean|error {
     boolean flag = false;
     foreach json item in statusStore {
         json|error id = item.id;
@@ -320,7 +320,7 @@ function mapFileUpdateEvents(string resourceId, drive:ChangesListResponse change
 # + eventTime - Drive client connecter. 
 # + lastRecordedTime - The Folder Id for the parent folder.
 # + return - If it is modified, returns boolean(true). Else error.
-function checkforModificationAftertheLastOne(string eventTime, string lastRecordedTime) returns boolean|error {
+isolated function checkforModificationAftertheLastOne(string eventTime, string lastRecordedTime) returns boolean|error {
     string timeFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     boolean isModified = false;
     string eventTimeFormated = regex:replaceAll(eventTime, "Z", "+0000");
