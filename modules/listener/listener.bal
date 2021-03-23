@@ -79,9 +79,7 @@ public class DriveEventListener {
         self.channelUuid = self.watchResponse?.id.toString();
         self.currentToken = self.watchResponse?.startPageToken.toString();
         self.watchResourceId = self.watchResponse?.resourceId.toString();
-        log:print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         log:print("Watch channel started in Google, id : " + self.channelUuid);
-        log:print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
     
     public isolated function attach(http:Service s, string[]|string? name) returns error? {
@@ -110,7 +108,7 @@ public class DriveEventListener {
     # + request - The HTTP request.
     # + return - Returns error, if unsuccessful.
     public function findEventType(http:Caller caller, http:Request request) returns @tainted error? {
-        log:print("<<<<<<<<<<<<<<< RECEIVING A CALLBACK <<<<<<<<<<<<<<<");
+        log:print("< RECEIVING A CALLBACK <");
         string channelID = check request.getHeader("X-Goog-Channel-ID");
         string messageNumber = check request.getHeader("X-Goog-Message-Number");
         string resourceStates = check request.getHeader("X-Goog-Resource-State");
@@ -138,7 +136,7 @@ public class DriveEventListener {
                 }
             }
         }
-        log:print("<<<<<<<<<<<<<<< RECEIVED >>>>>>>>>>>>>>>");
+        log:print("< RECEIVED >");
     }
 
     # Stop all subscriptions for listening.
