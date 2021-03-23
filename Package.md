@@ -33,9 +33,8 @@ Connects to Google Drive using Ballerina.
 
 [Google Drive](https://developers.google.com/drive/api) allows users to store files on their servers, 
 synchronize files across devices, and share files. Google Drive encompasses Google Docs, Google Sheets, and Google 
-Slides, which are a part of the Google Docs Editors office suite that permits collaborative editing of documents, 
-spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are 
-saved in Google Drive.
+Slides, which are a part of the Google Docs Editors office suite that permits the collaborative editing of documents, 
+spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are saved in Google Drive.
 
 ![alt text](/docs/images/drive_overview.png?raw=true)
 
@@ -44,19 +43,15 @@ saved in Google Drive.
 * Easy and secure access to all of your content.
 * Store, share and collaborate on files and folders from any mobile device, tablet or computer.
 * Cloud-native collaboration apps to supercharge teamwork.
-* Drive integrates seamlessly with Docs, Sheets, and Slides, cloud-native apps that enable your team to collaborate 
-effectively in real time.
+* Drive integrates seamlessly with Docs, Sheets, and Slides, cloud-native apps that enable your team to collaborate effectively in real-time.
 * Integration with the tools and apps your team is already using.
 * Drive integrates with and complements your team’s existing technology. 
-* Drive works on all major platforms, enabling you to work seamlessly across your browser, mobile device, tablet 
-and computer.
+* Drive works on all major platforms, enabling you to work seamlessly across your browser, mobile device, tablet and computer.
 
 ## Connector Overview
 
 The Google Drive Ballerina Connector allows you to access the 
-[Google Drive API Version v3](https://developers.google.com/drive/api) through Ballerina. The connector can be used to 
-implement some of the most common use cases of Google Drive. The connector provides the capability to programmatically 
-manage files & folders in the drive.
+[Google Drive API Version v3](https://developers.google.com/drive/api) through Ballerina. The connector can be used to implement some of the most common use cases of Google Drive. The connector provides the capability to programmatically manage files & folders in the drive.
 
 The Google Drive Ballerina Connector supports file and folder management operations related to creating, deleting, 
 updating and retrieving.
@@ -84,8 +79,7 @@ follow the wizard to create a new project.
 3. On the **Credentials** tab, click **Create credentials** and select **OAuth client ID**. 
 4. Select an application type, enter a name for the application, and specify a redirect URI (
     enter https://developers.google.com/oauthplayground if you want to use 
-[OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the 
-access token and refresh token). 
+[OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the access token and refresh token). 
 5. Click **Create**. Your client ID and client secret appear. 
 6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), 
 select the required Google Calendar scopes, and then click **Authorize APIs**.
@@ -94,8 +88,8 @@ refresh token and access token.
 
 ## Add project configurations file
 
-Add the project configuration file by creating a `Config.toml` file under the root path of the project structure.
-This file should have following configurations. Add the tokens obtained in the previous step to the `Config.toml` file.
+Add the project configuration file by creating a `Config. toml` file under the root path of the project structure.
+This file should have the following configurations. Add the tokens obtained in the previous step to the `Config.toml` file.
 
 #### Config.toml
 ```ballerina
@@ -117,8 +111,7 @@ refreshToken = "<refresh_token>"
 ## Limitations
 
 Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels. Currently, 
-Google drive connecter supports operations related to Files, Channels and Changes only. .It doesnt support admin related 
-operations like creatin new shared drives.
+Google drive connecter supports operations related to Files, Channels and Changes only. .It doesn't support admin related operations like creatin new shared drives.
 
 # Quickstart
 
@@ -140,10 +133,10 @@ First, import the ballerinax/googleapis_drive module into the Ballerina project.
 ```ballerina
 import ballerinax/googleapis_drive as drive;
 ```
-All the actions return valid response or error. If the action is a success, then the requested resource will be returned. Else error will be returned.
+All the actions return a valid response or error. If the action is a success, then the requested resource will be returned. Else error will be returned.
 
 ### Step 2: Initialize the Google Drive Client
-In order for you to use the Drive Endpoint, first you need to create a Google Drive Client endpoint.
+In order for you to use the Drive Endpoint, first, you need to create a Google Drive Client endpoint.
 ```ballerina
 
 configurable string refreshToken = ?;
@@ -164,11 +157,11 @@ drive:Client driveClient = new (config);
 ```
 Then the endpoint actions can be invoked as `var response = driveClient->actionName(arguments)`.
 
-#### How to get a id from a file or folder in Google drive
+#### How to get an id from a file or folder in Google drive
 1. Go to Google drive https://drive.google.com/drive/u/0/my-drive
-2. Right click on a folder or file.
+2. Right-click on a folder or file.
 3. Click 'Get link'. Then copy the link.
-4. You can find the ID in the link copied or You can get the id directly from the browser url after clicking on the file
+4. You can find the ID in the link copied or You can get the id directly from the browser URL after clicking on the file
 ![alt text](/docs/images/file_id.jpeg?raw=true)
 
 ## Example code
@@ -256,21 +249,21 @@ Configuration config = {
 
 | What you want to query                                               |    Example                                                             |
 | ---------------------------------------------------------------------|------------------------------------------------------------------------|
-|Files with the name "hello"					                       |     name = 'hello'                                                     |
-|Files with a name containing the words "hello" and "goodbye"	       |     name contains 'hello' and name contains 'goodbye'                  |
-|Files with a name that does not contain the word "hello"	           |     not name contains 'hello'                                          |   
-|Folders that are Google apps or have the folder MIME type	           |     mimeType = 'application/vnd.google-apps.folder'                    |
-|Files that are not folders					                           |     mimeType != 'application/vnd.google-apps.folder'                   |
-|Files that contain the text "important" and in the trash	           |     fullText contains 'important' and trashed = true                   |
-|Files that contain the word "hello"				                   |     fullText contains 'hello'                                          |
-|Files that do not have the word "hello"				               |     not fullText contains 'hello'                                      |
-|Files that contain the exact phrase "hello world"		               |     fullText contains '"hello world"'                                  |
+|Files with the name "hello"                                           |     name = 'hello'                                                     |
+|Files with a name containing the words "hello" and "goodbye"          |     name contains 'hello' and name contains 'goodbye'                  |
+|Files with a name that does not contain the word "hello"              |     not name contains 'hello'                                          |   
+|Folders that are Google apps or have the folder MIME type             |     mimeType = 'application/vnd.google-apps.folder'                    |
+|Files that are not folders                                            |     mimeType != 'application/vnd.google-apps.folder'                   |
+|Files that contain the text "important" and in the trash              |     fullText contains 'important' and trashed = true                   |
+|Files that contain the word "hello"                                   |     fullText contains 'hello'                                          |
+|Files that do not have the word "hello"                               |     not fullText contains 'hello'                                      |
+|Files that contain the exact phrase "hello world"                     |     fullText contains '"hello world"'                                  |
 |Files with a query that contains the "" character (e.g., "\authors")  |     fullText contains '\\authors'                                      |
-|Files with ID within a collection, e.g. parents collection	           |     '1234567' in parents                                               |
-|Files in an Application data folder in a collection	               |     'appDataFolder' in parents                                         |
-|Files for which user "test@example.org" has write permission	       |     'test@example.org' in writers                                      |
-|Files modified after a given date	                                   |      modifiedTime > '2012-06-04T12:00:00' // default time zone is UTC  |
-|Files shared with the authorized user with "hello" in the name	       |      sharedWithMe and name contains 'hello'                            |
+|Files with ID within a collection, e.g. parents collection            |     '1234567' in parents                                               |
+|Files in an Application data folder in a collection                   |     'appDataFolder' in parents                                         |
+|Files for which user "test@example.org" has write permission          |     'test@example.org' in writers                                      |
+|Files modified after a given date                                     |      modifiedTime > '2012-06-04T12:00:00' // default time zone is UTC  |
+|Files shared with the authorized user with "hello" in the name        |      sharedWithMe and name contains 'hello'                            |
 
 ### Get All files
 ```ballerina
@@ -390,7 +383,7 @@ Run this command from the module-ballerinax-googleapis.drive root directory:
 
 ## Contributing to Ballerina
 
-As an open source project, Ballerina welcomes contributions from the community. 
+As an open-source project, Ballerina welcomes contributions from the community. 
 
 For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/master/CONTRIBUTING.md).
 
@@ -409,4 +402,4 @@ All the contributors are encouraged to read the [Ballerina Code of Conduct](http
 Clone the repository by running the following command
 `git clone https://github.com/ballerina-platform/module-ballerinax-googleapis.drive.git`
 
-As an open source project, we welcome contributions from the community. Check the [issue tracker](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/issues) for open issues that interest you. We look forward to receiving your contributions.
+As an open-source project, we welcome contributions from the community. Check the [issue tracker](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/issues) for open issues that interest you. We look forward to receiving your contributions.
