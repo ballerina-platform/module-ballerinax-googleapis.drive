@@ -21,7 +21,7 @@ import ballerina/uuid;
 # Google Drive Client. 
 #
 # + httpClient - The HTTP Client
-@display {label: "Google Drive Client"}
+@display {label: "Google Drive Client", iconPath: "GoogleDriveLogo.png"}
 public client class Client {
     public http:Client httpClient;
     Configuration driveConfiguration;
