@@ -4,8 +4,8 @@
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-googleapis.drive.svg)](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/commits/master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-The Google drive listener allows you to listen for file and folders events in the Google drive.
-Listner can be used to track changes on the whole drive or specified folders.
+The Google drive listener allows you to listen for file and folders events in Google drive.
+The listener can be used to track changes on the whole drive or specified folders.
 
 <!-- TOC -->
 
@@ -33,33 +33,30 @@ Listner can be used to track changes on the whole drive or specified folders.
 
 [Google Drive](https://developers.google.com/drive/api) allows users to store files on their servers, 
 synchronize files across devices, and share files. Google Drive encompasses Google Docs, Google Sheets, and Google 
-Slides, which are a part of the Google Docs Editors office suite that permits collaborative editing of documents, 
-spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are 
-saved in Google Drive.
+Slides, which are a part of the Google Docs Editors office suite that permits the collaborative editing of documents, 
+spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are saved in Google Drive.
 
 ![alt text](/docs/images/drive_overview.png?raw=true)
 
 # Listener overview
 
 The Google Drive Ballerina Connector allows you to access the 
-[Google Drive API Version v3](https://developers.google.com/drive/api) through Ballerina. The connector can be used to 
-implement some of the most common use cases of Google Drive. The connector provides the capability to programmatically 
-manage files & folders in the drive.
+[Google Drive API Version v3](https://developers.google.com/drive/api) through Ballerina. The connector can be used to implement some of the most common use cases of Google Drive. The connector provides the capability to programmatically manage files & folders in the drive.
 
 The Google Drive Ballerina Connector supports file and folder management operations related to creating, deleting, 
 updating and retrieving.
 
 ![alt text](/docs/images/connecter_overview.png?raw=true)
 
-1. Listen to new file creation event.
-2. Listen to new file creation on a specific folder.
-3. Listen to new folder creation event.
+1. Listen to the new file creation event.
+2. Listen to a new file created on a specific folder.
+3. Listen to the new folder creation event.
 4. Listen to new folder creation on a specific folder.
-5. Listen to file update event.
-6. Listen to file delete event.
-7. Listen to file delte event on a specific folder.
-8. Listen to folder delete event.
-9. Listen to folder delte event on a specific folder.
+5. Listen to the file update event.
+6. Listen to file deleted event.
+7. Listen to file deleted event on a specific folder.
+8. Listen to the folder delete event.
+9. Listen to folder delete event on a specific folder.
 
 # Prerequisites
 
@@ -69,7 +66,7 @@ Java Development Kit (JDK) with version 11 is required.
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
 Ballerina Swan Lake Alpha 2 is required.
 
-* Domain used in the CallbackURL need to be registered in google console as a verified domain.
+* Domain used in the callback URL needs to be registered in google console as a verified domain.
 https://console.cloud.google.com/apis/credentials/domainverification
 
 # Supported versions & limitations
@@ -84,8 +81,7 @@ https://console.cloud.google.com/apis/credentials/domainverification
 ## Limitations
 
 Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels. Currently, 
-Google drive connecter supports operations related to Files, Channels and Changes only. .It doesnt support admin related 
-operations like creatin new shared drives.
+Google drive connecter supports operations related to Files, Channels and Changes only. .It doesn't support admin related operations like creatin new shared drives.
 
 # Quickstart
 
@@ -104,11 +100,11 @@ You must follow the following steps in order to obtain the tokens needed for the
 
 # Samples 
 
-Import the Google Drive Listner module to your Ballerina program as follows.
-i.e : Client connecter is imported to create a file in the drive here.
+Import the Google Drive Listener module to your Ballerina program as follows.
+i.e: The client connecter is imported to create a file in the drive here.
 
 ```ballerina
-	
+    
 import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis_drive as drive;
@@ -186,7 +182,7 @@ public function main() returns error? {
 ```
 ## Notes : 
 
-1. The above example is used to listen for file creation only. Implement all needed methods in `EventTrigger` class.
+1. The above example is used to listen for file creation only. Implement all needed methods in the `EventTrigger` class.
 
 ```
 # Event Trigger class  
@@ -229,7 +225,7 @@ public isolated class EventTrigger {
 }
 ```
 
-2. If listener should listen for changes only in a specifc folder, specify the folder Id in `ListenerConfiguration`.
+2. If the listener should listen for changes only in a specific folder, specify the folder Id in `ListenerConfiguration`.
 
 ```
     listen:ListenerConfiguration configuration = {
@@ -243,7 +239,7 @@ public isolated class EventTrigger {
 
 ## Sample logs
 
-### Logs on listner startup
+### Logs on listener startup
 
 ```
 googleapis_drive.listener
@@ -288,7 +284,7 @@ time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_driv
 
    * [OpenJDK](https://adoptopenjdk.net/)
 
-        > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
+        > **Note:** Set the JAVA_HOME environment variable to the pathname of the directory into which you installed JDK.
 
 2. Download and install [Ballerina Alpha 2](https://ballerina.io/). 
 
@@ -316,7 +312,7 @@ Run this command from the module-ballerinax-googleapis.drive root directory:
 
 ## Contributing to Ballerina
 
-As an open source project, Ballerina welcomes contributions from the community. 
+As an open-source project, Ballerina welcomes contributions from the community. 
 
 For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/master/CONTRIBUTING.md).
 
@@ -335,4 +331,4 @@ All the contributors are encouraged to read the [Ballerina Code of Conduct](http
 Clone the repository by running the following command
 `git clone https://github.com/ballerina-platform/module-ballerinax-googleapis.drive.git`
 
-As an open source project, we welcome contributions from the community. Check the [issue tracker](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/issues) for open issues that interest you. We look forward to receiving your contributions.
+As an open-source project, we welcome contributions from the community. Check the [issue tracker](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/issues) for open issues that interest you. We look forward to receiving your contributions.
