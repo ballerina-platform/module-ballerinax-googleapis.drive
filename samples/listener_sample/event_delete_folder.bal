@@ -28,27 +28,27 @@ configurable string refreshToken = ?;
 string fileId = "<FILE_ID_OF_THE_FILE_OR_FOLDER_TO_BE_DELETED>";
 
 # Event Trigger class  
-public class EventTrigger {
+public isolated class EventTrigger {
     
-    public function onNewFolderCreatedEvent(string folderId) {}
+    isolated function onNewFolderCreatedEvent(string folderId) {}
 
-    public function onFolderDeletedEvent(string folderID) {
+    isolated function onFolderDeletedEvent(string folderID) {
         log:print("This folder was removed to the trashed:" + folderID);
     }
 
-    public function onNewFileCreatedEvent(string fileId) {}
+    isolated function onNewFileCreatedEvent(string fileId) {}
 
-    public function onFileDeletedEvent(string fileId) {}
+    isolated function onFileDeletedEvent(string fileId) {}
 
-    public function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
+    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
 
-    public function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
+    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
 
-    public function onFolderDeletedInSpecificFolderEvent(string folderId) {}
+    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
 
-    public function onFileDeletedInSpecificFolderEvent(string fileId) {}
+    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
 
-    public function onFileUpdateEvent(string fileId) {}
+    isolated function onFileUpdateEvent(string fileId) {}
 }
 
     drive:Configuration config = {

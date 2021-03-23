@@ -47,7 +47,7 @@ configurable string refreshToken = ?;
 string fileName = "<NEW_FILE_NAME>";
 
 # Event Trigger class  
-public class EventTrigger {
+public isolated class EventTrigger {
     
     isolated function onNewFolderCreatedEvent(string folderId) {}
 
@@ -114,7 +114,7 @@ public function main() returns error? {
 
 ```
 # Event Trigger class  
-public class EventTrigger {
+public isolated class EventTrigger {
     
     isolated function onNewFolderCreatedEvent(string folderId) {
         log:print("New folder was created:" + folderId);

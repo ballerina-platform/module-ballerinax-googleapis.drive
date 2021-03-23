@@ -29,25 +29,25 @@ string fileId = "<FILE_ID>";
 string parentFolderId = "<PLACE_FOLDER_ID_HERE>";
 
 # Event Trigger class  
-public class EventTrigger {
+public isolated class EventTrigger {
     
-    public function onNewFolderCreatedEvent(string folderId) {}
+    isolated function onNewFolderCreatedEvent(string folderId) {}
 
-    public function onFolderDeletedEvent(string folderID) {}
+    isolated function onFolderDeletedEvent(string folderID) {}
 
-    public function onNewFileCreatedEvent(string fileId) {}
+    isolated function onNewFileCreatedEvent(string fileId) {}
 
-    public function onFileDeletedEvent(string fileId) {}
+    isolated function onFileDeletedEvent(string fileId) {}
 
-    public function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
+    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
 
-    public function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
+    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
 
-    public function onFolderDeletedInSpecificFolderEvent(string folderId) {}
+    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
 
-    public function onFileDeletedInSpecificFolderEvent(string fileId) {}
+    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
 
-    public function onFileUpdateEvent(string fileId) {
+    isolated function onFileUpdateEvent(string fileId) {
         log:print("Update on file :" + fileId);
     }
 }
