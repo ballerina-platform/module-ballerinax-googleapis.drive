@@ -1,16 +1,56 @@
-## Google drive listener
+# Google drive listener
+
+[![Build](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/workflows/CI/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/actions?query=workflow%3ACI)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-googleapis.drive.svg)](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/commits/master)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 The Google drive listener allows you to listen for file and folders events in the Google drive.
 Listner can be used to track changes on the whole drive or specified folders.
 
-## Compatibility
+<!-- TOC -->
 
-|                             |            Versions             |
-|:---------------------------:|:-------------------------------:|
-| Ballerina Language          |     Swan Lake Alpha2            |
-| Google Drive API            |             V3                  |
+- [Google Drive Connecter](#markdown-navigation)
+    - [Introduction](#introduction)
+        - [What is Google drive](#what-is-google-drive-?)
+        - [Listener Overview](#listener-overview)
+    - [Prerequisites](#prerequisites)
+    - [Supported versions & limitations](#supported-versions-&-limitations)
+    - [Quickstart](#quickstart)
+    - [Samples](#samples)
+        - [Notes](#notes)
+        - [Sample logs](#sample-logs)
+    - [Building from the Source](#building-from-the-source)
+    - [Contributing to Ballerina](#contributing-to-ballerina)
+    - [Code of Conduct](#code-of-conduct)
+    - [Useful Links](#useful-links)
+    - [How you can contribute](#how-you-can-contribute)
 
-## Feature overview
+<!-- /TOC -->
+
+# Introduction
+
+## What is Google drive?
+
+[Google Drive](https://developers.google.com/drive/api) allows users to store files on their servers, 
+synchronize files across devices, and share files. Google Drive encompasses Google Docs, Google Sheets, and Google 
+Slides, which are a part of the Google Docs Editors office suite that permits collaborative editing of documents, 
+spreadsheets, presentations, drawings, forms, and more. Files created and edited through the Google Docs suite are 
+saved in Google Drive.
+
+![alt text](/docs/images/drive_overview.png?raw=true)
+
+# Listener overview
+
+The Google Drive Ballerina Connector allows you to access the 
+[Google Drive API Version v3](https://developers.google.com/drive/api) through Ballerina. The connector can be used to 
+implement some of the most common use cases of Google Drive. The connector provides the capability to programmatically 
+manage files & folders in the drive.
+
+The Google Drive Ballerina Connector supports file and folder management operations related to creating, deleting, 
+updating and retrieving.
+
+![alt text](/docs/images/connecter_overview.png?raw=true)
+
 1. Listen to new file creation event.
 2. Listen to new file creation on a specific folder.
 3. Listen to new folder creation event.
@@ -21,14 +61,50 @@ Listner can be used to track changes on the whole drive or specified folders.
 8. Listen to folder delete event.
 9. Listen to folder delte event on a specific folder.
 
-## Prerequisite
-Domain used in the CallbackURL need to be registered in google console as a verified domain.
+# Prerequisites
+
+* Java 11 Installed
+Java Development Kit (JDK) with version 11 is required.
+
+* Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
+Ballerina Swan Lake Alpha 2 is required.
+
+* Domain used in the CallbackURL need to be registered in google console as a verified domain.
 https://console.cloud.google.com/apis/credentials/domainverification
 
-## Getting started
-1. Refer the [Get Started](https://ballerina.io/v1-1/learn/) section to download and install Ballerina.
-2. Import the Google Drive Listner module to your Ballerina program as follows.
+# Supported versions & limitations
 
+## Supported Versions
+
+|                             |            Versions             |
+|:---------------------------:|:-------------------------------:|
+| Ballerina Language          |     Swan Lake Alpha2            |
+| Google Drive API            |             V3                  |
+
+## Limitations
+
+Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels. Currently, 
+Google drive connecter supports operations related to Files, Channels and Changes only. .It doesnt support admin related 
+operations like creatin new shared drives.
+
+# Quickstart
+
+## Working with Google Drive Endpoint Actions
+
+You must follow the following steps in order to obtain the tokens needed for the configuration of the Ballerina Connector.
+
+1. Visit [Google API Console](https://console.developers.google.com), click **Create Project**, and follow the wizard to create a new project.
+2. Go to **Credentials -> OAuth consent screen**, enter a product name to be shown to users, and click **Save**.
+3. On the **Credentials** tab, click **Create credentials** and select **OAuth client ID**. 
+4. Select an application type, enter a name for the application, and specify a redirect URI (enter https://developers.google.com/oauthplayground if you want to use 
+[OAuth 2.0 playground](https://developers.google.com/oauthplayground) to receive the authorization code and obtain the refresh token). 
+5. Click **Create**. Your client ID and client secret appear. 
+6. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground), select the required Google Drive scopes, and then click **Authorize APIs**.
+7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the refresh token.
+
+# Samples 
+
+Import the Google Drive Listner module to your Ballerina program as follows.
 i.e : Client connecter is imported to create a file in the drive here.
 
 ```ballerina
@@ -202,3 +278,61 @@ time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_driv
 time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_drive.listener message = 
 "<<<<<<<<<<<<<<< RECEIVED >>>>>>>>>>>>>>>" 
 ```
+# Building from the Source
+
+### Setting Up the Prerequisites
+
+1. Download and install Java SE Development Kit (JDK) version 11 (from one of the following locations).
+
+   * [Oracle](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+
+   * [OpenJDK](https://adoptopenjdk.net/)
+
+        > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
+
+2. Download and install [Ballerina Alpha 2](https://ballerina.io/). 
+
+### Building the Source
+
+Execute the commands below to build from the source after installing Ballerina Alpha 2 version.
+
+1. To clone the repository:
+Clone this repository using the following command:
+```shell
+    git clone https://github.com/ballerina-platform/module-ballerinax-googleapis.drive
+```
+Execute the commands below to build from the source after installing Ballerina SLP8 version.
+
+2. To build the library:
+Run this command from the module-ballerinax-googleapis.drive root directory:
+```shell script
+    bal build
+```
+
+3. To build the module without the tests:
+```shell script
+    bal build --skip-tests
+```
+
+## Contributing to Ballerina
+
+As an open source project, Ballerina welcomes contributions from the community. 
+
+For more information, go to the [contribution guidelines](https://github.com/ballerina-platform/ballerina-lang/blob/master/CONTRIBUTING.md).
+
+## Code of Conduct
+
+All the contributors are encouraged to read the [Ballerina Code of Conduct](https://ballerina.io/code-of-conduct).
+
+## Useful Links
+
+* Discuss the code changes of the Ballerina project in [ballerina-dev@googlegroups.com](mailto:ballerina-dev@googlegroups.com).
+* Chat live with us via our [Slack channel](https://ballerina.io/community/slack/).
+* Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
+
+## How you can contribute
+
+Clone the repository by running the following command
+`git clone https://github.com/ballerina-platform/module-ballerinax-googleapis.drive.git`
+
+As an open source project, we welcome contributions from the community. Check the [issue tracker](https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/issues) for open issues that interest you. We look forward to receiving your contributions.
