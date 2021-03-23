@@ -17,7 +17,7 @@
 import ballerina/http;
 import ballerina/log;
 import ballerina/test;
-import nuwantissera/googleapis_drive as drive;
+import ballerinax/googleapis_drive as drive;
 
 configurable string callbackURL = ?;
 configurable string clientId = ?;
@@ -33,40 +33,40 @@ drive:Configuration clientConfiguration = {clientConfig: {
 }};
 
 # Event Trigger class  
-public class EventTrigger {
+public isolated class EventTrigger {
     
-    public function onNewFolderCreatedEvent(string folderId) {
+    isolated function onNewFolderCreatedEvent(string folderId) {
         log:print(TRIGGER_LOG + "New folder was created : " + folderId);
     }
 
-    public function onFolderDeletedEvent(string folderID) {
+    isolated function onFolderDeletedEvent(string folderID) {
         log:print(TRIGGER_LOG + "This folder was removed to the trashed : " + folderID);
     }
 
-    public function onNewFileCreatedEvent(string fileId) {
+    isolated function onNewFileCreatedEvent(string fileId) {
         log:print(TRIGGER_LOG + "New File was created : " + fileId);
     }
 
-    public function onFileDeletedEvent(string fileId) {
+    isolated function onFileDeletedEvent(string fileId) {
         log:print(TRIGGER_LOG + "This File was removed to the trashed : " + fileId);
     }
 
-    public function onNewFileCreatedInSpecificFolderEvent(string fileId) {
+    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {
         log:print(TRIGGER_LOG + "A file with Id " + fileId + " was created in side the folder specified");
     }
 
-    public function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
+    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
         log:print(TRIGGER_LOG + "A folder with Id " + folderId + " was created in side the folder specified");
     }
 
-    public function onFolderDeletedInSpecificFolderEvent(string folderId) {
+    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {
         log:print(TRIGGER_LOG + "A folder with Id " + folderId + " was deleted in side the folder specified");
     }
 
-    public function onFileDeletedInSpecificFolderEvent(string fileId) {
+    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {
         log:print(TRIGGER_LOG + "A file with Id " + fileId + " was deleted in side the folder specified");
     }
-    public function onFileUpdateEvent(string fileId) {
+    isolated function onFileUpdateEvent(string fileId) {
         log:print(TRIGGER_LOG + "File updated : " + fileId);
     }
 }
@@ -92,7 +92,7 @@ service / on gDrivelistener {
 }
 
 @test:Config {enable: false}
-function testDriveAPITrigger() {
+isolated function testDriveAPITrigger() {
     log:print("gDriveClient -> watchFiles()");
     int i = 0;
     while (true) {

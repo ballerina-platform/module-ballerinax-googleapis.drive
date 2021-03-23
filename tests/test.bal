@@ -21,6 +21,8 @@ import ballerina/test;
 configurable string clientId = os:getEnv("CLIENT_ID");
 configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
+// Access token support
+//configurable string accessToken = os:getEnv("ACCESS_TOKEN");
 
 const string fileName = "ballerina_temp_file"; 
 const string folderName = "ballerina_temp_folder";
@@ -29,7 +31,7 @@ const string localFilePath = "./tests/resources/bar.jpeg";
 // Access token support
 // Configuration config = {
 //     clientConfig: {
-//         token: os:getEnv("ACCESS_TOKEN")
+//         token: accessToken
 //     }
 // };
 
