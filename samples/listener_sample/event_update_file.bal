@@ -28,25 +28,25 @@ configurable string refreshToken = ?;
 string fileId = "<FILE_ID>";
 
 # Event Trigger class  
-public isolated class EventTrigger {
+public class EventTrigger {
     
-    isolated function onNewFolderCreatedEvent(string folderId) {}
+    public isolated function onNewFolderCreatedEvent(string folderId) {}
 
-    isolated function onFolderDeletedEvent(string folderID) {}
+    public isolated function onFolderDeletedEvent(string folderID) {}
 
-    isolated function onNewFileCreatedEvent(string fileId) {}
+    public isolated function onNewFileCreatedEvent(string fileId) {}
 
-    isolated function onFileDeletedEvent(string fileId) {}
+    public isolated function onFileDeletedEvent(string fileId) {}
 
-    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
+    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
 
-    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
+    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
 
-    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
+    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
 
-    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
+    public isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
 
-    isolated function onFileUpdateEvent(string fileId) {
+    public isolated function onFileUpdateEvent(string fileId) {
         log:print("Update on file :" + fileId);
     }
 }
