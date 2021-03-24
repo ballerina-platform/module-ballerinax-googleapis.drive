@@ -67,13 +67,13 @@ public type InitiationDetail record {
 
 # This type object 'OnEventService' with all Event funtions. 
 public type OnEventService object {
-    isolated function onNewFolderCreatedEvent(string folderId);
-    isolated function onFolderDeletedEvent(string fileId);
-    isolated function onNewFileCreatedEvent(string folderId);
-    isolated function onFileDeletedEvent(string fileId);
-    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId);
-    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId);
-    isolated function onFolderDeletedInSpecificFolderEvent(string folderId);
-    isolated function onFileDeletedInSpecificFolderEvent(string fileId);
-    isolated function onFileUpdateEvent(string fileId);
+    public isolated function onNewFolderCreatedEvent(string folderId);
+    public isolated function onFolderDeletedEvent(string fileId);
+    public isolated function onNewFileCreatedEvent(string folderId);
+    public isolated function onFileDeletedEvent(string fileId);
+    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId);
+    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId);
+    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId);
+    public isolated function onFileDeletedInSpecificFolderEvent(string fileId);
+    public isolated function onFileUpdateEvent(string fileId);
 };
