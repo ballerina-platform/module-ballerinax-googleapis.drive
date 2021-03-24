@@ -33,40 +33,40 @@ drive:Configuration clientConfiguration = {clientConfig: {
 }};
 
 # Event Trigger class  
-public isolated class EventTrigger {
+public class EventTrigger {
     
-    isolated function onNewFolderCreatedEvent(string folderId) {
+    public isolated function onNewFolderCreatedEvent(string folderId) {
         log:print(TRIGGER_LOG + "New folder was created : " + folderId);
     }
 
-    isolated function onFolderDeletedEvent(string folderID) {
+    public isolated function onFolderDeletedEvent(string folderID) {
         log:print(TRIGGER_LOG + "This folder was removed to the trashed : " + folderID);
     }
 
-    isolated function onNewFileCreatedEvent(string fileId) {
+    public isolated function onNewFileCreatedEvent(string fileId) {
         log:print(TRIGGER_LOG + "New File was created : " + fileId);
     }
 
-    isolated function onFileDeletedEvent(string fileId) {
+    public isolated function onFileDeletedEvent(string fileId) {
         log:print(TRIGGER_LOG + "This File was removed to the trashed : " + fileId);
     }
 
-    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {
+    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {
         log:print(TRIGGER_LOG + "A file with Id " + fileId + " was created in side the folder specified");
     }
 
-    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
+    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
         log:print(TRIGGER_LOG + "A folder with Id " + folderId + " was created in side the folder specified");
     }
 
-    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {
+    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {
         log:print(TRIGGER_LOG + "A folder with Id " + folderId + " was deleted in side the folder specified");
     }
 
-    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {
+    public isolated function onFileDeletedInSpecificFolderEvent(string fileId) {
         log:print(TRIGGER_LOG + "A file with Id " + fileId + " was deleted in side the folder specified");
     }
-    isolated function onFileUpdateEvent(string fileId) {
+    public isolated function onFileUpdateEvent(string fileId) {
         log:print(TRIGGER_LOG + "File updated : " + fileId);
     }
 }
@@ -92,7 +92,7 @@ service / on gDrivelistener {
 }
 
 @test:Config {enable: false}
-isolated function testDriveAPITrigger() {
+public isolated function testDriveAPITrigger() {
     log:print("gDriveClient -> watchFiles()");
     int i = 0;
     while (true) {
