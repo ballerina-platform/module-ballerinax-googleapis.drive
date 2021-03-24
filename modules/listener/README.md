@@ -119,27 +119,27 @@ configurable string refreshToken = ?;
 string fileName = "<NEW_FILE_NAME>";
 
 # Event Trigger class  
-public isolated class EventTrigger {
+public class EventTrigger {
     
-    isolated function onNewFolderCreatedEvent(string folderId) {}
+    public isolated function onNewFolderCreatedEvent(string folderId) {}
 
-    isolated function onFolderDeletedEvent(string folderID) {}
+    public isolated function onFolderDeletedEvent(string folderID) {}
 
-    isolated function onNewFileCreatedEvent(string fileId) {
+    public isolated function onNewFileCreatedEvent(string fileId) {
         log:print("New File was created:" + fileId);
     }
 
-    isolated function onFileDeletedEvent(string fileId) {}
+    public isolated function onFileDeletedEvent(string fileId) {}
 
-    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
+    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
 
-    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
+    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
 
-    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
+    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
 
-    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
+    public isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
 
-    isolated function onFileUpdateEvent(string fileId) {}
+    public isolated function onFileUpdateEvent(string fileId) {}
 }
 
     drive:Configuration config = {
@@ -186,40 +186,40 @@ public function main() returns error? {
 
 ```
 # Event Trigger class  
-public isolated class EventTrigger {
+public class EventTrigger {
     
-    isolated function onNewFolderCreatedEvent(string folderId) {
+    public isolated function onNewFolderCreatedEvent(string folderId) {
         log:print("New folder was created:" + folderId);
     }
 
-    isolated function onFolderDeletedEvent(string folderID) {
+    public isolated function onFolderDeletedEvent(string folderID) {
         log:print("This folder was removed to the trashed:" + folderID);
     }
 
-    isolated function onNewFileCreatedEvent(string fileId) {
+    public isolated function onNewFileCreatedEvent(string fileId) {
         log:print("New File was created:" + fileId);
     }
 
-    isolated function onFileDeletedEvent(string fileId) {
+    public isolated function onFileDeletedEvent(string fileId) {
         log:print("This File was removed to the trashed:" + fileId);
     }
 
-    isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {
+    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {
         log:print("A file with Id " + fileId + "was created in side the folder specified");
     }
 
-    isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
+    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
         log:print("A folder with Id " + folderId + "was created in side the folder specified");
     }
 
-    isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {
+    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {
         log:print("A folder with Id " + folderId + "was deleted in side the folder specified");
     }
 
-    isolated function onFileDeletedInSpecificFolderEvent(string fileId) {
+    public isolated function onFileDeletedInSpecificFolderEvent(string fileId) {
         log:print("A file with Id " + fileId + "was deleted in side the folder specified");
     }
-    isolated function onFileUpdateEvent(string fileId) {
+    public isolated function onFileUpdateEvent(string fileId) {
         log:print("File updated : " + fileId);
     }
 }
