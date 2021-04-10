@@ -64,7 +64,7 @@ updating and retrieving.
 Java Development Kit (JDK) with version 11 is required.
 
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
-Ballerina Swan Lake Alpha 2 is required.
+Ballerina Swan Lake Alpha 4 SNAPSHOT is required.
 
 * Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Drive uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
     * Client ID
@@ -105,7 +105,7 @@ refreshToken = "<refresh_token>"
 
 |                             |            Versions             |
 |:---------------------------:|:-------------------------------:|
-| Ballerina Language          |     Swan Lake Alpha2            |
+| Ballerina Language          |     Swan Lake Alpha4 SNAPSHOT   |
 | Google Drive API            |             V3                  |
 
 ## Limitations
@@ -186,7 +186,7 @@ Creating a drive:driveClient by giving the HTTP client config details.
         }
     };
 
-    drive:Client driveClient = new (config);
+    drive:Client driveClient = check new (config);
 ```
 There is support for providing configuration using access token also.
 
@@ -276,7 +276,7 @@ Configuration config = {
     stream<File>|error response = driveClient->getAllSpreadsheets();
      if (response is stream<File>){
         error? e = response.forEach(isolated function (File response) {
-            log:print(response?.id.toString());
+            log:printInfo(response?.id.toString());
         });
     } else {
         log:printError(response.message());
@@ -357,11 +357,11 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 
         > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
 
-2. Download and install [Ballerina Alpha 2](https://ballerina.io/). 
+2. Download and install [Ballerina Alpha 4 SNAPSHOT](https://ballerina.io/). 
 
 ### Building the Source
 
-Execute the commands below to build from the source after installing Ballerina Alpha 2 version.
+Execute the commands below to build from the source after installing Ballerina Alpha 4 SNAPSHOT version.
 
 1. To clone the repository:
 Clone this repository using the following command:
@@ -378,7 +378,7 @@ Run this command from the module-ballerinax-googleapis.drive root directory:
 
 3. To build the module without the tests:
 ```shell script
-    bal build --skip-tests
+    bal build -c --skip-tests
 ```
 
 ## Contributing to Ballerina
