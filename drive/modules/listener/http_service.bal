@@ -13,7 +13,7 @@ service class HttpService {
     boolean isWatchOnSpecificResource;
     boolean isAFolder = true;
 
-    private boolean isFileCreated = false;
+    // private boolean isFileCreated = false;
 
     private SimpleHttpService httpService;
 
@@ -44,7 +44,6 @@ service class HttpService {
     }
 
     resource function post events(http:Caller caller, http:Request request) returns error? {
-        log:printInfo("< RECEIVING A CALLBACK <");
         if(check request.getHeader(GOOGLE_CHANNEL_ID) != self.channelUuid){
             fail error("Diffrent channel IDs found, Resend the watch request");
         } else {
@@ -52,23 +51,22 @@ service class HttpService {
             foreach drive:ChangesListResponse item in response {
                 self.currentToken = item?.newStartPageToken.toString();
                 if (self.isWatchOnSpecificResource && self.isAFolder) {
-                    log:printInfo("Folder watch response processing");
+                    log:printDebug("Folder watch response processing");
                     check mapEventForSpecificResource(<@untainted> self.specificFolderOrFileId, <@untainted> item, 
                     <@untainted> self.driveClient, <@untainted> self.httpService, <@untainted> self.currentFileStatus);
                     check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus, self.specificFolderOrFileId);
                 } else if (self.isWatchOnSpecificResource && self.isAFolder == false) {
-                    log:printInfo("File watch response processing");
+                    log:printDebug("File watch response processing");
                     check mapFileUpdateEvents(self.specificFolderOrFileId, item, self.driveClient, self.httpService, 
                     self.currentFileStatus);
                     check getCurrentStatusOfFile(self.driveClient, self.currentFileStatus, self.specificFolderOrFileId);
                 } else {
-                    log:printInfo("Whole drive watch response processing");
+                    log:printDebug("Whole drive watch response processing");
                     check mapEvents(item, self.driveClient, self.httpService, self.currentFileStatus);
                     check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus);
                 }
             } 
             check caller->respond(http:STATUS_OK);
-            log:printInfo("< RECEIVED >");
         }
     }
 }

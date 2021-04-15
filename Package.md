@@ -105,7 +105,7 @@ refreshToken = "<refresh_token>"
 
 |                             |            Versions             |
 |:---------------------------:|:-------------------------------:|
-| Ballerina Language          |     Swan Lake Alpha4 SNAPSHOT   |
+| Ballerina Language          |     Swan Lake Alpha4            |
 | Google Drive API            |             V3                  |
 
 ## Limitations
