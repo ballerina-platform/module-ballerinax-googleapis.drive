@@ -63,7 +63,7 @@ allprojects {
             url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang'
             credentials {
                 username "SkNuwanTissera"
-                password "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"
+                password "XXXXXXXX"
             }
         }
     }
