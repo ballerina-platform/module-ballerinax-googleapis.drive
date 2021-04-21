@@ -107,7 +107,6 @@ isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client d
 isolated function identifyFolderEvent(string folderId, string changeTime, SimpleHttpService eventService, 
         drive:Client driveClient, boolean isSepcificFolder = false, string? specFolderId = ()) returns @tainted error? {
     drive:File folder = check driveClient->getFile(folderId, "createdTime,modifiedTime,trashed,parents");
-    log:printInfo(folder.toString());
     boolean? isTrashed = folder?.trashed;
     string createdTime = folder?.createdTime.toString();
     string[]? parentList = folder?.parents;
@@ -176,7 +175,7 @@ isolated function isCreated(string createdTime, string changeTime) returns boole
     time:Utc changeTimeUNIX = check time:utcFromString(changeTime);
     time:Seconds due = time:utcDiffSeconds(changeTimeUNIX, createdTimeUNIX);
     log:printInfo(">>>>>>>>>>>> DUE : " +due.toString());
-    if (due <= 10d) {
+    if (due <= 12d) {
         log:printInfo(">>>>>>>>>>>> CREATED TIME : " +createdTime);
         log:printInfo(">>>>>>>>>>>> CHANGE TIME : " +changeTime);
         log:printInfo(">>>>>>>>>>>> CREATED EVENT >>>>>>>>>");
@@ -191,7 +190,7 @@ isolated function isUpdated(string createdTime, string changeTime) returns boole
     time:Utc changeTimeUNIX = check time:utcFromString(changeTime);
     time:Seconds due = time:utcDiffSeconds(changeTimeUNIX, createdTimeUNIX);
     log:printInfo(">>>>>>>>>>>> DUE : " +due.toString());
-    if (due > 10d) {
+    if (due > 12d) {
         log:printInfo(">>>>>>>>>>>> CREATED TIME : " +createdTime);
         log:printInfo(">>>>>>>>>>>> CHANGE TIME : " +changeTime);
         log:printInfo(">>>>>>>>>>>> UPDATED EVENT >>>>>>>>>");
