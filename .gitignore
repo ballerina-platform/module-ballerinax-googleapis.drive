@@ -58,3 +58,6 @@ ballerina-internal.log
 
 # Gradle files
 **/.gradle/*
+
+# Build files
+build/
