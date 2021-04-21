@@ -39,24 +39,6 @@ public class WebhookNativeOperationHandler {
     public static Object callOnTrashMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
         return invokeRemoteFunction(env, bWebhookService, message, "callOnTrashMethod", "onTrash");
     }
-    // public static Object callOnFileCreateOnSpecificFolderMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-    //     return invokeRemoteFunction(env, bWebhookService, message, "callOnFileCreateOnSpecificFolderMethod", "onFileCreateOnSpecificFolder");
-    // }
-    // public static Object callOnFileDeleteOnSpecificFolderMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-    //     return invokeRemoteFunction(env, bWebhookService, message, "callOnFileDeleteOnSpecificFolderMethod", "onFileDeleteOnSpecificFolder");
-    // }
-    // public static Object callOnFileUpdateOnSpecificFolderMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-    //     return invokeRemoteFunction(env, bWebhookService, message, "callOnFileUpdateOnSpecificFolderMethod", "onFileUpdateOnSpecificFolder");
-    // }
-    // public static Object callOnFolderCreateOnSpecificFolderMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-    //     return invokeRemoteFunction(env, bWebhookService, message, "callOnFolderCreateOnSpecificFolderMethod", "onFolderCreateOnSpecificFolder");
-    // }
-    // public static Object callOnFolderDeleteOnSpecificFolderMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-    //     return invokeRemoteFunction(env, bWebhookService, message, "callOnFolderDeleteOnSpecificFolderMethod", "onFolderDeleteOnSpecificFolder");
-    // }
-    // public static Object callOnFolderUpdateOnSpecificFolderMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-    //     return invokeRemoteFunction(env, bWebhookService, message, "callOnFolderUpdateOnSpecificFolderMethod", "onFolderUpdateOnSpecificFolder");
-    // }
 
     public static BArray getServiceMethodNames(BObject bSubscriberService) {
         ArrayList<BString> methodNamesList = new ArrayList<>();
