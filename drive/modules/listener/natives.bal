@@ -1,31 +1,32 @@
 import ballerina/jballerina.java;
+import ballerinax/googleapis_drive as drive;
 
-isolated function callOnFileCreateMethod(SimpleHttpService httpService, EventInfo fileId)
+isolated function callOnFileCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFolderCreateMethod(SimpleHttpService httpService, EventInfo folderId)
+isolated function callOnFolderCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFileUpdateMethod(SimpleHttpService httpService, EventInfo fileId)
+isolated function callOnFileUpdateMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, EventInfo folderId)
+isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnDeleteMethod(SimpleHttpService httpService, EventInfo fileId)
+isolated function callOnDeleteMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnTrashMethod(SimpleHttpService httpService, EventInfo fileId)
+isolated function callOnTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;

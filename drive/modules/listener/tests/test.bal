@@ -44,23 +44,23 @@ ListenerConfiguration congifuration = {
 listener Listener gDriveListener = new (congifuration);
 
 service / on gDriveListener {
-    isolated remote function onFileCreate(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onFileCreate > fileID : ", fileId);     
+    isolated remote function onFileCreate(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
     }
-    isolated remote function onFolderCreate(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderCreate > fileID : ", folderId);     
+    isolated remote function onFolderCreate(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onFolderCreate > changeInfo : ", changeInfo);     
     }
-    isolated remote function onFileUpdate(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onFileUpdate > fileID : ", fileId);     
+    isolated remote function onFileUpdate(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onFileUpdate > changeInfo : ", changeInfo);     
     }
-    isolated remote function onFolderUpdate(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderUpdate > folderId : ", folderId);     
+    isolated remote function onFolderUpdate(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
     }
-    isolated remote function onTrash(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onTrash > fileID : ", fileId);     
+    isolated remote function onTrash(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onTrash > changeInfo : ", changeInfo);     
     }
-    isolated remote function onDelete(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onPermenantDelete > fileOrFolderId : ", fileId);     
+    isolated remote function onDelete(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);     
     }
 }
 

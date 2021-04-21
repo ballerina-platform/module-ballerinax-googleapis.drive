@@ -87,27 +87,10 @@ public type Acknowledgement record {
     *CommonResponse;
 };
 
-# Record type used to handle the Events
-# 
-# + eventType - Enum that handles the event type
-# + fileOrFolderId - File or folder id related to the event
-public type EventInfo record {
-    EventType eventType?;
-    string fileOrFolderId?;
-};
+// # Record type used to handle the Events
+// #
+// # + fileOrFolderId - File or folder id related to the event
+// public type EventInfo record {
+//     string fileOrFolderId?;
+// };
 
-# Represents event type
-public enum EventType {
-    NEW_FOLDER_CREATED_ON_SPECIFIED_FOLDER,
-    NEW_FOLDER_CREATED,
-    FOLDER_DELETED_ON_SPECIFIED_FOLDER,
-    FOLDER_DELETED,
-    FOLDER_UPDATED_ON_SPECIFIED_FOLDER,
-    FOLDER_UPDATED,
-    NEW_FILE_CREATED_ON_SPECIFIED_FOLDER,
-    NEW_FILE_CREATED,
-    FILE_DELETED_ON_SPECIFIED_FOLDER,
-    FILE_DELETED,
-    FILE_UPDATED_ON_SPECIFIED_FOLDER,
-    FILE_UPDATED
-}
