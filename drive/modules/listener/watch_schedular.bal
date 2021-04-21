@@ -1,11 +1,9 @@
-// import ballerina/http;
 import ballerina/log;
 import ballerina/task;
 import ballerina/time;
 import ballerinax/googleapis_drive as drive;
 
 class Job {
-
     *task:Job;
     private SimpleHttpService s;
     string[]|string? name = ();
@@ -18,10 +16,10 @@ class Job {
     private boolean isAFolder = true;
 
     private drive:WatchResponse watchResponse;
-    private string channelUuid = "";
-    private string specificFolderOrFileId = "";
-    private string watchResourceId = "";
-    private string currentToken = "";
+    private string channelUuid = EMPTY_STRING;
+    private string specificFolderOrFileId = EMPTY_STRING;
+    private string watchResourceId = EMPTY_STRING;
+    private string currentToken = EMPTY_STRING;
     private int? expiration = 0;
 
     public isolated function execute() {
@@ -51,7 +49,7 @@ class Job {
         self.httpService.channelUuid = self.channelUuid;
         self.httpService.watchResourceId = self.watchResourceId;
         self.httpService.currentToken = self.currentToken;
-        
+
         self.httpListener.channelUuid = self.channelUuid;
         self.httpListener.watchResourceId = self.watchResourceId;
 

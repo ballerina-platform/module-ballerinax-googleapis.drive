@@ -22,14 +22,14 @@ public type ListenerConfiguration record {
 # Drive event listener   
 @display {label: "Google Drive Listener"}
 public class Listener {
-    private string currentToken = "";
     # Watch Channel ID
-    public string channelUuid = "";
-    private int expiration;
+    public string channelUuid = EMPTY_STRING;
     # Watch Resource ID
-    public string watchResourceId = "";
+    public string watchResourceId = EMPTY_STRING;
+    private int expiration;
+    private string currentToken = EMPTY_STRING;
     private http:Client clientEP;
-    private string specificFolderOrFileId = "";
+    private string specificFolderOrFileId = EMPTY_STRING;
     private drive:Client driveClient;
     private drive:WatchResponse watchResponse;
     private boolean isWatchOnSpecificResource = false;
