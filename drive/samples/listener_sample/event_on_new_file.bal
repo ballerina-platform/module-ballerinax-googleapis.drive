@@ -45,8 +45,8 @@ string fileName = "<NEW_FILE_NAME>";
     listener listen:Listener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        isolated remote function onFileCreate(EventInfo fileId) returns error? {
-            log:printInfo("Trigger > onFileCreate > fileID : ", fileId);     
+        isolated remote function onFileCreate(drive:Change changeInfo) returns error? {
+            log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
         }
     }
 
