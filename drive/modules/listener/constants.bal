@@ -28,14 +28,15 @@ const string audio = "application/vnd.google-apps.audio";
 const string LOG_FILE = "text/x-log";
 const string TEXT_FILE = "text/plain";
 
-// Trigger log
-const string TRIGGER_LOG = ">>>>> INCOMING TRIGGER >>>>> ";
-
 // Constants
 const string EMPTY_STRING = "";
 
-# Header constants
+// Header constants
 const string GOOGLE_CHANNEL_ID = "X-Goog-Channel-ID";
 const string GOOGLE_RESOURCE_ID = "X-Goog-Resource-ID";
 const string GOOGLE_RESOURCE_STATE = "X-Goog-Resource-State";
 const string SYNC = "sync";
+
+// Watch 
+const decimal MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE = 86400;
+const decimal MAX_EXPIRATION_TIME_FOR_CHANGES_ALL_DRIVE = 604800;
