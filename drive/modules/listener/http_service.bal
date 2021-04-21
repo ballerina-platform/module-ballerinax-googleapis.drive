@@ -4,14 +4,14 @@ import ballerinax/googleapis_drive as drive;
 
 service class HttpService {
     
-    private string channelUuid;
-    private string currentToken;
-    private string watchResourceId;
-    private json[] currentFileStatus = [];
-    private string specificFolderOrFileId;
-    private drive:Client driveClient;
-    boolean isWatchOnSpecificResource;
-    boolean isAFolder = true;
+    public string channelUuid;
+    public string currentToken;
+    public string watchResourceId;
+    public json[] currentFileStatus = [];
+    public string specificFolderOrFileId;
+    public drive:Client driveClient;
+    public boolean isWatchOnSpecificResource;
+    public boolean isAFolder = true;
 
     private SimpleHttpService httpService;
 

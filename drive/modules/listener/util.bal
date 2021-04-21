@@ -35,6 +35,24 @@ isolated function startWatch(string callbackURL, drive:Client driveClient, strin
     }
 }
 
+# Stop all subscriptions for listening.
+# + driveClient - Google drive client
+# + channelUuid - UUID or other unique string you provided to identify this notification channel
+# + watchResourceId - An opaque value that identifies the watched resource
+# 
+# + return - Returns error, if unsuccessful.
+isolated function stopWatchChannel(drive:Client driveClient, string channelUuid, string watchResourceId) 
+                                   returns error? {
+    boolean|error response = driveClient->watchStop(channelUuid, watchResourceId);
+    if (response is boolean) {
+        log:printInfo("Watch channel stopped");
+        return;
+    } else {
+        log:printInfo("Watch channel was not stopped");
+        return response;
+    }
+}
+
 # List changes by page token
 # + driveClient - The HTTP Client
 # + pageToken - The token for continuing a previous list request on the next page. This should be set to the value of 
