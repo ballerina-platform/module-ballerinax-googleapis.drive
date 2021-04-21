@@ -5,17 +5,7 @@ isolated function callOnFileCreateMethod(SimpleHttpService httpService, EventInf
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFileCreateOnSpecificFolderMethod(SimpleHttpService httpService, EventInfo fileId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
-isolated function callOnFileDeleteMethod(SimpleHttpService httpService, EventInfo fileId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
-isolated function callOnFileDeleteOnSpecificFolderMethod(SimpleHttpService httpService, EventInfo fileId)
+isolated function callOnFolderCreateMethod(SimpleHttpService httpService, EventInfo folderId)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
@@ -25,37 +15,17 @@ isolated function callOnFileUpdateMethod(SimpleHttpService httpService, EventInf
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFileUpdateOnSpecificFolderMethod(SimpleHttpService httpService, EventInfo fileId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
-isolated function callOnFolderCreateMethod(SimpleHttpService httpService, EventInfo folderId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
-isolated function callOnFolderCreateOnSpecificFolderMethod(SimpleHttpService httpService, EventInfo folderId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
-isolated function callOnFolderDeleteMethod(SimpleHttpService httpService, EventInfo folderId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
-isolated function callOnFolderDeleteOnSpecificFolderMethod(SimpleHttpService httpService, EventInfo folderId)
-                                returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
-} external;
-
 isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, EventInfo folderId)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFolderUpdateOnSpecificFolderMethod(SimpleHttpService httpService, EventInfo folderId)
+isolated function callOnDeleteMethod(SimpleHttpService httpService, EventInfo fileId)
+                                returns error? = @java:Method {
+    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+} external;
+
+isolated function callOnTrashMethod(SimpleHttpService httpService, EventInfo fileId)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;

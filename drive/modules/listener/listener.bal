@@ -1,6 +1,8 @@
 import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis_drive as drive;
+// import ballerina/task;
+// import ballerina/time;
 
 # Listener Configuration. 
 #
@@ -22,7 +24,6 @@ public class Listener {
     private string channelUuid;
     private string watchResourceId;
     private http:Client clientEP;
-    private json[] currentFileStatus = [];
     private string specificFolderOrFileId;
     private drive:Client driveClient;
     private drive:WatchResponse watchResponse;
@@ -32,7 +33,7 @@ public class Listener {
     private http:Listener httpListener;
     private HttpService httpService;
 
-    public function init(ListenerConfiguration config) returns @tainted error? {
+    public isolated function init(ListenerConfiguration config) returns @tainted error? {
         self.httpListener = check new (config.port);
         self.driveClient = check new (config.clientConfiguration);
         self.config = config;
@@ -44,32 +45,33 @@ public class Listener {
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
             self.watchResponse = check startWatch(self.config.callbackURL, self.driveClient, self.specificFolderOrFileId.
             toString());
-            check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus, 
-            self.specificFolderOrFileId.toString());
             self.isWatchOnSpecificResource = true;
         } else if (self.config.specificFolderOrFileId is string && self.isAFolder == false) {
             check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
             self.watchResponse = check startWatch(self.config.callbackURL, self.driveClient, self.specificFolderOrFileId);
             self.isWatchOnSpecificResource = true;
-            check getCurrentStatusOfFile(self.driveClient, self.currentFileStatus, self.specificFolderOrFileId);
         } else {
             self.specificFolderOrFileId = EMPTY_STRING;
             self.watchResponse = check startWatch(self.config.callbackURL, self.driveClient);
-            check getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus);
         }
         self.channelUuid = self.watchResponse?.id.toString();
         self.currentToken = self.watchResponse?.startPageToken.toString();
-        // expiration time
         self.watchResourceId = self.watchResponse?.resourceId.toString();
+        // self.expiration = self.watchResponse?.expiration.toString();
         log:printInfo("Watch channel started in Google, id : " + self.channelUuid);
         // schedular start
         // expiration time >>>    
     }
 
     public isolated function attach(SimpleHttpService s, string[]|string? name = ()) returns error? {
-        self.httpService = new HttpService(s, self.currentFileStatus, self.channelUuid, self.currentToken, self.watchResourceId, self.driveClient, self.isWatchOnSpecificResource, self.isAFolder, self.specificFolderOrFileId);
+        self.httpService = new HttpService(s, self.channelUuid, self.currentToken, self.watchResourceId, self.driveClient, self.isWatchOnSpecificResource, self.isAFolder, self.specificFolderOrFileId);
         check self.httpListener.attach(self.httpService, name);
+
+        // time:Utc currentUtc = time:utcNow();
+        // time:Civil time = time:utcToCivil(currentUtc);
+        // task:JobId result = check task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self, self.httpService, 
+        // self.currentFileStatus), time);
     }
 
     public isolated function detach(service object {} s) returns error? {
@@ -87,5 +89,41 @@ public class Listener {
     public isolated function immediateStop() returns error? {
         return self.httpListener.immediateStop();
     }
+
+
+//     public isolated function registerWebhook() returns drive:WatchResponse|error {
+//         if (self.config.specificGsheetId is string) {
+//             self.isValidGsheet = checkpanic checkMimeType(self.driveClient, self.config.specificGsheetId.toString());
+//         }
+//         if (self.isValidGsheet == true) {
+//             self.specificGsheetId = self.config.specificGsheetId.toString();
+//             self.watchResponse = checkpanic startWatchChannel(self.config.callbackURL, self.driveClient, 
+//                 self.config.expiration, self.specificGsheetId);
+//             checkpanic getCurrentStatusOfFile(self.driveClient, self.currentFileStatus, self.specificGsheetId);
+//         } 
+//         self.channelUuid = self.watchResponse?.id.toString();
+//         self.watchResourceId = self.watchResponse?.resourceId.toString();
+//         self.currentToken = self.watchResponse?.startPageToken.toString();
+//         self.expiration = self.watchResponse?.expiration;
+//         log:printInfo("Subscribed to watch channel ID : " + self.channelUuid);
+//         log:printInfo("Start page token for the current state of the account: " + self.currentToken);
+//         return self.watchResponse;
+//         // else {
+//         //     self.specificGsheetId = EMPTY_STRING;
+//         //     self.watchResponse = checkpanic startWatchChannel(self.config.callbackURL, self.driveClient,
+//         //         self.config.expiration);
+//         //     checkpanic getCurrentStatusOfDrive(self.driveClient, self.currentFileStatus);
+//         //     return self.watchResponse;
+//         // }
+//     }
+
+//     public isolated function scheduleNextWebhookRenewal(drive:WatchResponse watchResponse) returns error? {
+//         time:Utc currentUtc = time:utcNow();
+//         time:Utc newTime = time:utcAddSeconds(currentUtc, <decimal>self.config.expiration);
+//         time:Civil time = time:utcToCivil(newTime);
+
+//         task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self, 
+//             self.httpService, self.currentFileStatus), time);
+//     }
 }
 

@@ -19,11 +19,11 @@ import ballerina/os;
 import ballerina/test;
 import ballerinax/googleapis_drive as drive;
 
-configurable string callbackURL = os:getEnv("CALLBACK_URL");
-configurable string clientId = os:getEnv("CLIENT_ID");
-configurable string clientSecret = os:getEnv("CLIENT_SECRET");
-configurable string refreshUrl = drive:REFRESH_URL;
-configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
+string callbackURL = os:getEnv("CALLBACK_URL");
+string clientId = os:getEnv("CLIENT_ID");
+string clientSecret = os:getEnv("CLIENT_SECRET");
+string refreshUrl = drive:REFRESH_URL;
+string refreshToken = os:getEnv("REFRESH_TOKEN");
 
 drive:Configuration clientConfiguration = {clientConfig: {
         clientId: clientId,
@@ -35,8 +35,9 @@ drive:Configuration clientConfiguration = {clientConfig: {
 ListenerConfiguration congifuration = {
     port: 9090,
     callbackURL: callbackURL,
-    clientConfiguration: clientConfiguration,
-    specificFolderOrFileId: "1A1oEfuP7gZrCUU6FySahMvjpqJP-mDEn"
+    clientConfiguration: clientConfiguration
+    // specificFolderOrFileId: "1A1oEfuP7gZrCUU6FySahMvjpqJP-mDEn"
+    // specificFolderOrFileId:"1qkopkT7g_KAJX1TKJir7NLRQ9mYNBcv8DWAaD17FbMo"
 };
 
 listener Listener gDriveListener = new (congifuration);
@@ -45,38 +46,20 @@ service / on gDriveListener {
     isolated remote function onFileCreate(EventInfo fileId) returns error? {
         log:printInfo("Trigger > onFileCreate > fileID : ", fileId);     
     }
-    isolated remote function onFileCreateOnSpecificFolder(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onFileCreateOnSpecificFolder > fileID : ", fileId);     
-    }
-    isolated remote function onFileDelete(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onFileDelete > fileID : ", fileId);    
-    }
-    isolated remote function onFileDeleteOnSpecificFolder(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onFileDeleteOnSpecificFolder > fileID : ", fileId);     
+    isolated remote function onFolderCreate(EventInfo folderId) returns error? {
+        log:printInfo("Trigger > onFolderCreate > fileID : ", folderId);     
     }
     isolated remote function onFileUpdate(EventInfo fileId) returns error? {
         log:printInfo("Trigger > onFileUpdate > fileID : ", fileId);     
     }
-    isolated remote function onFileUpdateOnSpecificFolder(EventInfo fileId) returns error? {
-        log:printInfo("Trigger > onFileUpdateOnSpecificFolder > fileID : ", fileId);     
-    }
-    isolated remote function onFolderCreate(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderCreate > fileID : ", folderId);     
-    }
-    isolated remote function onFolderCreateOnSpecificFolder(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderCreateOnSpecificFolder > folderId : ", folderId);     
-    }
-    isolated remote function onFolderDelete(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderDelete > folderId : ", folderId);     
-    }
-    isolated remote function onFolderDeleteOnSpecificFolder(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderDeleteOnSpecificFolder > folderId : ", folderId);     
-    }    
     isolated remote function onFolderUpdate(EventInfo folderId) returns error? {
         log:printInfo("Trigger > onFolderUpdate > folderId : ", folderId);     
     }
-    isolated remote function onFolderUpdateOnSpecificFolder(EventInfo folderId) returns error? {
-        log:printInfo("Trigger > onFolderUpdateOnSpecificFolder > folderId : ", folderId);     
+    isolated remote function onTrash(EventInfo fileId) returns error? {
+        log:printInfo("Trigger > onTrash > fileID : ", fileId);     
+    }
+    isolated remote function onDelete(EventInfo fileId) returns error? {
+        log:printInfo("Trigger > onPermenantDelete > fileOrFolderId : ", fileId);     
     }
 }
 
