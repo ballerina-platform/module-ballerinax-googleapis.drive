@@ -55,3 +55,6 @@ target/
 
 # Error log file
 ballerina-internal.log
+
+# Gradle files
+**/.gradle/*
