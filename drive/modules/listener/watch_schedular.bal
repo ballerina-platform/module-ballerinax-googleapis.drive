@@ -23,6 +23,7 @@ class Job {
     private int? expiration = 0;
 
     public isolated function execute() {
+        decimal expiration = <decimal>self.config.expiration;
         if (self.config.specificFolderOrFileId is string) {
             self.isAFolder = checkpanic checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
         }
@@ -32,14 +33,23 @@ class Job {
             self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient, self.specificFolderOrFileId.
             toString());
             self.isWatchOnSpecificResource = true;
+            if(expiration > MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE){
+                expiration = MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE;
+            }
         } else if (self.config.specificFolderOrFileId is string && self.isAFolder == false) {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
             self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient, self.specificFolderOrFileId);
             self.isWatchOnSpecificResource = true;
+            if(expiration > MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE){
+                expiration = MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE;
+            }
         } else {
             self.specificFolderOrFileId = EMPTY_STRING;
             self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient);
+            if(expiration > MAX_EXPIRATION_TIME_FOR_CHANGES_ALL_DRIVE){
+                expiration = MAX_EXPIRATION_TIME_FOR_CHANGES_ALL_DRIVE;
+            }
         }
         self.channelUuid = self.watchResponse?.id.toString();
         self.currentToken = self.watchResponse?.startPageToken.toString();
@@ -54,7 +64,7 @@ class Job {
         self.httpListener.watchResourceId = self.watchResourceId;
 
         time:Utc currentUtc = time:utcNow();
-        time:Utc newTime = time:utcAddSeconds(currentUtc, <decimal>self.config.expiration);
+        time:Utc newTime = time:utcAddSeconds(currentUtc, expiration);
         time:Civil time = time:utcToCivil(newTime);
 
         task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self.httpListener, 
