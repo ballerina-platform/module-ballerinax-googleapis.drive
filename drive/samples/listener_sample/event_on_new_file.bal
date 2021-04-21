@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis_drive as drive;
 import ballerinax/googleapis_drive.'listener as listen;

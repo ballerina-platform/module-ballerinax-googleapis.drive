@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis_drive as drive;
 import ballerinax/googleapis_drive.'listener as listen;
@@ -25,8 +24,7 @@ configurable string clientSecret = ?;
 configurable string refreshUrl = drive:REFRESH_URL;
 configurable string refreshToken = ?;
 
-string parentFolderId = "<PLACE_FOLDER_ID_HERE>";
-string fileName = "<NEW_FILE_NAME>";
+string fileId = "<FILE_ID_OF_THE_FILE_OR_FOLDER_TO_BE_DELETED>";
 
     drive:Configuration config = {
         clientConfig: {
@@ -40,22 +38,18 @@ string fileName = "<NEW_FILE_NAME>";
     listen:ListenerConfiguration configuration = {
         port: 9090,
         callbackURL: callbackURL,
-        clientConfiguration: config,
-        specificFolderOrFileId : parentFolderId
+        clientConfiguration: config
     };
 
     listener listen:Listener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        isolated remote function onFileCreateOnSpecificFolder(EventInfo fileId) returns error? {
-            log:printInfo("Trigger > onFileCreateOnSpecificFolder > fileID : ", fileId);     
+        isolated remote function onDelete(drive:Change changeInfo) returns error? {
+            log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);    
         }
     }
 
 public function main() returns error? {
     drive:Client driveClient = check new (config);
-    drive:File|error response = driveClient->createFile(fileName, drive:DOCUMENT, parentFolderId);
-    if (response is drive:File) {
-        log:printInfo(response.toString());
-    }
+    boolean|error response = driveClient->deleteFile(fileId);
 }

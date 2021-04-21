@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis_drive as drive;
 import ballerinax/googleapis_drive.'listener as listen;
@@ -45,8 +44,8 @@ string fileId = "<FILE_ID>";
     listener listen:Listener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        isolated remote function onFolderUpdate(EventInfo folderId) returns error? {
-            log:printInfo("Trigger > onFolderUpdate > folderId : ", folderId);     
+        isolated remote function onFolderUpdate(drive:Change changeInfo) returns error? {
+            log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
         } 
     }
 

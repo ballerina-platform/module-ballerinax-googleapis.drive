@@ -14,7 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis_drive as drive;
 import ballerinax/googleapis_drive.'listener as listen;
@@ -45,8 +44,8 @@ string folderName = "<NEW_FOLDER_NAME>";
     listener listen:Listener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        isolated remote function onFolderCreate(EventInfo folderId) returns error? {
-            log:printInfo("Trigger > onFolderCreate > fileID : ", folderId);     
+        isolated remote function onFolderCreate(drive:Change changeInfo) returns error? {
+            log:printInfo("Trigger > onFolderCreate > changeInfo : ", changeInfo);     
         }
     }
 
