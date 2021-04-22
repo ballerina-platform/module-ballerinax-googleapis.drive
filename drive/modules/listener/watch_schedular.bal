@@ -29,7 +29,7 @@ class Job {
     private ListenerConfiguration config; 
 
     private boolean isWatchOnSpecificResource = false;
-    private boolean isAFolder = true;
+    private boolean isFolder = true;
 
     private drive:WatchResponse watchResponse;
     private string channelUuid = EMPTY_STRING;
@@ -41,9 +41,9 @@ class Job {
     public isolated function execute() {
         decimal expiration = <decimal>self.config.expiration;
         if (self.config.specificFolderOrFileId is string) {
-            self.isAFolder = checkpanic checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
+            self.isFolder = checkpanic checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
         }
-       if (self.config.specificFolderOrFileId is string && self.isAFolder == true) {
+       if (self.config.specificFolderOrFileId is string && self.isFolder == true) {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
@@ -54,7 +54,7 @@ class Job {
             if(expiration > MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE){
                 expiration = MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE;
             }
-        } else if (self.config.specificFolderOrFileId is string && self.isAFolder == false) {
+        } else if (self.config.specificFolderOrFileId is string && self.isFolder == false) {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();

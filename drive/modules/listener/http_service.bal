@@ -27,19 +27,19 @@ service class HttpService {
     public string specificFolderOrFileId;
     public drive:Client driveClient;
     public boolean isWatchOnSpecificResource;
-    public boolean isAFolder = true;
+    public boolean isFolder = true;
 
     private SimpleHttpService httpService;
 
     public isolated function init(SimpleHttpService httpService, string channelUuid, string currentToken, 
                                     string watchResourceId, drive:Client driveClient, boolean isWatchOnSpecificResource, 
-                                    boolean isAFolder,string specificFolderOrFileId) {
+                                    boolean isFolder,string specificFolderOrFileId) {
         self.httpService = httpService;
         self.channelUuid = channelUuid;
         self.currentToken = currentToken;
         self.watchResourceId = watchResourceId;
         self.driveClient = driveClient;
-        self.isAFolder = isAFolder;
+        self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
     }
@@ -51,11 +51,11 @@ service class HttpService {
             drive:ChangesListResponse[] response = check getAllChangeList(self.currentToken, self.driveClient);
             foreach drive:ChangesListResponse item in response {
                 self.currentToken = item?.newStartPageToken.toString();
-                if (self.isWatchOnSpecificResource && self.isAFolder) {
+                if (self.isWatchOnSpecificResource && self.isFolder) {
                     log:printDebug("Folder watch response processing");
                     check mapEventForSpecificResource(<@untainted> self.specificFolderOrFileId, <@untainted> item, 
                     <@untainted> self.driveClient, <@untainted> self.httpService);
-                } else if (self.isWatchOnSpecificResource && self.isAFolder == false) {
+                } else if (self.isWatchOnSpecificResource && self.isFolder == false) {
                     log:printDebug("File watch response processing");
                     check mapFileUpdateEvents(self.specificFolderOrFileId, item, self.driveClient, self.httpService);
                 } else {
