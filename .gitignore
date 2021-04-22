@@ -20,7 +20,6 @@ ballerina.conf
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -57,7 +56,7 @@ target/
 ballerina-internal.log
 
 # Gradle files
-**/.gradle/*
+.gradle
 
 # Build files
-build/
+**/build/*
