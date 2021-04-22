@@ -24,7 +24,7 @@ const string FORM = "application/vnd.google-apps.form";
 const string PHOTO = "application/vnd.google-apps.photo";
 const string PRESENTATION = "application/vnd.google-apps.presentation";
 const string VIDEO = "application/vnd.google-apps.video";
-const string audio = "application/vnd.google-apps.audio";
+const string AUDIO = "application/vnd.google-apps.audio";
 const string LOG_FILE = "text/x-log";
 const string TEXT_FILE = "text/plain";
 
