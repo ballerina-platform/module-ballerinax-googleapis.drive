@@ -64,7 +64,7 @@ updating and retrieving.
 Java Development Kit (JDK) with version 11 is required.
 
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
-Ballerina Swan Lake Alpha 4 SNAPSHOT is required.
+Ballerina Swan Lake Alpha 4 is required.
 
 * Domain used in the callback URL needs to be registered in google console as a verified domain.
 https://console.cloud.google.com/apis/credentials/domainverification
@@ -118,30 +118,6 @@ configurable string refreshToken = ?;
 
 string fileName = "<NEW_FILE_NAME>";
 
-# Event Trigger class  
-public class EventTrigger {
-    
-    public isolated function onNewFolderCreatedEvent(string folderId) {}
-
-    public isolated function onFolderDeletedEvent(string folderID) {}
-
-    public isolated function onNewFileCreatedEvent(string fileId) {
-        log:printInfo("New File was created:" + fileId);
-    }
-
-    public isolated function onFileDeletedEvent(string fileId) {}
-
-    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {}
-
-    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {}
-
-    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {}
-
-    public isolated function onFileDeletedInSpecificFolderEvent(string fileId) {}
-
-    public isolated function onFileUpdateEvent(string fileId) {}
-}
-
     drive:Configuration config = {
         clientConfig: {
             clientId: clientId,
@@ -154,20 +130,14 @@ public class EventTrigger {
     listen:ListenerConfiguration configuration = {
         port: 9090,
         callbackURL: callbackURL,
-        clientConfiguration: config,
-        eventService: new EventTrigger()
+        clientConfiguration: config
     };
 
     listener listen:DriveEventListener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        resource function post gdrive(http:Caller caller, http:Request request) returns string|error? {
-            error? procesOutput = gDrivelistener.findEventType(caller, request);
-            http:Response response = new;
-            var result = caller->respond(response);
-            if (result is error) {
-                log:printError("Error in responding ", err = result);
-            }
+        isolated remote function onFileCreate(drive:Change changeInfo) returns error? {
+            log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
         }
     }
 
@@ -182,58 +152,24 @@ public function main() returns error? {
 ```
 ## Notes : 
 
-1. The above example is used to listen for file creation only. Implement all needed methods in the `EventTrigger` class.
-
-```
-# Event Trigger class  
-public class EventTrigger {
-    
-    public isolated function onNewFolderCreatedEvent(string folderId) {
-        log:printInfo("New folder was created:" + folderId);
-    }
-
-    public isolated function onFolderDeletedEvent(string folderID) {
-        log:printInfo("This folder was removed to the trashed:" + folderID);
-    }
-
-    public isolated function onNewFileCreatedEvent(string fileId) {
-        log:printInfo("New File was created:" + fileId);
-    }
-
-    public isolated function onFileDeletedEvent(string fileId) {
-        log:printInfo("This File was removed to the trashed:" + fileId);
-    }
-
-    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId) {
-        log:printInfo("A file with Id " + fileId + "was created in side the folder specified");
-    }
-
-    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId) {
-        log:printInfo("A folder with Id " + folderId + "was created in side the folder specified");
-    }
-
-    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId) {
-        log:printInfo("A folder with Id " + folderId + "was deleted in side the folder specified");
-    }
-
-    public isolated function onFileDeletedInSpecificFolderEvent(string fileId) {
-        log:printInfo("A file with Id " + fileId + "was deleted in side the folder specified");
-    }
-    public isolated function onFileUpdateEvent(string fileId) {
-        log:printInfo("File updated : " + fileId);
-    }
-}
-```
-
-2. If the listener should listen for changes only in a specific folder, specify the folder Id in `ListenerConfiguration`.
+1. If the listener should listen for changes only in a specific folder, specify the folder Id in `ListenerConfiguration`.
 
 ```
     listen:ListenerConfiguration configuration = {
         port: 9090,
         callbackURL: callbackURL,
         clientConfiguration: config,
-        eventService: new EventTrigger(),
         specificFolderOrFileId : parentFolderId
+    };
+```
+2. If you want to specify a custom expiration time. Specify it in the listener configuration.
+```
+    listen:ListenerConfiguration configuration = {
+        port: 9090,
+        callbackURL: callbackURL,
+        clientConfiguration: config,
+        specificFolderOrFileId : parentFolderId,
+        expiration : 100000
     };
 ```
 
@@ -242,37 +178,18 @@ public class EventTrigger {
 ### Logs on listener startup
 
 ```
-googleapis_drive.listener
-time = 2021-03-15 12:03:15,797 level = INFO  module = ballerinax/googleapis_drive message = "{"kind":"api#channel","id":"01eb8595-de58-1926-b49b-6cad0df9c80c","resourceId":"GYFfeabdbAp2FoyZm2KDfQMKd1Q","resourceUri":
-https://www.googleapis.com/drive/v3/changes?includeCorpusRemovals=false&includeItemsFromAllDrives=false
-&includeRemoved=true&includeTeamDriveItems=false&pageSize=100&pageToken=121208&restrictToMyDrive=false&spaces=drive&supportsAllDrives=true&supportsTeamDrives=false&alt=json","expiration":"1615793595000"}" 
-time = 2021-03-15 12:03:40,444 level = INFO  module = ballerinax/googleapis_drive.listener message = "10475" 
-time = 2021-03-15 12:03:40,445 level = INFO  module = ballerinax/googleapis_drive.listener message = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
-time = 2021-03-15 12:03:40,445 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-"Watch channel started in Google, id : 01eb8595-de58-1926-b49b-6cad0df9c80c" 
-time = 2021-03-15 12:03:40,446 level = INFO  module = ballerinax/googleapis_drive.listener message = ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" 
 [ballerina/http] started HTTP/WS listener 0.0.0.0:9090
-time = 2021-03-15 12:03:40,474 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-"gDriveClient -> watchFiles()"
+time = 2021-04-21 22:33:23,203 level = INFO  module = ballerinax/googleapis_drive.listener message = "Watch channel started in Google, id : 01eba304-074c-1c34-a0c4-16fed7d5b321" 
+time = 2021-04-21 22:33:23,212 level = INFO  module = ballerinax/googleapis_drive.listener message = "gDriveClient -> watchFiles()" 
+
 ```
 
 ### Logs on receiving a callback
 
 ```
-time = 2021-03-15 12:06:19,314 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-"<<<<<<<<<<<<<<< RECEIVING A CALLBACK <<<<<<<<<<<<<<<" 
-time = 2021-03-15 12:06:19,316 level = INFO  module = ballerinax/googleapis_drive message = 
-"/drive/v3/changes?pageToken=121208" 
-time = 2021-03-15 12:06:19,644 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-"Whole drive watch response processing" 
-time = 2021-03-15 12:06:20,030 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-">>>>> INCOMING TRIGGER >>>>> File change event found file id : 1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk | 
-Mime type : application/vnd.google-apps.document" 
-time = 2021-03-15 12:06:20,448 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-"This File was removed to the trashed:1A3xvEHoCSx-NryIg2IZOyst5uo5guSAtqem2VYFhgPk" 
-time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_drive.listener message = "10474" 
-time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_drive.listener message = 
-"<<<<<<<<<<<<<<< RECEIVED >>>>>>>>>>>>>>>" 
+
+time = 2021-04-21 22:36:59,110 level = INFO  module = ballerinax/googleapis_drive.listener message = "Trigger > onTrash > changeInfo : " kind = "drive#change" changeType = "file" time = "2021-04-21T17:03:41.249Z" removed = false fileId = "1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc" file = {"kind":"drive#file","id":"1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc","name":"Untitled form","mimeType":"application/vnd.google-apps.form"} type = "file
+
 ```
 # Building from the Source
 
@@ -286,11 +203,11 @@ time = 2021-03-15 12:06:40,798 level = INFO  module = ballerinax/googleapis_driv
 
         > **Note:** Set the JAVA_HOME environment variable to the pathname of the directory into which you installed JDK.
 
-2. Download and install [Ballerina Alpha 4 SNAPSHOT](https://ballerina.io/). 
+2. Download and install [Ballerina Alpha 4 ](https://ballerina.io/). 
 
 ### Building the Source
 
-Execute the commands below to build from the source after installing Ballerina Alpha 4 SNAPSHOT version.
+Execute the commands below to build from the source after installing Ballerina Alpha 4 version.
 
 1. To clone the repository:
 Clone this repository using the following command:

@@ -73,7 +73,7 @@ isolated function getAllChangeList(string pageToken, drive:Client driveClient)
 # Maps Events to Change records
 # + changeList - 'ChangesListResponse' record that contains the whole changeList.
 # + driveClient - Http client for client connection.
-# + eventService - 'OnEventService' record that represents all events.
+# + eventService - Http service object 
 # + return - if unsucessful, returns error. 
 isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client driveClient,
                             SimpleHttpService eventService) returns @tainted error? {
@@ -81,7 +81,6 @@ isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client d
     if (changes is drive:Change[] && changes.length() > 0) {
         foreach drive:Change changeLog in changes {
             string fileOrFolderId = changeLog?.fileId.toString();
-            // EventInfo eventInfo = {fileOrFolderId:fileOrFolderId};
             drive:File|error fileOrFolder = driveClient->getFile(fileOrFolderId);
             string mimeType = changeLog?.file?.mimeType.toString();
             if (changeLog?.removed == true) {
@@ -101,7 +100,7 @@ isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client d
 # Maps and identify folder change events.
 # + folderId - folderId that subjected to a change. 
 # + driveClient - Http client for client connection.
-# + eventService - 'OnEventService' record that represents all events.
+# + eventService - Http service object 
 # + return - if unsucessful, returns error. 
 isolated function identifyFolderEvent(string folderId, drive:Change changeLog, SimpleHttpService eventService, 
         drive:Client driveClient, boolean isSepcificFolder = false, string? specFolderId = ()) returns @tainted error? {
@@ -137,7 +136,7 @@ isolated function identifyFolderEvent(string folderId, drive:Change changeLog, S
 # Maps and identify file change events.
 # + fileId - fileId that subjected to a change. 
 # + driveClient - Http client for client connection.
-# + eventService - 'OnEventService' record that represents all events.
+# + eventService - Http service object 
 # + return - if unsucessful, returns error. 
 isolated function identifyFileEvent(string fileId, drive:Change changeLog, SimpleHttpService eventService, 
         drive:Client driveClient, boolean isSepcificFolder = false, string? specFolderId = ()) returns @tainted error? {
@@ -175,11 +174,8 @@ isolated function isCreated(string createdTime, string changeTime) returns boole
     time:Utc createdTimeUNIX = check time:utcFromString(createdTime);
     time:Utc changeTimeUNIX = check time:utcFromString(changeTime);
     time:Seconds due = time:utcDiffSeconds(changeTimeUNIX, createdTimeUNIX);
-    log:printInfo(">>>>>>>>>>>> DUE : " +due.toString());
+    log:printDebug("Due : " +due.toString());
     if (due <= 12d) {
-        log:printInfo(">>>>>>>>>>>> CREATED TIME : " +createdTime);
-        log:printInfo(">>>>>>>>>>>> CHANGE TIME : " +changeTime);
-        log:printInfo(">>>>>>>>>>>> CREATED EVENT >>>>>>>>>");
         isCreated = true;
     }
     return isCreated;
@@ -190,11 +186,8 @@ isolated function isUpdated(string createdTime, string changeTime) returns boole
     time:Utc createdTimeUNIX = check time:utcFromString(createdTime);
     time:Utc changeTimeUNIX = check time:utcFromString(changeTime);
     time:Seconds due = time:utcDiffSeconds(changeTimeUNIX, createdTimeUNIX);
-    log:printInfo(">>>>>>>>>>>> DUE : " +due.toString());
+    log:printDebug("Due : " +due.toString());
     if (due > 12d) {
-        log:printInfo(">>>>>>>>>>>> CREATED TIME : " +createdTime);
-        log:printInfo(">>>>>>>>>>>> CHANGE TIME : " +changeTime);
-        log:printInfo(">>>>>>>>>>>> UPDATED EVENT >>>>>>>>>");
         isModified = true;
     }
     return isModified;
@@ -243,7 +236,6 @@ isolated function mapEventForSpecificResource(string resourceId, drive:ChangesLi
     if (changes is drive:Change[] && changes.length() > 0) {
         foreach drive:Change changeLog in changes {
             string fileOrFolderId = changeLog?.fileId.toString();
-            // EventInfo eventInfo = {fileOrFolderId:fileOrFolderId};
             string changeTime = changeLog?.time.toString();
             string mimeType = changeLog?.file?.mimeType.toString();
             if (mimeType != FOLDER) {

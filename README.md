@@ -64,7 +64,7 @@ updating and retrieving.
 Java Development Kit (JDK) with version 11 is required.
 
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
-Ballerina Swan Lake Alpha 4 SNAPSHOT is required.
+Ballerina Swan Lake Alpha 4 is required.
 
 * Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Drive uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
     * Client ID
@@ -357,11 +357,11 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 
         > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
 
-2. Download and install [Ballerina Alpha 4 SNAPSHOT](https://ballerina.io/). 
+2. Download and install [Ballerina Alpha 4 ](https://ballerina.io/). 
 
 ### Building the Source
 
-Execute the commands below to build from the source after installing Ballerina Alpha 4 SNAPSHOT version.
+Execute the commands below to build from the source after installing Ballerina Alpha 4  version.
 
 1. To clone the repository:
 Clone this repository using the following command:
