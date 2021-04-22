@@ -49,7 +49,7 @@ public class Listener {
     private drive:Client driveClient;
     private drive:WatchResponse watchResponse;
     private boolean isWatchOnSpecificResource = false;
-    private boolean isAFolder = true;
+    private boolean isFolder = true;
     private ListenerConfiguration config;
     private http:Listener httpListener;
     private HttpService httpService;
@@ -62,7 +62,7 @@ public class Listener {
 
     public isolated function attach(SimpleHttpService s, string[]|string? name = ()) returns error? {
         self.httpService = new HttpService(s, self.channelUuid, self.currentToken, self.watchResourceId, 
-        self.driveClient, self.isWatchOnSpecificResource, self.isAFolder, self.specificFolderOrFileId);
+        self.driveClient, self.isWatchOnSpecificResource, self.isFolder, self.specificFolderOrFileId);
         check self.httpListener.attach(self.httpService, name);
 
         time:Utc currentUtc = time:utcNow();
