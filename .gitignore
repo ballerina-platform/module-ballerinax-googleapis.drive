@@ -6,6 +6,7 @@
 *.log
 
 #Config files
+**/Config.toml
 Config.toml
 ballerina.conf
 
@@ -19,7 +20,6 @@ ballerina.conf
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -54,3 +54,9 @@ target/
 
 # Error log file
 ballerina-internal.log
+
+# Gradle files
+.gradle
+
+# Build files
+**/build/*
