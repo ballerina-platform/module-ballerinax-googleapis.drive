@@ -26,7 +26,7 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 
 const string fileName = "ballerina_temp_file"; 
 const string folderName = "ballerina_temp_folder";
-const string localFilePath = "./tests/resources/bar.jpeg";
+const string localFilePath = "tests/resources/bar.jpeg";
 
 // Access token support
 // Configuration config = {
