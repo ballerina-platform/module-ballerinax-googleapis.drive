@@ -64,7 +64,7 @@ service / on gDriveListener {
     }
 }
 
-@test:Config {enable: true}
+@test:Config {enable: false}
 public isolated function testDriveAPITrigger() {
     log:printInfo("gDriveClient -> watchFiles()");
     int i = 0;
