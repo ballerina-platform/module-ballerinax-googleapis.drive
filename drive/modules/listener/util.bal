@@ -193,7 +193,6 @@ isolated function isUpdated(string createdTime, string changeTime) returns boole
     return isModified;
 }
 
-
 # Get current status of a drive. 
 # 
 # + driveClient - Http client for Drive connection. 
@@ -282,7 +281,8 @@ isolated function mapFileUpdateEvents(string resourceId, drive:ChangesListRespon
 # + driveClient - Drive client connecter. 
 # + specificParentFolderId - The Folder Id for the parent folder.
 # + return - If successful, returns boolean. Else error.
-isolated function checkMimeType(drive:Client driveClient, string specificParentFolderId) returns @tainted boolean|error {
+isolated function checkMimeType(drive:Client driveClient, string specificParentFolderId) 
+                                    returns @tainted boolean|error {
     drive:File item = check driveClient->getFile(specificParentFolderId, "mimeType,trashed");
     if (item?.mimeType.toString() == FOLDER) {
         return true;

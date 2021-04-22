@@ -65,32 +65,3 @@ public type InitiationDetail record {
     http:Client clientEP;
 };
 
-# This type object 'OnEventService' with all Event funtions. 
-public type OnEventService object {
-    public isolated function onNewFolderCreatedEvent(string folderId);
-    public isolated function onFolderDeletedEvent(string fileId);
-    public isolated function onNewFileCreatedEvent(string folderId);
-    public isolated function onFileDeletedEvent(string fileId);
-    public isolated function onNewFileCreatedInSpecificFolderEvent(string fileId);
-    public isolated function onNewFolderCreatedInSpecificFolderEvent(string folderId);
-    public isolated function onFolderDeletedInSpecificFolderEvent(string folderId);
-    public isolated function onFileDeletedInSpecificFolderEvent(string fileId);
-    public isolated function onFileUpdateEvent(string fileId);
-};
-
-type CommonResponse record {|
-    map<string|string[]> headers?;
-    map<string> body?;
-|};
-
-public type Acknowledgement record {
-    *CommonResponse;
-};
-
-// # Record type used to handle the Events
-// #
-// # + fileOrFolderId - File or folder id related to the event
-// public type EventInfo record {
-//     string fileOrFolderId?;
-// };
-
