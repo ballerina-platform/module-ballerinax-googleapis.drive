@@ -22,7 +22,6 @@ import ballerinax/googleapis_drive as drive;
 class Job {
     *task:Job;
     private SimpleHttpService s;
-    string[]|string? name = ();
     private HttpService httpService;
     private Listener httpListener;
     private drive:Client driveClient;

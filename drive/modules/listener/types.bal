@@ -14,8 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
-
 # Watch request properties
 #
 # + address - The address where notifications are delivered for this channel.  
@@ -50,18 +48,5 @@ public type changeResponse record {
     string resourceId;
     string resourceUri;
     int expiration;
-};
-
-# Record type used on Http listner initiation.
-#
-# + clientEP - The Http Client.  
-# + isWatchAlive - Boolean value to handle isWatchAlive.  
-# + startToken - The starting page token for listing changes.   
-# + uuid - A universally unique identifier.  
-public type InitiationDetail record {
-    boolean isWatchAlive;
-    string startToken;
-    string uuid;
-    http:Client clientEP;
 };
 

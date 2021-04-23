@@ -36,9 +36,6 @@ ListenerConfiguration congifuration = {
     port: 9090,
     callbackURL: callbackURL,
     clientConfiguration: clientConfiguration
-    // expiration: 866500000000,
-    // specificFolderOrFileId: "1A1oEfuP7gZrCUU6FySahMvjpqJP-mDEn"
-    // specificFolderOrFileId:"1qkopkT7g_KAJX1TKJir7NLRQ9mYNBcv8DWAaD17FbMo"
 };
 
 listener Listener gDriveListener = new (congifuration);
