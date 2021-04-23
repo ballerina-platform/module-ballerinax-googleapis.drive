@@ -53,8 +53,11 @@ service / on gDriveListener {
     isolated remote function onFolderUpdate(drive:Change changeInfo) returns error? {
         log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
     }
-    isolated remote function onTrash(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onTrash > changeInfo : ", changeInfo);     
+    isolated remote function onFileTrash(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onFileTrash > changeInfo : ", changeInfo);     
+    }
+    isolated remote function onFolderTrash(drive:Change changeInfo) returns error? {
+        log:printInfo("Trigger > onFolderTrash > changeInfo : ", changeInfo);     
     }
     isolated remote function onDelete(drive:Change changeInfo) returns error? {
         log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);     

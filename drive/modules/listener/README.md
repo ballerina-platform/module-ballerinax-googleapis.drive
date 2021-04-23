@@ -188,7 +188,7 @@ time = 2021-04-21 22:33:23,212 level = INFO  module = ballerinax/googleapis_driv
 
 ```
 
-time = 2021-04-21 22:36:59,110 level = INFO  module = ballerinax/googleapis_drive.listener message = "Trigger > onTrash > changeInfo : " kind = "drive#change" changeType = "file" time = "2021-04-21T17:03:41.249Z" removed = false fileId = "1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc" file = {"kind":"drive#file","id":"1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc","name":"Untitled form","mimeType":"application/vnd.google-apps.form"} type = "file
+time = 2021-04-21 22:36:59,110 level = INFO  module = ballerinax/googleapis_drive.listener message = "Trigger > onFileTrash > changeInfo : " kind = "drive#change" changeType = "file" time = "2021-04-21T17:03:41.249Z" removed = false fileId = "1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc" file = {"kind":"drive#file","id":"1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc","name":"Untitled form","mimeType":"application/vnd.google-apps.form"} type = "file
 
 ```
 # Building from the Source

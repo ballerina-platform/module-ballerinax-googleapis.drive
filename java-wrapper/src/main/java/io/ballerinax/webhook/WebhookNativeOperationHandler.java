@@ -36,8 +36,11 @@ public class WebhookNativeOperationHandler {
     public static Object callOnDeleteMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
         return invokeRemoteFunction(env, bWebhookService, message, "callOnDeleteMethod", "onDelete");
     }
-    public static Object callOnTrashMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
-        return invokeRemoteFunction(env, bWebhookService, message, "callOnTrashMethod", "onTrash");
+    public static Object callOnFileTrashMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
+        return invokeRemoteFunction(env, bWebhookService, message, "callOnFileTrashMethod", "onFileTrash");
+    }
+    public static Object callOnFolderTrashMethod(Environment env, BObject bWebhookService, BMap<BString, Object> message) {
+        return invokeRemoteFunction(env, bWebhookService, message, "callOnFolderTrashMethod", "onFolderTrash");
     }
 
     public static BArray getServiceMethodNames(BObject bSubscriberService) {

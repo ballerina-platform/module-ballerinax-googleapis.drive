@@ -42,7 +42,12 @@ isolated function callOnDeleteMethod(SimpleHttpService httpService, drive:Change
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
+                                returns error? = @java:Method {
+    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+} external;
+
+isolated function callOnFolderTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;

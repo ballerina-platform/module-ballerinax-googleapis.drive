@@ -117,7 +117,7 @@ isolated function identifyFolderEvent(string folderId, drive:Change changeLog, S
          if (check isCreated(createdTime, changeTime)) {
             check callOnFolderCreateMethod(eventService, changeLog);                               
         } else if (isTrashed is boolean && isTrashed) {
-            check callOnTrashMethod(eventService, changeLog);
+            check callOnFolderTrashMethod(eventService, changeLog);
         } else if (check isUpdated(createdTime, changeTime)) {
             check callOnFolderUpdateMethod(eventService, changeLog);
         }
@@ -125,7 +125,7 @@ isolated function identifyFolderEvent(string folderId, drive:Change changeLog, S
         if (check isCreated(createdTime, changeTime)) {
             check callOnFolderCreateMethod(eventService, changeLog);                               
         } else if (isTrashed is boolean && isTrashed) {
-            check callOnTrashMethod(eventService, changeLog);
+            check callOnFolderTrashMethod(eventService, changeLog);
         } else if (check isUpdated(createdTime, changeTime)) {
             check callOnFolderUpdateMethod(eventService, changeLog);
         }
@@ -152,7 +152,7 @@ isolated function identifyFileEvent(string fileId, drive:Change changeLog, Simpl
         if (check isCreated(createdTime, changeTime)) {
             check callOnFileCreateMethod(eventService, changeLog);                               
         } else if (isTrashed is boolean && isTrashed) {
-            check callOnTrashMethod(eventService, changeLog);
+            check callOnFileTrashMethod(eventService, changeLog);
         } else if (check isUpdated(createdTime, changeTime)) {
             check callOnFileUpdateMethod(eventService, changeLog);
         }
@@ -160,7 +160,7 @@ isolated function identifyFileEvent(string fileId, drive:Change changeLog, Simpl
         if (check isCreated(createdTime, changeTime)) {
             check callOnFileCreateMethod(eventService, changeLog);                               
         } else if (isTrashed is boolean && isTrashed) {
-            check callOnTrashMethod(eventService, changeLog);
+            check callOnFileTrashMethod(eventService, changeLog);
         } else if (check isUpdated(createdTime, changeTime)) {
             check callOnFileUpdateMethod(eventService, changeLog);
         }
@@ -264,7 +264,7 @@ isolated function mapFileUpdateEvents(string resourceId, drive:ChangesListRespon
                 string createdTime = file?.createdTime.toString();
                 boolean? istrashed = file?.trashed;
                 if (istrashed == true) {
-                    check callOnTrashMethod(eventService, changeLog);
+                    check callOnFileTrashMethod(eventService, changeLog);
                 } else if (check isUpdated(createdTime, changeTime)) {
                     check callOnFileUpdateMethod(eventService, changeLog);
                 }
