@@ -24,14 +24,12 @@ import ballerina/time;
 #
 # + port - Port for the listener.  
 # + specificFolderOrFileId - Folder or file Id.  
-# + callbackURL - Callback URL registered. 
-# + expiration - Expiration time of the watch channel in seconds  
+# + callbackURL - Callback URL registered.  
 # + clientConfiguration - Drive client connecter configuration.
 public type ListenerConfiguration record {
     int port;
     string callbackURL;
     drive:Configuration clientConfiguration;
-    int? expiration = 3600;
     string? specificFolderOrFileId = ();
 };
 
@@ -42,7 +40,6 @@ public class Listener {
     public string channelUuid = EMPTY_STRING;
     # Watch Resource ID
     public string watchResourceId = EMPTY_STRING;
-    private int expiration;
     private string currentToken = EMPTY_STRING;
     private http:Client clientEP;
     private string specificFolderOrFileId = EMPTY_STRING;
@@ -64,7 +61,7 @@ public class Listener {
         self.httpService = new HttpService(s, self.channelUuid, self.currentToken, self.watchResourceId, 
         self.driveClient, self.isWatchOnSpecificResource, self.isFolder, self.specificFolderOrFileId);
         check self.httpListener.attach(self.httpService, name);
-
+    
         time:Utc currentUtc = time:utcNow();
         time:Civil time = time:utcToCivil(currentUtc);
         task:JobId result = check task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self, self.httpService), time);

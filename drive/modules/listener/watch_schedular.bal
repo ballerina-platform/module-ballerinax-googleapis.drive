@@ -35,10 +35,10 @@ class Job {
     private string specificFolderOrFileId = EMPTY_STRING;
     private string watchResourceId = EMPTY_STRING;
     private string currentToken = EMPTY_STRING;
-    private int? expiration = 0;
+    public decimal expiration = 0;
 
     public isolated function execute() {
-        decimal expiration = <decimal>self.config.expiration;
+        log:printInfo("Expiration time : " + self.expiration.toString());
         if (self.config.specificFolderOrFileId is string) {
             self.isFolder = checkpanic checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
         }
@@ -46,33 +46,26 @@ class Job {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
-            self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient, 
-            self.specificFolderOrFileId.toString());
+            self.watchResponse = checkpanic self.driveClient->watchFilesById(self.specificFolderOrFileId.toString(), 
+            self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
-            if(expiration > MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE){
-                expiration = MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE;
-            }
         } else if (self.config.specificFolderOrFileId is string && self.isFolder == false) {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
-            self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient, 
-            self.specificFolderOrFileId);
+            self.watchResponse = checkpanic self.driveClient->watchFilesById(self.specificFolderOrFileId.toString(), 
+            self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
-            if(expiration > MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE){
-                expiration = MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE;
-            }
         } else {
             self.specificFolderOrFileId = EMPTY_STRING;
-            self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient);
-            if(expiration > MAX_EXPIRATION_TIME_FOR_CHANGES_ALL_DRIVE){
-                expiration = MAX_EXPIRATION_TIME_FOR_CHANGES_ALL_DRIVE;
-            }
+            self.watchResponse = checkpanic self.driveClient->watchFiles(self.config.callbackURL);
         }
         self.channelUuid = self.watchResponse?.id.toString();
         self.currentToken = self.watchResponse?.startPageToken.toString();
         self.watchResourceId = self.watchResponse?.resourceId.toString();
+        self.expiration = <decimal>self.watchResponse?.expiration;
         log:printInfo("Watch channel started in Google, id : " + self.channelUuid);
+        log:printInfo("Expiration time : " + self.expiration.toString());
 
         self.httpService.channelUuid = self.channelUuid;
         self.httpService.watchResourceId = self.watchResourceId;
@@ -82,8 +75,12 @@ class Job {
         self.httpListener.watchResourceId = self.watchResourceId;
 
         time:Utc currentUtc = time:utcNow();
-        time:Utc newTime = time:utcAddSeconds(currentUtc, expiration);
+        decimal timeDifference = (self.expiration/1000) - (<decimal>currentUtc[0]) - 60;
+        time:Utc newTime = time:utcAddSeconds(currentUtc, timeDifference);
         time:Civil time = time:utcToCivil(newTime);
+        log:printInfo("currentUtc : " + currentUtc.toString());
+        log:printInfo("timeDifference : " + timeDifference.toString());
+        log:printInfo("newTime : " + newTime.toString());
 
         task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self.httpListener, 
             self.httpService), time);
