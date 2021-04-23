@@ -48,8 +48,7 @@ class Job {
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
             self.watchResponse = checkpanic startWatch(self.config.callbackURL, self.driveClient, 
-            self.specificFolderOrFileId.
-            toString());
+            self.specificFolderOrFileId.toString());
             self.isWatchOnSpecificResource = true;
             if(expiration > MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE){
                 expiration = MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE;
