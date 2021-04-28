@@ -28,8 +28,8 @@ service class HttpService {
     public drive:Client driveClient;
     public boolean isWatchOnSpecificResource;
     public boolean isFolder = true;
-
     private SimpleHttpService httpService;
+    public MethodNames methods = {};
 
     public isolated function init(SimpleHttpService httpService, string channelUuid, string currentToken, 
                                     string watchResourceId, drive:Client driveClient, boolean isWatchOnSpecificResource, 
@@ -42,6 +42,37 @@ service class HttpService {
         self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
+
+        string[] methodNames = getServiceMethodNames(httpService);
+
+        foreach var methodName in methodNames {
+            match methodName {
+                "onFileCreate" => {
+                    self.methods.isOnNewFileCreate = true;
+                }
+                "onFolderCreate" => {
+                    self.methods.isOnNewFolderCreate = true;
+                }
+                "onFileUpdate" => {
+                    self.methods.isOnFileUpdate = true;
+                }
+                "onFolderUpdate" => {
+                    self.methods.isOnFolderUpdate = true;
+                }
+                "onDelete" => {
+                    self.methods.isOnDelete = true;
+                }
+                "onFileTrash" => {
+                    self.methods.isOnFileTrash = true;
+                }
+                "onFolderTrash" => {
+                    self.methods.isOnFolderTrash = true;
+                }
+                _ => {
+                    log:printError("Unrecognized method [" + methodName + "] found in the implementation");
+                }
+            }
+        }
     }
 
     resource isolated function post events(http:Caller caller, http:Request request) returns error? {
@@ -54,19 +85,18 @@ service class HttpService {
                 if (self.isWatchOnSpecificResource && self.isFolder) {
                     log:printDebug("Folder watch response processing");
                     check mapEventForSpecificResource(<@untainted> self.specificFolderOrFileId, <@untainted> item, 
-                    <@untainted> self.driveClient, <@untainted> self.httpService);
+                    <@untainted> self.driveClient, <@untainted> self.httpService, self.methods);
                 } else if (self.isWatchOnSpecificResource && self.isFolder == false) {
                     log:printDebug("File watch response processing");
-                    check mapFileUpdateEvents(self.specificFolderOrFileId, item, self.driveClient, self.httpService);
+                    check mapFileUpdateEvents(self.specificFolderOrFileId, item, self.driveClient, self.httpService, 
+                    self.methods);
                 } else {
                     log:printDebug("Whole drive watch response processing");
-                    check mapEvents(item, self.driveClient, self.httpService);
+                    check mapEvents(item, self.driveClient, self.httpService, self.methods);
                 }
             } 
             check caller->respond(http:STATUS_OK);
         }
     }
 }
-
-
 
