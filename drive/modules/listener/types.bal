@@ -14,39 +14,22 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Watch request properties
+# Record type that handles the available methods in the listener. 
+# These values is automatically set from the available methods inside the listener.
 #
-# + address - The address where notifications are delivered for this channel.  
-# + payload - A Boolean value to indicate whether payload is wanted.  
-# + kind - Identifies this as a notification channel used to watch for changes to a resource, which is "api#channel".  
-# + expiration - Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds.  
-# + id - A UUID or similar unique string that identifies this channel.  
-# + type - The type of delivery mechanism used for this channel. Valid values are "web_hook" (or "webhook"). 
-#          Both values refer to a channel where Http requests are used to deliver messages  
-# + token - An arbitrary string delivered to the target address with each notification delivered over this channel.  
-public type WatchRequestproperties record {
-    string kind = "api#channel";
-    string id;
-    string 'type = "web_hook";
-    string address;
-    string token?;
-    int? expiration?;
-    boolean payload?;
+# + isOnNewFileCreate - Trigger on new file creation.  
+# + isOnNewFolderCreate - Trigger on new folder creation.  
+# + isOnFileUpdate - Trigger on file update.
+# + isOnFolderUpdate - Trigger on folder update.   
+# + isOnFileTrash - Trigger on file trash operation (Temporary delete).
+# + isOnFolderTrash - Trigger on folder trash operation (Temporary delete). 
+# + isOnDelete - Trigger on delete operation (Permenantly delete).  
+public type MethodNames record {
+    boolean isOnNewFileCreate = false;
+    boolean isOnNewFolderCreate = false;
+    boolean isOnFileUpdate = false;
+    boolean isOnFolderUpdate = false;
+    boolean isOnFileTrash = false;
+    boolean isOnFolderTrash = false;
+    boolean isOnDelete = false;
 };
-
-# Record type that matches Change response.
-#
-# + resourceId - An opaque ID that identifies the resource being watched on this channel. 
-#                Stable across different API versions.  
-# + kind - Identifies this as a notification channel used to watch for changes to a resource, which is "api#channel".  
-# + expiration - Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds.  
-# + id - A UUID or similar unique string that identifies this channel.  
-# + resourceUri - A version-specific identifier for the watched resource.  
-public type changeResponse record {
-    string kind;
-    string id;
-    string resourceId;
-    string resourceUri;
-    int expiration;
-};
-

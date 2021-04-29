@@ -76,22 +76,22 @@ isolated function getAllChangeList(string pageToken, drive:Client driveClient)
 # + eventService - Http service object 
 # + return - if unsucessful, returns error. 
 isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client driveClient,
-                            SimpleHttpService eventService) returns @tainted error? {
+                            SimpleHttpService eventService, MethodNames methods) returns @tainted error? {
     drive:Change[]? changes = changeList?.changes;
     if (changes is drive:Change[] && changes.length() > 0) {
         foreach drive:Change changeLog in changes {
             string fileOrFolderId = changeLog?.fileId.toString();
             drive:File|error fileOrFolder = driveClient->getFile(fileOrFolderId);
             string mimeType = changeLog?.file?.mimeType.toString();
-            if (changeLog?.removed == true) {
+            if (changeLog?.removed == true && methods.isOnDelete) {
                 check callOnDeleteMethod(eventService, changeLog);
             }
             else if (mimeType != FOLDER) {
                 log:printDebug("File change event found file id : " + fileOrFolderId + " | Mime type : " +mimeType);
-                check identifyFileEvent(fileOrFolderId, changeLog, eventService, driveClient);
+                check identifyFileEvent(fileOrFolderId, changeLog, eventService, driveClient, methods);
             } else {
                 log:printDebug("Folder change event found folder id : " + fileOrFolderId + " | Mime type : " +mimeType);
-                check identifyFolderEvent(fileOrFolderId, changeLog, eventService, driveClient);
+                check identifyFolderEvent(fileOrFolderId, changeLog, eventService, driveClient, methods);
             }
         }
     }
@@ -103,7 +103,8 @@ isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client d
 # + eventService - Http service object 
 # + return - if unsucessful, returns error. 
 isolated function identifyFolderEvent(string folderId, drive:Change changeLog, SimpleHttpService eventService, 
-        drive:Client driveClient, boolean isSepcificFolder = false, string? specFolderId = ()) returns @tainted error? {
+        drive:Client driveClient, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
+        returns @tainted error? {
     drive:File folder = check driveClient->getFile(folderId, "createdTime,modifiedTime,trashed,parents");
     string changeTime = changeLog?.time.toString();
     boolean? isTrashed = folder?.trashed;
@@ -114,19 +115,19 @@ isolated function identifyFolderEvent(string folderId, drive:Change changeLog, S
         parent = parentList[0].toString();
     }
     if (isSepcificFolder && parent == specFolderId.toString()) {
-         if (check isCreated(createdTime, changeTime)) {
+         if (check isCreated(createdTime, changeTime) && methods.isOnNewFolderCreate) {
             check callOnFolderCreateMethod(eventService, changeLog);                               
-        } else if (isTrashed is boolean && isTrashed) {
+        } else if (isTrashed is boolean && isTrashed && methods.isOnFolderTrash) {
             check callOnFolderTrashMethod(eventService, changeLog);
-        } else if (check isUpdated(createdTime, changeTime)) {
+        } else if (check isUpdated(createdTime, changeTime) && methods.isOnFolderUpdate) {
             check callOnFolderUpdateMethod(eventService, changeLog);
         }
     } else if (!isSepcificFolder) {
-        if (check isCreated(createdTime, changeTime)) {
+        if (check isCreated(createdTime, changeTime) && methods.isOnNewFolderCreate) {
             check callOnFolderCreateMethod(eventService, changeLog);                               
-        } else if (isTrashed is boolean && isTrashed) {
+        } else if (isTrashed is boolean && isTrashed && methods.isOnFolderTrash) {
             check callOnFolderTrashMethod(eventService, changeLog);
-        } else if (check isUpdated(createdTime, changeTime)) {
+        } else if (check isUpdated(createdTime, changeTime) && methods.isOnFolderUpdate) {
             check callOnFolderUpdateMethod(eventService, changeLog);
         }
     }
@@ -138,7 +139,8 @@ isolated function identifyFolderEvent(string folderId, drive:Change changeLog, S
 # + eventService - Http service object 
 # + return - if unsucessful, returns error. 
 isolated function identifyFileEvent(string fileId, drive:Change changeLog, SimpleHttpService eventService, 
-        drive:Client driveClient, boolean isSepcificFolder = false, string? specFolderId = ()) returns @tainted error? {
+        drive:Client driveClient, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
+        returns @tainted error? {
     drive:File file = check driveClient->getFile(fileId, "createdTime,modifiedTime,trashed,parents");
     string changeTime = changeLog?.time.toString();
     boolean? isTrashed = file?.trashed;
@@ -149,19 +151,19 @@ isolated function identifyFileEvent(string fileId, drive:Change changeLog, Simpl
         parent = parentList[0].toString();
     }
     if (isSepcificFolder && parent == specFolderId.toString()) {
-        if (check isCreated(createdTime, changeTime)) {
+        if (check isCreated(createdTime, changeTime) && methods.isOnNewFileCreate) {
             check callOnFileCreateMethod(eventService, changeLog);                               
-        } else if (isTrashed is boolean && isTrashed) {
+        } else if (isTrashed is boolean && isTrashed && methods.isOnFileTrash) {
             check callOnFileTrashMethod(eventService, changeLog);
-        } else if (check isUpdated(createdTime, changeTime)) {
+        } else if (check isUpdated(createdTime, changeTime) && methods.isOnFileUpdate) {
             check callOnFileUpdateMethod(eventService, changeLog);
         }
     } else if (!isSepcificFolder) {
-        if (check isCreated(createdTime, changeTime)) {
+        if (check isCreated(createdTime, changeTime) && methods.isOnNewFileCreate) {
             check callOnFileCreateMethod(eventService, changeLog);                               
-        } else if (isTrashed is boolean && isTrashed) {
+        } else if (isTrashed is boolean && isTrashed && methods.isOnFileTrash) {
             check callOnFileTrashMethod(eventService, changeLog);
-        } else if (check isUpdated(createdTime, changeTime)) {
+        } else if (check isUpdated(createdTime, changeTime) && methods.isOnFileUpdate) {
             check callOnFileUpdateMethod(eventService, changeLog);
         }
     }
@@ -228,7 +230,8 @@ isolated function validateSpecificFolderExsistence(string folderId, drive:Client
 # + eventService - 'OnEventService' object.
 # + return - If unsuccessful, return error.
 isolated function mapEventForSpecificResource(string resourceId, drive:ChangesListResponse changeList, 
-                                    drive:Client driveClient, SimpleHttpService eventService) returns @tainted error? {
+                                    drive:Client driveClient, SimpleHttpService eventService, MethodNames methods) 
+                                    returns @tainted error? {
     drive:Change[]? changes = changeList?.changes;
     if (changes is drive:Change[] && changes.length() > 0) {
         foreach drive:Change changeLog in changes {
@@ -236,9 +239,11 @@ isolated function mapEventForSpecificResource(string resourceId, drive:ChangesLi
             string changeTime = changeLog?.time.toString();
             string mimeType = changeLog?.file?.mimeType.toString();
             if (mimeType != FOLDER) {
-                check identifyFileEvent(fileOrFolderId, changeLog, eventService, driveClient, true, resourceId);
+                check identifyFileEvent(fileOrFolderId, changeLog, eventService, driveClient, methods, true, 
+                resourceId);
             } else {
-                check identifyFolderEvent(fileOrFolderId, changeLog, eventService, driveClient, true, resourceId);
+                check identifyFolderEvent(fileOrFolderId, changeLog, eventService, driveClient, methods, true, 
+                resourceId);
             }
         }
     }
@@ -253,7 +258,7 @@ isolated function mapEventForSpecificResource(string resourceId, drive:ChangesLi
 # + eventService - 'OnEventService' object 
 # + return - If it is modified, returns boolean(true). Else error.
 isolated function mapFileUpdateEvents(string resourceId, drive:ChangesListResponse changeList, drive:Client driveClient, 
-                             SimpleHttpService eventService) returns @tainted error? {
+                                        SimpleHttpService eventService, MethodNames methods) returns @tainted error? {
     drive:Change[]? changes = changeList?.changes;
     if (changes is drive:Change[] && changes.length() > 0) {
         foreach drive:Change changeLog in changes {
@@ -263,9 +268,9 @@ isolated function mapFileUpdateEvents(string resourceId, drive:ChangesListRespon
                 drive:File file = check driveClient->getFile(fileOrFolderId, "createdTime,modifiedTime,trashed");
                 string createdTime = file?.createdTime.toString();
                 boolean? istrashed = file?.trashed;
-                if (istrashed == true) {
+                if (istrashed == true && methods.isOnFileTrash) {
                     check callOnFileTrashMethod(eventService, changeLog);
-                } else if (check isUpdated(createdTime, changeTime)) {
+                } else if (check isUpdated(createdTime, changeTime) && methods.isOnFileUpdate) {
                     check callOnFileUpdateMethod(eventService, changeLog);
                 }
             }
