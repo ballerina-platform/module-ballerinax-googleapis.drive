@@ -38,7 +38,6 @@ class Job {
     public decimal expiration = 0;
 
     public isolated function execute() {
-        log:printInfo("Expiration time : " + self.expiration.toString());
         if (self.config.specificFolderOrFileId is string) {
             self.isFolder = checkpanic checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
         }
@@ -65,7 +64,6 @@ class Job {
         self.watchResourceId = self.watchResponse?.resourceId.toString();
         self.expiration = <decimal>self.watchResponse?.expiration;
         log:printInfo("Watch channel started in Google, id : " + self.channelUuid);
-        log:printInfo("Expiration time : " + self.expiration.toString());
 
         self.httpService.channelUuid = self.channelUuid;
         self.httpService.watchResourceId = self.watchResourceId;
@@ -78,9 +76,9 @@ class Job {
         decimal timeDifference = (self.expiration/1000) - (<decimal>currentUtc[0]) - 60;
         time:Utc newTime = time:utcAddSeconds(currentUtc, timeDifference);
         time:Civil time = time:utcToCivil(newTime);
-        log:printInfo("currentUtc : " + currentUtc.toString());
-        log:printInfo("timeDifference : " + timeDifference.toString());
-        log:printInfo("newTime : " + newTime.toString());
+        log:printDebug("currentUtc : " + currentUtc.toString());
+        log:printDebug("timeDifference : " + timeDifference.toString());
+        log:printDebug("newTime : " + newTime.toString());
 
         task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self.httpListener, 
             self.httpService), time);
