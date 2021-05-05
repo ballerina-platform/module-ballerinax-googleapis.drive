@@ -14,7 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 import ballerina/log;
 import ballerina/time;
 
@@ -42,7 +42,7 @@ isolated function startWatch(string callbackURL, drive:Client driveClient, strin
 # 
 # + return - Returns error, if unsuccessful.
 isolated function stopWatchChannel(drive:Client driveClient, string channelUuid, string watchResourceId) 
-                                   returns error? {
+                                   returns @tainted error? {
     boolean|error response = driveClient->watchStop(channelUuid, watchResourceId);
     if (response is boolean) {
         log:printInfo("Watch channel stopped");
@@ -71,10 +71,12 @@ isolated function getAllChangeList(string pageToken, drive:Client driveClient)
 }
 
 # Maps Events to Change records
-# + changeList - 'ChangesListResponse' record that contains the whole changeList.
-# + driveClient - Http client for client connection.
-# + eventService - Http service object 
-# + return - if unsucessful, returns error. 
+#
+# + changeList - 'ChangesListResponse' record that contains the whole changeList.  
+# + driveClient - Http client for client connection.  
+# + eventService - Http service object   
+# + methods - Methods
+# + return - if unsucessful, returns error.
 isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client driveClient,
                             SimpleHttpService eventService, MethodNames methods) returns @tainted error? {
     drive:Change[]? changes = changeList?.changes;
@@ -98,10 +100,15 @@ isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client d
 }
 
 # Maps and identify folder change events.
-# + folderId - folderId that subjected to a change. 
-# + driveClient - Http client for client connection.
-# + eventService - Http service object 
-# + return - if unsucessful, returns error. 
+#
+# + folderId - folderId that subjected to a change.   
+# + changeLog - Change log  
+# + eventService - Http service object   
+# + driveClient - Http client for client connection.  
+# + methods - Methods  
+# + isSepcificFolder - Is specific Folder  
+# + specFolderId - Spec folder ID
+# + return - if unsucessful, returns error.
 isolated function identifyFolderEvent(string folderId, drive:Change changeLog, SimpleHttpService eventService, 
         drive:Client driveClient, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
         returns @tainted error? {
@@ -134,10 +141,15 @@ isolated function identifyFolderEvent(string folderId, drive:Change changeLog, S
 }
 
 # Maps and identify file change events.
-# + fileId - fileId that subjected to a change. 
-# + driveClient - Http client for client connection.
-# + eventService - Http service object 
-# + return - if unsucessful, returns error. 
+#
+# + fileId - fileId that subjected to a change.   
+# + changeLog - Change log  
+# + eventService - Http service object   
+# + driveClient - Http client for client connection.  
+# + methods - Methods  
+# + isSepcificFolder - Is specific folder  
+# + specFolderId - Spec folder ID
+# + return - if unsucessful, returns error.
 isolated function identifyFileEvent(string fileId, drive:Change changeLog, SimpleHttpService eventService, 
         drive:Client driveClient, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
         returns @tainted error? {
@@ -222,12 +234,13 @@ isolated function validateSpecificFolderExsistence(string folderId, drive:Client
 }
 
 # Checks for a modified resource.
-# 
+#
 # + resourceId - An opaque ID that identifies the resource being watched on this channel.
-#                Stable across different API versions. 
-# + changeList - Record which maps the response from list changes request.
-# + driveClient - Drive connecter client.
-# + eventService - 'OnEventService' object.
+#                Stable across different API versions.   
+# + changeList - Record which maps the response from list changes request.  
+# + driveClient - Drive connecter client.  
+# + eventService - 'OnEventService' object.  
+# + methods - Methods
 # + return - If unsuccessful, return error.
 isolated function mapEventForSpecificResource(string resourceId, drive:ChangesListResponse changeList, 
                                     drive:Client driveClient, SimpleHttpService eventService, MethodNames methods) 
@@ -250,12 +263,13 @@ isolated function mapEventForSpecificResource(string resourceId, drive:ChangesLi
 }
 
 # Checks for a modified resource.
-# 
+#
 # + resourceId - An opaque ID that identifies the resource being watched on this channel.
-#                Stable across different API versions. 
-# + changeList - Record which maps the response from list changes request.
-# + driveClient - Drive connecter client
-# + eventService - 'OnEventService' object 
+#                Stable across different API versions.   
+# + changeList - Record which maps the response from list changes request.  
+# + driveClient - Drive connecter client  
+# + eventService - 'OnEventService' object   
+# + methods - Methods
 # + return - If it is modified, returns boolean(true). Else error.
 isolated function mapFileUpdateEvents(string resourceId, drive:ChangesListResponse changeList, drive:Client driveClient, 
                                         SimpleHttpService eventService, MethodNames methods) returns @tainted error? {

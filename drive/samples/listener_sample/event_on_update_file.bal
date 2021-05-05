@@ -15,8 +15,8 @@
 // under the License.
 
 import ballerina/log;
-import ballerinax/googleapis_drive as drive;
-import ballerinax/googleapis_drive.'listener as listen;
+import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive.'listener as listen;
 
 configurable string callbackURL = ?;
 configurable string clientId = ?;

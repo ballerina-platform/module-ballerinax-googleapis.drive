@@ -17,7 +17,7 @@
 import ballerina/log;
 import ballerina/task;
 import ballerina/time;
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 
 class Job {
     *task:Job;

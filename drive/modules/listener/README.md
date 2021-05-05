@@ -64,7 +64,7 @@ updating and retrieving.
 Java Development Kit (JDK) with version 11 is required.
 
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
-Ballerina Swan Lake Alpha 4 is required.
+Ballerina Swan Lake Alpha 5 is required.
 
 * Domain used in the callback URL needs to be registered in google console as a verified domain.
 https://console.cloud.google.com/apis/credentials/domainverification
@@ -75,7 +75,7 @@ https://console.cloud.google.com/apis/credentials/domainverification
 
 |                             |            Versions             |
 |:---------------------------:|:-------------------------------:|
-| Ballerina Language          |     Swan Lake Alpha4    |
+| Ballerina Language          |     Swan Lake Alpha 5           |
 | Google Drive API            |             V3                  |
 
 ## Limitations
@@ -107,8 +107,8 @@ i.e: The client connecter is imported to create a file in the drive here.
     
 import ballerina/http;
 import ballerina/log;
-import ballerinax/googleapis_drive as drive;
-import ballerinax/googleapis_drive.'listener as listen;
+import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive.'listener as listen;
 
 configurable string callbackURL = ?;
 configurable string clientId = ?;
@@ -179,8 +179,8 @@ public function main() returns error? {
 
 ```
 [ballerina/http] started HTTP/WS listener 0.0.0.0:9090
-time = 2021-04-21 22:33:23,203 level = INFO  module = ballerinax/googleapis_drive.listener message = "Watch channel started in Google, id : 01eba304-074c-1c34-a0c4-16fed7d5b321" 
-time = 2021-04-21 22:33:23,212 level = INFO  module = ballerinax/googleapis_drive.listener message = "gDriveClient -> watchFiles()" 
+time = 2021-04-21 22:33:23,203 level = INFO  module = ballerinax/googleapis.drive.listener message = "Watch channel started in Google, id : 01eba304-074c-1c34-a0c4-16fed7d5b321" 
+time = 2021-04-21 22:33:23,212 level = INFO  module = ballerinax/googleapis.drive.listener message = "gDriveClient -> watchFiles()" 
 
 ```
 
@@ -188,7 +188,7 @@ time = 2021-04-21 22:33:23,212 level = INFO  module = ballerinax/googleapis_driv
 
 ```
 
-time = 2021-04-21 22:36:59,110 level = INFO  module = ballerinax/googleapis_drive.listener message = "Trigger > onFileTrash > changeInfo : " kind = "drive#change" changeType = "file" time = "2021-04-21T17:03:41.249Z" removed = false fileId = "1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc" file = {"kind":"drive#file","id":"1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc","name":"Untitled form","mimeType":"application/vnd.google-apps.form"} type = "file
+time = 2021-04-21 22:36:59,110 level = INFO  module = ballerinax/googleapis.drive.listener message = "Trigger > onFileTrash > changeInfo : " kind = "drive#change" changeType = "file" time = "2021-04-21T17:03:41.249Z" removed = false fileId = "1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc" file = {"kind":"drive#file","id":"1nRyPs-Hxl4A875YROR6cj9jnFzTPgw0k-FoWyWuQOuc","name":"Untitled form","mimeType":"application/vnd.google-apps.form"} type = "file
 
 ```
 # Building from the Source
@@ -203,11 +203,11 @@ time = 2021-04-21 22:36:59,110 level = INFO  module = ballerinax/googleapis_driv
 
         > **Note:** Set the JAVA_HOME environment variable to the pathname of the directory into which you installed JDK.
 
-2. Download and install [Ballerina Alpha 4 ](https://ballerina.io/). 
+2. Download and install [Ballerina Alpha 5 ](https://ballerina.io/). 
 
 ### Building the Source
 
-Execute the commands below to build from the source after installing Ballerina Alpha 4 version.
+Execute the commands below to build from the source after installing Ballerina Alpha 5 version.
 
 1. To clone the repository:
 Clone this repository using the following command:

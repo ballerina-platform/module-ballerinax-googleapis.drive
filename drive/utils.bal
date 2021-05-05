@@ -54,8 +54,10 @@ isolated function deleteRequest(http:Client httpClient, string path) returns @ta
 }
 
 # Stop channel watching.
-# 
-# + httpClient - Drive client
+#
+# + httpClient - Drive client  
+# + path - Path  
+# + jsonPayload - Request payload
 # + return - boolean or error if not suceeded, True if Deleted successfully.
 isolated function stopChannelRequest(http:Client httpClient, string path, json jsonPayload) returns @tainted boolean|error {
     http:Request httpRequest = new;
@@ -432,8 +434,9 @@ isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = (
 }
 
 # Upload files
-# 
-# + path - Formatted URI 
+#
+# + httpClient - Http client  
+# + path - Formatted URI   
 # + filePath - File path subjected to upload
 # + return - Json response or Error
 isolated function uploadFiles(http:Client httpClient, string path, string filePath) returns @tainted json|error {
@@ -456,8 +459,9 @@ isolated function uploadFiles(http:Client httpClient, string path, string filePa
 }
 
 # Upload files using a byte Array
-# 
-# + path - Formatted URI 
+#
+# + httpClient - Http client  
+# + path - Formatted URI   
 # + byteArray - Byte Array subjected to upload
 # + return - Json response or Error
 isolated function uploadFileWithByteArray(http:Client httpClient, string path, byte[] byteArray) returns @tainted json|error {
@@ -700,10 +704,11 @@ isolated function watchFilesById(http:Client httpClient, string fileId, WatchRes
 }
 
 # 
-# 
-# + httpClient - The HTTP Client
-# + fileWatchRequest - 'WatchResponse' object
-# + return - If successful, returns `WatchResponse`. Else returns `error` 
+#
+# + httpClient - The HTTP Client  
+# + fileWatchRequest - 'WatchResponse' object  
+# + optional - Optional
+# + return - If successful, returns `WatchResponse`. Else returns `error`
 isolated function watchAllFiles(http:Client httpClient, WatchResponse fileWatchRequest, WatchFileOptional? optional = ()) 
                         returns @tainted WatchResponse|error {
     string path = prepareUrlwithWatchFileOptional(optional);

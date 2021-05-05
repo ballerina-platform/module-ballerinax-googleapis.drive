@@ -17,7 +17,7 @@
 import ballerina/log;
 import ballerina/os;
 import ballerina/test;
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 
 string callbackURL = os:getEnv("CALLBACK_URL");
 string clientId = os:getEnv("CLIENT_ID");
