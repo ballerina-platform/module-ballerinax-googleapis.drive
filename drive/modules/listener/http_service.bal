@@ -16,7 +16,7 @@
 
 import ballerina/log;
 import ballerina/http;
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 
 service class HttpService {
     
@@ -75,7 +75,7 @@ service class HttpService {
         }
     }
 
-    resource isolated function post events(http:Caller caller, http:Request request) returns error? {
+    resource isolated function post events(http:Caller caller, http:Request request) returns @tainted error? {
         if(check request.getHeader(GOOGLE_CHANNEL_ID) != self.channelUuid){
             fail error("Diffrent channel IDs found, Resend the watch request");
         } else {
@@ -92,7 +92,8 @@ service class HttpService {
                     self.methods);
                 } else {
                     log:printDebug("Whole drive watch response processing");
-                    check mapEvents(item, self.driveClient, self.httpService, self.methods);
+                    check mapEvents(<@untainted>item, <@untainted>self.driveClient, <@untainted>self.httpService, 
+                                    <@untainted>self.methods);
                 }
             } 
             check caller->respond(http:STATUS_OK);

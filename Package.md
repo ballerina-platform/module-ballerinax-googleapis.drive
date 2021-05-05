@@ -64,7 +64,7 @@ updating and retrieving.
 Java Development Kit (JDK) with version 11 is required.
 
 * Download the Ballerina [distribution](https://ballerinalang.org/downloads/)
-Ballerina Swan Lake Alpha 4 is required.
+Ballerina Swan Lake Alpha 5 is required.
 
 * Instantiate the connector by giving authentication details in the HTTP client config. The HTTP client config has built-in support for BasicAuth and OAuth 2.0. Google Drive uses OAuth 2.0 to authenticate and authorize requests. The Google Drive connector can be minimally instantiated in the HTTP client config using the client ID, client secret, and refresh token.
     * Client ID
@@ -93,7 +93,7 @@ This file should have the following configurations. Add the tokens obtained in t
 
 #### Config.toml
 ```ballerina
-[ballerinax.googleapis_drive]
+[ballerinax.googleapis.drive]
 clientId = "<client_id">
 clientSecret = "<client_secret>"
 refreshToken = "<refresh_token>"
@@ -105,7 +105,7 @@ refreshToken = "<refresh_token>"
 
 |                             |            Versions             |
 |:---------------------------:|:-------------------------------:|
-| Ballerina Language          |     Swan Lake Alpha4            |
+| Ballerina Language          |     Swan Lake Alpha 5           |
 | Google Drive API            |             V3                  |
 
 ## Limitations
@@ -129,9 +129,9 @@ You must follow the following steps in order to obtain the tokens needed for the
 7. When you receive your authorization code, click **Exchange authorization code for tokens** to obtain the refresh token.
 
 ### Step 1: Import the Google Drive Ballerina Library
-First, import the ballerinax/googleapis_drive module into the Ballerina project.
+First, import the ballerinax/googleapis.drive module into the Ballerina project.
 ```ballerina
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 ```
 All the actions return a valid response or error. If the action is a success, then the requested resource will be returned. Else error will be returned.
 
@@ -170,7 +170,7 @@ Creating a drive:driveClient by giving the HTTP client config details.
 
 ```ballerina
     import ballerina/config;   
-    import ballerinax/googleapis_drive as drive;
+    import ballerinax/googleapis.drive as drive;
 
     configurable string clientId = ?;
     configurable string clientSecret = ?;
@@ -357,11 +357,11 @@ More details : https://developers.google.com/drive/api/v3/reference/files/update
 
         > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
 
-2. Download and install [Ballerina Alpha 4 ](https://ballerina.io/). 
+2. Download and install [Ballerina Alpha 5 ](https://ballerina.io/). 
 
 ### Building the Source
 
-Execute the commands below to build from the source after installing Ballerina Alpha 4  version.
+Execute the commands below to build from the source after installing Ballerina Alpha 5  version.
 
 1. To clone the repository:
 Clone this repository using the following command:

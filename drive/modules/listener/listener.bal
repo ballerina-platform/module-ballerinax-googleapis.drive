@@ -16,7 +16,7 @@
 
 import ballerina/http;
 import ballerina/log;
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 import ballerina/task;
 import ballerina/time;
 
@@ -71,19 +71,19 @@ public class Listener {
         check self.httpListener.'start();
     }
 
-    public isolated function detach(service object {} s) returns error? {
+    public isolated function detach(service object {} s) returns @tainted error? {
         check stopWatchChannel(self.driveClient, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.detach(s);
     }
 
-    public isolated function gracefulStop() returns error? {
+    public isolated function gracefulStop() returns @tainted error? {
         check stopWatchChannel(self.driveClient, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.gracefulStop();
     }
 
-    public isolated function immediateStop() returns error? {
+    public isolated function immediateStop() returns @tainted error? {
         check stopWatchChannel(self.driveClient, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.immediateStop();

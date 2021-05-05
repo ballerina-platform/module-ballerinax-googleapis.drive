@@ -42,8 +42,9 @@ public client class Client {
     # + fields - Paths of the fields you want included in the reponse.
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get file"}
-    remote isolated function getFile(@display {label: "File id"} string fileId, @display {label: "Fields"} string? fields = ()) 
-                            returns @tainted @display {label: "File"} File|error {
+    remote isolated function getFile(@display {label: "File id"} string fileId, 
+                                     @display {label: "Fields"} string? fields = ()) 
+                                     returns @tainted @display {label: "File"} File|error {
         GetFileOptional optional = {};
         optional.supportsAllDrives = true;
         if (fields is string){
@@ -80,6 +81,7 @@ public client class Client {
 
     # Retrieve all the files in the drive.
     # 
+    # + filterString - The filter string
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     @display {label: "Get all files"}
     remote isolated function getAllFiles(@display {label: "Filter string (optional)"} string? filterString = ()) 
@@ -337,9 +339,11 @@ public client class Client {
     # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
     @display {label: "Update file metadata by id"}
     remote isolated function updateFileMetadataById(@display {label: "File id"} string fileId, 
-                                           @display {label: "File resource (optional)"} File? fileResource = (), 
-                                           @display {label: "Optional parameters"} UpdateFileMetadataOptional? optional = ()) 
-                                           returns @tainted @display {label: "File"} File|error {
+                                                    @display {label: "File resource (optional)"} 
+                                                    File? fileResource = (), 
+                                                    @display {label: "Optional parameters"} 
+                                                    UpdateFileMetadataOptional? optional = ()) 
+                                                    returns @tainted @display {label: "File"} File|error {
         return updateFileById(self.httpClient, fileId, fileResource, optional);
     }
 
@@ -349,9 +353,10 @@ public client class Client {
     # + fileData - 'File' Metadata is send to in the payload 
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Create metadata file"}
-    remote isolated function createMetaDataFile(@display {label: "Optional parameters"} CreateFileOptional? optional = (), 
-                                       @display {label: "File data (optional)"} File? fileData = ()) 
-                                       returns @tainted @display {label: "File"} File|error {
+    remote isolated function createMetaDataFile(@display {label: "Optional parameters"} 
+                                                CreateFileOptional? optional = (), 
+                                                @display {label: "File data (optional)"} File? fileData = ()) 
+                                                returns @tainted @display {label: "File"} File|error {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
@@ -451,11 +456,12 @@ public client class Client {
     }
 
     # Subscribes to in a specific file.
-    # 
-    # + fileId - Id of the file that needs to be subscribed for watching.
-    # + address - The address where notifications are delivered for this channel.
+    #
+    # + fileId - Id of the file that needs to be subscribed for watching.  
+    # + address - The address where notifications are delivered for this channel.  
+    # + pageToken - The page token  
     # + expiration - The expiration time
-    # + return - If successful, returns `WatchResponse`. Else returns `error` 
+    # + return - If successful, returns `WatchResponse`. Else returns `error`
     @display {label: "Watch specific using file id"} 
     remote isolated function watchFilesById(@display {label: "File id"} string fileId, 
                                    @display {label: "Address"} string address, 
@@ -515,8 +521,9 @@ public client class Client {
     #                Stable across different API versions.
     # + return - If successful, returns `boolean`. Else returns `error`.
     @display {label: "Stop all channels"} 
-    remote isolated function watchStop(@display {label: "Channel id"} string channelId, @display {label: "Resource id"} string resourceId) 
-                              returns @tainted @display {label: "Result"} boolean|error {
+    remote isolated function watchStop(@display {label: "Channel id"} string channelId, 
+                                       @display {label: "Resource id"} string resourceId) 
+                                       returns @tainted @display {label: "Result"} boolean|error {
         WatchResponse payload = {};
         payload.id = channelId;
         payload.resourceId = resourceId;

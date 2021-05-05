@@ -2,7 +2,7 @@
 
 | Ballerina Language Version | Gdrive API Version|  
 |:--------------------------:|:-----------------:|
-| Swan Lake Alpha 2          |   v3              |
+| Swan Lake Alpha 5          |   v3              |
 
 ### Prerequisites
 
@@ -40,7 +40,7 @@ In order to run the tests, the user will need to have a Gdrive account and creat
 #### Config.toml
 ```ballerina
 
-[ballerinax.googleapis_drive]
+[ballerinax.googleapis.drive]
 
 refreshToken = "enter your refresh token here"
 clientId = "enter your client id here"

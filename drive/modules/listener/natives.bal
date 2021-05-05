@@ -15,7 +15,7 @@
 // under the License.
 
 import ballerina/jballerina.java;
-import ballerinax/googleapis_drive as drive;
+import ballerinax/googleapis.drive as drive;
 
 isolated function callOnFileCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
                                 returns error? = @java:Method {
