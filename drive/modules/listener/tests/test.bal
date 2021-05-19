@@ -41,27 +41,27 @@ ListenerConfiguration congifuration = {
 listener Listener gDriveListener = new (congifuration);
 
 service / on gDriveListener {
-    isolated remote function onFileCreate(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
-    }
-    isolated remote function onFolderCreate(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onFolderCreate > changeInfo : ", changeInfo);     
-    }
-    isolated remote function onFileUpdate(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onFileUpdate > changeInfo : ", changeInfo);     
-    }
-    isolated remote function onFolderUpdate(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
-    }
-    isolated remote function onFileTrash(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onFileTrash > changeInfo : ", changeInfo);     
-    }
-    isolated remote function onFolderTrash(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onFolderTrash > changeInfo : ", changeInfo);     
-    }
-    isolated remote function onDelete(drive:Change changeInfo) returns error? {
-        log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);     
-    }
+    // isolated remote function onFileCreate(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
+    // }
+    // isolated remote function onFolderCreate(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onFolderCreate > changeInfo : ", changeInfo);     
+    // }
+    // isolated remote function onFileUpdate(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onFileUpdate > changeInfo : ", changeInfo);     
+    // }
+    // isolated remote function onFolderUpdate(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
+    // }
+    // isolated remote function onFileTrash(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onFileTrash > changeInfo : ", changeInfo);     
+    // }
+    // isolated remote function onFolderTrash(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onFolderTrash > changeInfo : ", changeInfo);     
+    // }
+    // isolated remote function onDelete(drive:Change changeInfo) returns error? {
+    //     log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);     
+    // }
 }
 
 @test:Config {enable: false}
