@@ -58,7 +58,7 @@ public client class Client {
     # + fileId - ID of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
     @display {label: "Download file"}
-    remote isolated function downloadFile(@display {label: "File id to download"} string fileId) 
+    remote isolated function downloadFile(@display {label: "File id"} string fileId) 
                                 returns @tainted @display {label: "Downloadable link"} string|error {
         GetFileOptional optional = {supportsAllDrives : true, fields : WEB_CONTENT_LINK};
         File fileResponse = check getFileById(self.httpClient , fileId, optional);
