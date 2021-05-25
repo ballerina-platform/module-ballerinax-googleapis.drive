@@ -205,21 +205,6 @@ isolated function isUpdated(string createdTime, string changeTime) returns boole
     return isModified;
 }
 
-# Get current status of a drive. 
-# 
-# + driveClient - Http client for Drive connection. 
-# + optionalSearch - 'ListFilesOptional' object that is used during listing objects in drive.
-# + curretStatus - JSON that carries the current status.
-public function getAllMetaData(drive:Client driveClient, drive:ListFilesOptional optionalSearch, json[] curretStatus) {
-    stream<drive:File>|error res = driveClient->getFiles(optionalSearch);
-    if (res is stream<drive:File>) {
-        error? e = res.forEach(function(drive:File file) {
-                                   json output = checkpanic file.cloneWithType(json);
-                                   curretStatus.push(output);
-                               });
-    }
-}
-
 # Validate for the existence of resources
 # 
 # + folderId - Id that uniquely represents a folder. 
