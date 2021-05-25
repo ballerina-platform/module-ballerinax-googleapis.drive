@@ -36,13 +36,13 @@ public client class Client {
         });
     }
 
-    # Retrieve file using the fileID.
+    # Retrieve file using the fileId.
     # 
-    # + fileId - ID of the file to retreive
+    # + fileId - Id of the file to retreive
     # + fields - Paths of the fields you want included in the reponse.
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get file"}
-    remote isolated function getFile(@display {label: "File id"} string fileId, 
+    remote isolated function getFile(@display {label: "File Id"} string fileId, 
                                      @display {label: "Fields"} string? fields = ()) 
                                      returns @tainted @display {label: "File"} File|error {
         GetFileOptional optional = {};
@@ -53,12 +53,12 @@ public client class Client {
         return getFileById(self.httpClient, fileId, optional);
     }
 
-    # Download file using the fileID.
+    # Download file using the fileId.
     # 
-    # + fileId - ID of the file to retreive
+    # + fileId - Id of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
     @display {label: "Download file"}
-    remote isolated function downloadFile(@display {label: "File id"} string fileId) 
+    remote isolated function downloadFile(@display {label: "File Id"} string fileId) 
                                 returns @tainted @display {label: "Downloadable link"} string|error {
         GetFileOptional optional = {supportsAllDrives : true, fields : WEB_CONTENT_LINK};
         File fileResponse = check getFileById(self.httpClient , fileId, optional);
@@ -275,7 +275,7 @@ public client class Client {
     # + fileId - ID of the file to delete
     # + return - If successful, returns `boolean` as true. Else returns `error`
     @display {label: "Delete file by id"}
-    remote isolated function deleteFile(@display {label: "File id"} string fileId) 
+    remote isolated function deleteFile(@display {label: "File Id"} string fileId) 
                                returns @tainted @display {label: "Result"} boolean|error {
         DeleteFileOptional deleteOptional = {supportsAllDrives : true};
         return deleteFileById(self.httpClient, fileId, deleteOptional);
@@ -288,8 +288,8 @@ public client class Client {
     # + newFileName - Name of the New file
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Copy file"}
-    remote isolated function copyFile(@display {label: "File id"} string fileId, 
-                             @display {label: "Destination folder id (optional)"} string? destinationFolderId = (), 
+    remote isolated function copyFile(@display {label: "File Id"} string fileId, 
+                             @display {label: "Destination folder Id (optional)"} string? destinationFolderId = (), 
                              @display {label: "New file name (optional)"} string? newFileName = ()) 
                              returns @tainted @display {label: "File"} File|error {
         CopyFileOptional optional = {supportsAllDrives : true};
@@ -338,7 +338,7 @@ public client class Client {
     # + fileResource - 'File' can added as a payload to change metadata
     # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
     @display {label: "Update file metadata by id"}
-    remote isolated function updateFileMetadataById(@display {label: "File id"} string fileId, 
+    remote isolated function updateFileMetadataById(@display {label: "File Id"} string fileId, 
                                                     @display {label: "File resource (optional)"} 
                                                     File? fileResource = (), 
                                                     @display {label: "Optional parameters"} 
@@ -434,7 +434,7 @@ public client class Client {
     @display {label: "Upload file using byte array"} 
     remote isolated function uploadFileUsingByteArray(@display {label: "Byte array"} byte[] byteArray, 
                                              @display {label: "File name"} string fileName, 
-                                             @display {label: "Parent folder id (optional)"} 
+                                             @display {label: "Parent folder Id (optional)"} 
                                              string? parentFolderId = ()) 
                                              returns @tainted @display {label: "File"} File|error {
         File fileMetadata = {name : fileName};
@@ -521,8 +521,8 @@ public client class Client {
     #                Stable across different API versions.
     # + return - If successful, returns `boolean`. Else returns `error`.
     @display {label: "Stop all channels"} 
-    remote isolated function watchStop(@display {label: "Channel id"} string channelId, 
-                                       @display {label: "Resource id"} string resourceId) 
+    remote isolated function watchStop(@display {label: "Channel Id"} string channelId, 
+                                       @display {label: "Resource Id"} string resourceId) 
                                        returns @tainted @display {label: "Result"} boolean|error {
         WatchResponse payload = {};
         payload.id = channelId;
