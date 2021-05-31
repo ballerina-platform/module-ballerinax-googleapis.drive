@@ -21,7 +21,7 @@ import ballerina/uuid;
 # Google Drive Client. 
 #
 # + httpClient - The HTTP Client
-@display {label: "Google Drive Client", iconPath: "GoogleDriveLogo.png"}
+@display {label: "Google Drive", iconPath: "GoogleDriveLogo.png"}
 public client class Client {
     public http:Client httpClient;
     Configuration driveConfiguration;
@@ -44,7 +44,7 @@ public client class Client {
     @display {label: "Get file"}
     remote isolated function getFile(@display {label: "File Id"} string fileId, 
                                      @display {label: "Fields"} string? fields = ()) 
-                                     returns @tainted @display {label: "File"} File|error {
+                                     returns @tainted File|error {
         GetFileOptional optional = {};
         optional.supportsAllDrives = true;
         if (fields is string){
@@ -291,7 +291,7 @@ public client class Client {
     remote isolated function copyFile(@display {label: "File Id"} string fileId, 
                              @display {label: "Destination Folder Id"} string? destinationFolderId = (), 
                              @display {label: "New File Name"} string? newFileName = ()) 
-                             returns @tainted @display {label: "File"} File|error {
+                             returns @tainted File|error {
         CopyFileOptional optional = {supportsAllDrives : true};
         File fileResource = {};
         if (newFileName is string){
@@ -311,11 +311,11 @@ public client class Client {
     @display {label: "Move file"} 
     remote isolated function moveFile(@display {label: "File Id"} string fileId, 
                              @display {label: "Destination Folder Id"} string destinationFolderId) 
-                             returns @tainted @display {label: "File"} File|error {
+                             returns @tainted File|error {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
         };
-        return updateFileById(self.httpClient, fileId, optionalsFileMetadata);
+        return updateFileById(self.httpClient, fileId, null, optionalsFileMetadata);
     }
 
     # Rename a file
@@ -326,7 +326,7 @@ public client class Client {
     @display {label: "Rename file"} 
     remote isolated function renameFile(@display {label: "File Id"} string fileId, 
                                @display {label: "New File Name"} string newFileName) 
-                               returns @tainted @display {label: "File"} File|error {
+                               returns @tainted File|error {
         File fileResource = {name : newFileName};
         return updateFileById(self.httpClient, fileId, fileResource);
     }
@@ -343,7 +343,7 @@ public client class Client {
                                                     File? fileResource = (), 
                                                     @display {label: "Optional Parameters"} 
                                                     UpdateFileMetadataOptional? optional = ()) 
-                                                    returns @tainted @display {label: "File"} File|error {
+                                                    returns @tainted File|error {
         return updateFileById(self.httpClient, fileId, fileResource, optional);
     }
 
@@ -356,7 +356,7 @@ public client class Client {
     remote isolated function createMetaDataFile(@display {label: "Create Optional Parameters"} 
                                                 CreateFileOptional? optional = (), 
                                                 @display {label: "File Data"} File? fileData = ()) 
-                                                returns @tainted @display {label: "File"} File|error {
+                                                returns @tainted File|error {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
@@ -373,7 +373,7 @@ public client class Client {
     remote isolated function createFile(@display {label: "File Name"} string fileName, 
                                @display {label: "Mime Type"} MimeTypes? mime = (), 
                                @display {label: "Folder Id"} string? folderId = ()) 
-                               returns @tainted @display {label: "File"} File|error {
+                               returns @tainted File|error {
         CreateFileOptional optional = {supportsAllDrives : true};
         File fileData = {name : fileName};
         if (mime is string){
@@ -393,7 +393,7 @@ public client class Client {
     @display {label: "Create folder"} 
     remote isolated function createFolder(@display {label: "Folder Name"} string folderName, 
                                  @display {label: "Parent Folder Id"} string? parentFolderId = ()) 
-                                 returns @tainted @display {label: "File"} File|error {
+                                 returns @tainted File|error {
         File fileData = {name : folderName, mimeType : MIME_PREFIX + FOLDER};
         CreateFileOptional optional = {supportsAllDrives : true};
         if (parentFolderId is string){
@@ -412,7 +412,7 @@ public client class Client {
     remote isolated function uploadFile(@display {label: "Local Path"} string localPath, 
                                @display {label: "File Name"} string? fileName = (), 
                                @display {label: "Parent Folder Id"} string? parentFolderId = ()) 
-                               returns @tainted @display {label: "File"} File|error {
+                               returns @tainted File|error {
         string originalFileName = check file:basename(localPath);
         File fileMetadata = {name : originalFileName};
         if (fileName is string) {
@@ -436,7 +436,7 @@ public client class Client {
                                              @display {label: "File name"} string fileName, 
                                              @display {label: "Parent Folder Id"} 
                                              string? parentFolderId = ()) 
-                                             returns @tainted @display {label: "File"} File|error {
+                                             returns @tainted File|error {
         File fileMetadata = {name : fileName};
         UpdateFileMetadataOptional optional = {};
         if (parentFolderId is string){
@@ -451,7 +451,7 @@ public client class Client {
     # + return - If successful, returns `About`. Else returns `error`
     @display {label: "Get information about drive"} 
     remote isolated function getAbout(@display {label: "Fields"} string? fields) 
-                             returns @tainted @display {label: "About"} About|error {
+                             returns @tainted About|error {
         return getDriveInfo(self.httpClient , fields);
     }
 
@@ -467,7 +467,7 @@ public client class Client {
                                    @display {label: "Address"} string address, 
                                    @display {label: "Page token"} string? pageToken = (), 
                                    @display {label: "Expiration timestamp"} int? expiration = ()) 
-                                   returns @tainted @display {label: "Watch Response"} WatchResponse|error {
+                                   returns @tainted WatchResponse|error {
         WatchResponse payload = {};
         payload.id = uuid:createType1AsString();
         string token = EMPTY_STRING;
@@ -495,7 +495,7 @@ public client class Client {
     remote isolated function watchFiles(@display {label: "Address"} string address, 
                                @display {label: "Page Token"} string? pageToken = (), 
                                @display {label: "Expiration timestamp"} int? expiration = ()) 
-                               returns @tainted @display {label: "Watch response"} WatchResponse|error {
+                               returns @tainted WatchResponse|error {
         WatchResponse payload = {};
         WatchFileOptional optional = {};
         string token = EMPTY_STRING;
@@ -540,7 +540,7 @@ public client class Client {
     @display {label: "Get list of changes"} 
     remote isolated function listChanges(@display {label: "Page Token"} string pageToken, 
                                 @display {label: "Change Optional Parameters"} ChangesListOptional? optional = ()) 
-                                returns @tainted @display {label: "Changes list"} ChangesListResponse|error {
+                                returns @tainted ChangesListResponse|error {
         return listChangesByPageToken(self.httpClient, pageToken, optional);
     }
 } 
