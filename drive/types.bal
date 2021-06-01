@@ -417,7 +417,7 @@ public type CopyFileOptional record {
     string includePermissionsForView?;
     boolean keepRevisionForever?;
     string ocrLanguage?;
-    boolean? supportsAllDrives = true;
+    boolean supportsAllDrives;
 };
 
 # Optional Query Parameters in Create files
@@ -444,7 +444,7 @@ public type CreateFileOptional record {
     string includePermissionsForView?; 
     boolean keepRevisionForever?; 
     string ocrLanguage?;  
-    boolean? supportsAllDrives = true; 
+    boolean supportsAllDrives?; 
     boolean useContentAsIndexableText?; 
 };
 
@@ -467,7 +467,7 @@ public type UpdateFileMetadataOptional record {
    boolean keepRevisionForever?; 
    string ocrLanguage?; 
    string removeParents?; 
-   boolean? supportsAllDrives = true; 
+   boolean supportsAllDrives?; 
    boolean useContentAsIndexableText?; 
 };
 
@@ -673,7 +673,7 @@ public type ListFilesOptional record {
     string pageToken?;
     string q?;
     string spaces?;
-    boolean? supportsAllDrives = true;
+    boolean supportsAllDrives?;
 };
 
 # Mime types for file operations

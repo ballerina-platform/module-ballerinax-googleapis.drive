@@ -51,12 +51,7 @@
     stream<File>|error response = driveClient->getFoldersByName("ballerina");
     stream<File>|error response = driveClient->getFoldersByName("ballerina", "createdTime");
 ```
-
-### Filter files
-```ballerina
-    stream<File>|error response = driveClient->filterFiles(filterString);
-    stream<File>|error response = driveClient->filterFiles(filterString, "createdTime");
-```
+### How generate a the filter string
 
 | What you want to query                                               |    Example                                                             |
 | ---------------------------------------------------------------------|------------------------------------------------------------------------|
