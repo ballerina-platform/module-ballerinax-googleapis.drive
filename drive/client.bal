@@ -39,7 +39,6 @@ public client class Client {
     # Retrieve file using the fileId.
     # 
     # + fileId - Id of the file to retreive
-    # + fields - Paths of the fields you want included in the reponse.
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get File"}
     remote isolated function getFile(@display {label: "File Id"} string fileId, 
@@ -65,26 +64,17 @@ public client class Client {
         return fileResponse?.webContentLink.toString();
     }
 
-    # Retrieve files. (To be Deprecated in next release ..)
-    # 
-    # + optional - 'ListFilesOptional' used to add query parameters to the request
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get Files"}
-    remote isolated function getFiles(@display {label: "Optional Query Parameters"} ListFilesOptional? optional = ()) 
-                            returns @tainted @display {label: "File Stream"} stream<File>|error {
-        if (optional is ListFilesOptional) {
-            optional.pageSize = 1000;
-            optional.supportsAllDrives = false;
-        }
-        return getFiles(self.httpClient, optional);
-    }
-
     # Retrieve all the files in the drive.
     # 
-    # + filterString - The filter string
+    # + filterString - Query used to find what you need. Read documentation for query string patterns.
+    #                  https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/blob/main/drive/README.md#filter-files
+    # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
+    #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
+    #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
     @display {label: "Get All Files"}
-    remote isolated function getAllFiles(@display {label: "Filter String"} string? filterString = ()) 
+    remote isolated function getAllFiles(@display {label: "Filter String"} string? filterString = (), 
+                                        @display {label: "Order By"} string? orderBy = ()) 
                                 returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {
             pageSize : 1000,
@@ -93,26 +83,6 @@ public client class Client {
         if (filterString is string) {
             optional.q = filterString;
         }
-        return getFiles(self.httpClient, optional);
-    }
-
-    # Filter and retreive files using filter string
-    # 
-    # + filterString - Query used to find what you need. Read documentation for query string patterns.
-    # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
-    #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
-    #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Filter Files"}
-    remote isolated function filterFiles(@display {label: "Filter String"} string filterString,
-                                @display {label: "Order By"} string? orderBy = ()) 
-                                returns @tainted @display {label: "File Stream"} stream<File>|error {
-        ListFilesOptional optional = {
-            q : filterString,
-            supportsAllDrives: true,
-            includeItemsFromAllDrives: true,
-            pageSize: 1000
-        };
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
@@ -162,7 +132,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get Spreadsheets By Name"}
+    @display {label: "Get Spreadsheets"}
     remote isolated function getSpreadsheetsByName(@display {label: "File Name"} string fileName, 
                                           @display {label: "Order By"} string? orderBy = ()) 
                                           returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -185,7 +155,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get Documents by Name"}
+    @display {label: "Get Documents"}
     remote isolated function getDocumentsByName(@display {label: "File Name"} string fileName, 
                                        @display {label: "Order By"} string? orderBy = ()) 
                                        returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -208,7 +178,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get Forms By Name"}
+    @display {label: "Get Forms"}
     remote isolated function getFormsByName(@display {label: "File Name"} string fileName, 
                                    @display {label: "Order By"} string? orderBy = ()) 
                                    returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -231,7 +201,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get Slides By Name"}
+    @display {label: "Get Slides"}
     remote isolated function getSlidesByName(@display {label: "File Name"} string fileName, 
                                     @display {label: "Order By"} string? orderBy = ()) 
                                     returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -254,7 +224,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'.  
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get Folders By Name"}
+    @display {label: "Get Folders"}
     remote isolated function getFoldersByName(@display {label: "Folder Name"} string folderName, 
                                      @display {label: "Order By"} string? orderBy = ()) 
                                      returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -443,16 +413,6 @@ public client class Client {
             optional.addParents = parentFolderId;
         }
         return uploadFileUsingByteArray(self.httpClient, byteArray, fileMetadata, optional);
-    }
-
-    # Gets information about the user, the user's Drive, and system capabilities.
-    # 
-    # + fields - The paths of the fields you want included in the response
-    # + return - If successful, returns `About`. Else returns `error`
-    @display {label: "Get Information About Drive"} 
-    remote isolated function getAbout(@display {label: "Fields"} string? fields) 
-                             returns @tainted About|error {
-        return getDriveInfo(self.httpClient , fields);
     }
 
     # Subscribes to in a specific file.

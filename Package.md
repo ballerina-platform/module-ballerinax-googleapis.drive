@@ -241,11 +241,7 @@ Configuration config = {
     stream<File>|error response = driveClient->getFoldersByName("ballerina", "createdTime");
 ```
 
-### Filter files
-```ballerina
-    stream<File>|error response = driveClient->filterFiles(filterString);
-    stream<File>|error response = driveClient->filterFiles(filterString, "createdTime");
-```
+### How generate a the filter string
 
 | What you want to query                                               |    Example                                                             |
 | ---------------------------------------------------------------------|------------------------------------------------------------------------|
@@ -267,7 +263,7 @@ Configuration config = {
 
 ### Get All files
 ```ballerina
-    drive:stream<File>|error res = driveClient->getAllFiles();
+    drive:stream<File>|error res = driveClient->getAllFiles(filterString);
 ```
 
 ## Workspace related functions
