@@ -44,7 +44,7 @@ string fileId = "<FILE_ID>";
     listener listen:Listener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        isolated remote function onFileUpdate(drive:Change changeInfo) returns error? {
+        isolated remote function onFileUpdate(listen:Change changeInfo) returns error? {
             log:printInfo("Trigger > onFileUpdate > changeInfo : ", changeInfo);     
         }   
     }
