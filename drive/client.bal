@@ -16,7 +16,6 @@
 
 import ballerina/file;
 import ballerina/http;
-import ballerina/uuid;
 
 # Google Drive Client. 
 #
@@ -39,6 +38,7 @@ public client class Client {
     # Retrieve file using the fileId.
     # 
     # + fileId - Id of the file to retreive
+    # + fields - The paths of the fields you want included in the response. 
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get File"}
     remote isolated function getFile(@display {label: "File Id"} string fileId, 
@@ -413,94 +413,5 @@ public client class Client {
             optional.addParents = parentFolderId;
         }
         return uploadFileUsingByteArray(self.httpClient, byteArray, fileMetadata, optional);
-    }
-
-    # Subscribes to in a specific file.
-    #
-    # + fileId - Id of the file that needs to be subscribed for watching.  
-    # + address - The address where notifications are delivered for this channel.  
-    # + pageToken - The page token  
-    # + expiration - The expiration time
-    # + return - If successful, returns `WatchResponse`. Else returns `error`
-    @display {label: "Watch Specific Using File Id"} 
-    remote isolated function watchFilesById(@display {label: "File Id"} string fileId, 
-                                   @display {label: "Address"} string address, 
-                                   @display {label: "Page token"} string? pageToken = (), 
-                                   @display {label: "Expiration timestamp"} int? expiration = ()) 
-                                   returns @tainted WatchResponse|error {
-        WatchResponse payload = {};
-        payload.id = uuid:createType1AsString();
-        string token = EMPTY_STRING;
-        payload.'type = WEB_HOOK;
-        payload.address = address;
-        if (expiration is int) {
-            payload.expiration = expiration;
-        }
-        if (pageToken is ()) {
-            token = check getStartPageToken(self.httpClient);
-        } else {
-            token = pageToken;
-        }
-        WatchFileOptional optional = {supportsAllDrives : true, pageToken : token};
-        return watchFilesById(self.httpClient, fileId, payload, optional);
-    }
-
-    # Subscribes to changes in all files.
-    # 
-    # + address - The address where notifications are delivered for this channel.
-    # + pageToken - 
-    # + expiration - 
-    # + return - If successful, returns `WatchResponse`. Else returns `error`
-    @display {label: "Watch All Files"} 
-    remote isolated function watchFiles(@display {label: "Address"} string address, 
-                               @display {label: "Page Token"} string? pageToken = (), 
-                               @display {label: "Expiration timestamp"} int? expiration = ()) 
-                               returns @tainted WatchResponse|error {
-        WatchResponse payload = {};
-        WatchFileOptional optional = {};
-        string token = EMPTY_STRING;
-        payload.id = uuid:createType1AsString();
-        payload.'type = WEB_HOOK;
-        payload.address = address;
-        if (expiration is int) {
-            payload.expiration = expiration;
-        }
-        if (pageToken is ()) {
-            token = check getStartPageToken(self.httpClient);
-        } else {
-            token = pageToken;
-        }
-        optional = {pageToken : token};
-        return watchAllFiles(self.httpClient, payload, optional);
-    }
-
-    # Stop watching resources through this channel.
-    # 
-    # + channelId - A UUID or similar unique string that identifies this channel.
-    # + resourceId - An opaque ID that identifies the resource being watched on this channel.
-    #                Stable across different API versions.
-    # + return - If successful, returns `boolean`. Else returns `error`.
-    @display {label: "Stop All Channels"} 
-    remote isolated function watchStop(@display {label: "Channel Id"} string channelId, 
-                                       @display {label: "Resource Id"} string resourceId) 
-                                       returns @tainted @display {label: "Result"} boolean|error {
-        WatchResponse payload = {};
-        payload.id = channelId;
-        payload.resourceId = resourceId;
-        return stopWatch(self.httpClient, payload);
-    }
-
-    # Lists the changes for a user or shared drive.
-    # 
-    # + pageToken - The token for continuing a previous list request on the next page. 
-    #               This should be set to the value of 'nextPageToken' from the previous response or to the response 
-    #               from the getStartPageToken method.
-    # + optional - 'ChangesListOptional' object with optionals.
-    # + return - If successful, returns `ChangesListResponse`. Else returns `error`.
-    @display {label: "Get List of Changes"} 
-    remote isolated function listChanges(@display {label: "Page Token"} string pageToken, 
-                                @display {label: "Change Optional Parameters"} ChangesListOptional? optional = ()) 
-                                returns @tainted ChangesListResponse|error {
-        return listChangesByPageToken(self.httpClient, pageToken, optional);
     }
 } 

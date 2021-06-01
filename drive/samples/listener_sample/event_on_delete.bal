@@ -44,7 +44,7 @@ string fileId = "<FILE_ID_OF_THE_FILE_OR_FOLDER_TO_BE_DELETED>";
     listener listen:Listener gDrivelistener = new (configuration);
 
     service / on gDrivelistener {
-        isolated remote function onDelete(drive:Change changeInfo) returns error? {
+        isolated remote function onDelete(listen:Change changeInfo) returns error? {
             log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);    
         }
     }

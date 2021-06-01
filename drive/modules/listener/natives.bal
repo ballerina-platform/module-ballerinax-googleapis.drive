@@ -15,39 +15,38 @@
 // under the License.
 
 import ballerina/jballerina.java;
-import ballerinax/googleapis.drive as drive;
 
-isolated function callOnFileCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileCreateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFolderCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFolderCreateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFileUpdateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileUpdateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnDeleteMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnDeleteMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFileTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileTrashMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
 
-isolated function callOnFolderTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFolderTrashMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
     'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
 } external;
