@@ -51,23 +51,6 @@ string parentFolderId = EMPTY_STRING;
 string channelId = EMPTY_STRING;
 string resourceId = EMPTY_STRING;
 
-########################
-# Get Drive Information
-# ######################
-
-@test:Config {}
-function testGetDriveInformation() {    
-    log:printInfo("Gdrive Client -> testdriveGetAbout()");
-    About|error response = driveClient->getAbout("user");
-    if (response is About){
-        test:assertNotEquals(response?.user, EMPTY_STRING, msg = "Expect Drive User");
-        log:printInfo(response?.user.toString());
-    } else {
-        test:assertFail(response.message());
-        log:printError(response.message());
-    }
-}
-
 ###################
 # Get File By Id
 # ################
@@ -235,46 +218,6 @@ function testCreateFile() {
         log:printInfo(response?.id.toString());
         //Set variable fileId for other unit tests
         fileId = <@untainted> response?.id.toString();
-    } else {
-        test:assertFail(response.message());
-        log:printError(response.message());
-    }
-}
-
-###################
-# Get files
-# #################
-
-@test:Config {}
-function testGetFiles() { 
-    log:printInfo("Gdrive Client -> testGetFiles()");
-    ListFilesOptional optionalSearch = {
-        orderBy : "createdTime"
-    };
-    stream<File>|error response = driveClient->getFiles(optionalSearch);
-    if (response is stream<File>){
-        error? e = response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        test:assertFail(response.message());
-        log:printError(response.message());
-    }
-}
-
-###################
-# Filter files
-# #################
-
-@test:Config {}
-function testFilterFiles() { 
-    log:printInfo("Gdrive Client -> testFilterFiles()");
-    string filterString = "name contains 'hello'";
-    stream<File>|error response = driveClient->filterFiles(filterString);
-    if (response is stream<File>){
-        error? e = response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        });
     } else {
         test:assertFail(response.message());
         log:printError(response.message());
