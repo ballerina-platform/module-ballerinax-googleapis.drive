@@ -21,7 +21,7 @@ import ballerina/uuid;
 # Google Drive Client. 
 #
 # + httpClient - The HTTP Client
-@display {label: "Google Drive Client", iconPath: "GoogleDriveLogo.png"}
+@display {label: "Google Drive", iconPath: "GoogleDriveLogo.png"}
 public client class Client {
     public http:Client httpClient;
     Configuration driveConfiguration;
@@ -41,10 +41,10 @@ public client class Client {
     # + fileId - Id of the file to retreive
     # + fields - Paths of the fields you want included in the reponse.
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Get file"}
+    @display {label: "Get File"}
     remote isolated function getFile(@display {label: "File Id"} string fileId, 
                                      @display {label: "Fields"} string? fields = ()) 
-                                     returns @tainted @display {label: "File"} File|error {
+                                     returns @tainted File|error {
         GetFileOptional optional = {};
         optional.supportsAllDrives = true;
         if (fields is string){
@@ -57,7 +57,7 @@ public client class Client {
     # 
     # + fileId - Id of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
-    @display {label: "Download file"}
+    @display {label: "Download File"}
     remote isolated function downloadFile(@display {label: "File Id"} string fileId) 
                                 returns @tainted @display {label: "Downloadable Link"} string|error {
         GetFileOptional optional = {supportsAllDrives : true, fields : WEB_CONTENT_LINK};
@@ -69,7 +69,7 @@ public client class Client {
     # 
     # + optional - 'ListFilesOptional' used to add query parameters to the request
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get files"}
+    @display {label: "Get Files"}
     remote isolated function getFiles(@display {label: "Optional Query Parameters"} ListFilesOptional? optional = ()) 
                             returns @tainted @display {label: "File Stream"} stream<File>|error {
         if (optional is ListFilesOptional) {
@@ -83,7 +83,7 @@ public client class Client {
     # 
     # + filterString - The filter string
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get all files"}
+    @display {label: "Get All Files"}
     remote isolated function getAllFiles(@display {label: "Filter String"} string? filterString = ()) 
                                 returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {
@@ -103,10 +103,10 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Filter files"}
+    @display {label: "Filter Files"}
     remote isolated function filterFiles(@display {label: "Filter String"} string filterString,
                                 @display {label: "Order By"} string? orderBy = ()) 
-                                returns @tainted @display {label: "Files Stream"} stream<File>|error {
+                                returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {
             q : filterString,
             supportsAllDrives: true,
@@ -126,7 +126,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get files by name"}
+    @display {label: "Get Files By Name"}
     remote isolated function getFilesByName(@display {label: "File Name"} string fileName, 
                                    @display {label: "Order By"} string? orderBy = ())    
                                    returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -145,7 +145,7 @@ public client class Client {
     # Retrieve all Google spreadsheets
     # 
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get all spreadsheets"}
+    @display {label: "Get All Spreadsheets"}
     remote isolated function getAllSpreadsheets() returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
         string searchString = TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
@@ -162,7 +162,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get spreadsheets by name"}
+    @display {label: "Get Spreadsheets By Name"}
     remote isolated function getSpreadsheetsByName(@display {label: "File Name"} string fileName, 
                                           @display {label: "Order By"} string? orderBy = ()) 
                                           returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -185,7 +185,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get documents by name"}
+    @display {label: "Get Documents by Name"}
     remote isolated function getDocumentsByName(@display {label: "File Name"} string fileName, 
                                        @display {label: "Order By"} string? orderBy = ()) 
                                        returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -208,7 +208,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get forms by name"}
+    @display {label: "Get Forms By Name"}
     remote isolated function getFormsByName(@display {label: "File Name"} string fileName, 
                                    @display {label: "Order By"} string? orderBy = ()) 
                                    returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -231,7 +231,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get slides by name"}
+    @display {label: "Get Slides By Name"}
     remote isolated function getSlidesByName(@display {label: "File Name"} string fileName, 
                                     @display {label: "Order By"} string? orderBy = ()) 
                                     returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -254,7 +254,7 @@ public client class Client {
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'.  
     # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
-    @display {label: "Get folders by name"}
+    @display {label: "Get Folders By Name"}
     remote isolated function getFoldersByName(@display {label: "Folder Name"} string folderName, 
                                      @display {label: "Order By"} string? orderBy = ()) 
                                      returns @tainted @display {label: "File Stream"} stream<File>|error {
@@ -274,7 +274,7 @@ public client class Client {
     # 
     # + fileId - ID of the file to delete
     # + return - If successful, returns `boolean` as true. Else returns `error`
-    @display {label: "Delete file by id"}
+    @display {label: "Delete File By Id"}
     remote isolated function deleteFile(@display {label: "File Id"} string fileId) 
                                returns @tainted @display {label: "Result"} boolean|error {
         DeleteFileOptional deleteOptional = {supportsAllDrives : true};
@@ -287,11 +287,11 @@ public client class Client {
     # + destinationFolderId - Folder ID of the destination
     # + newFileName - Name of the New file
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Copy file"}
+    @display {label: "Copy File"}
     remote isolated function copyFile(@display {label: "File Id"} string fileId, 
                              @display {label: "Destination Folder Id"} string? destinationFolderId = (), 
                              @display {label: "New File Name"} string? newFileName = ()) 
-                             returns @tainted @display {label: "File"} File|error {
+                             returns @tainted File|error {
         CopyFileOptional optional = {supportsAllDrives : true};
         File fileResource = {};
         if (newFileName is string){
@@ -308,14 +308,14 @@ public client class Client {
     # + fileId - ID of the file to move
     # + destinationFolderId - Folder ID of the destination
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Move file"} 
+    @display {label: "Move File"} 
     remote isolated function moveFile(@display {label: "File Id"} string fileId, 
                              @display {label: "Destination Folder Id"} string destinationFolderId) 
-                             returns @tainted @display {label: "File"} File|error {
+                             returns @tainted File|error {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
         };
-        return updateFileById(self.httpClient, fileId, optionalsFileMetadata);
+        return updateFileById(self.httpClient, fileId, null, optionalsFileMetadata);
     }
 
     # Rename a file
@@ -323,10 +323,10 @@ public client class Client {
     # + fileId - File Id that need to be renamed
     # + newFileName - New file name that should be renamed to.
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Rename file"} 
+    @display {label: "Rename File"} 
     remote isolated function renameFile(@display {label: "File Id"} string fileId, 
                                @display {label: "New File Name"} string newFileName) 
-                               returns @tainted @display {label: "File"} File|error {
+                               returns @tainted File|error {
         File fileResource = {name : newFileName};
         return updateFileById(self.httpClient, fileId, fileResource);
     }
@@ -337,13 +337,13 @@ public client class Client {
     # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
     # + fileResource - 'File' can added as a payload to change metadata
     # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
-    @display {label: "Update file metadata by id"}
+    @display {label: "Update File Metadata By Id"}
     remote isolated function updateFileMetadataById(@display {label: "File Id"} string fileId, 
                                                     @display {label: "File Resource"} 
                                                     File? fileResource = (), 
                                                     @display {label: "Optional Parameters"} 
                                                     UpdateFileMetadataOptional? optional = ()) 
-                                                    returns @tainted @display {label: "File"} File|error {
+                                                    returns @tainted File|error {
         return updateFileById(self.httpClient, fileId, fileResource, optional);
     }
 
@@ -352,11 +352,11 @@ public client class Client {
     # + optional - 'CreateFileOptional' used to add query parameters to the request
     # + fileData - 'File' Metadata is send to in the payload 
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Create metadata file"}
+    @display {label: "Create Metadata File"}
     remote isolated function createMetaDataFile(@display {label: "Create Optional Parameters"} 
                                                 CreateFileOptional? optional = (), 
                                                 @display {label: "File Data"} File? fileData = ()) 
-                                                returns @tainted @display {label: "File"} File|error {
+                                                returns @tainted File|error {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
@@ -369,11 +369,11 @@ public client class Client {
     #          "document" .. Google sheets -> "spreadsheet" etc.
     # + folderId - Id of the parent folder that the new file wants to get created. 
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Create file"} 
+    @display {label: "Create File"} 
     remote isolated function createFile(@display {label: "File Name"} string fileName, 
                                @display {label: "Mime Type"} MimeTypes? mime = (), 
                                @display {label: "Folder Id"} string? folderId = ()) 
-                               returns @tainted @display {label: "File"} File|error {
+                               returns @tainted File|error {
         CreateFileOptional optional = {supportsAllDrives : true};
         File fileData = {name : fileName};
         if (mime is string){
@@ -390,10 +390,10 @@ public client class Client {
     # + folderName - Name of the new folder to be created.
     # + parentFolderId - Id of the parent folder.
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Create folder"} 
+    @display {label: "Create Folder"} 
     remote isolated function createFolder(@display {label: "Folder Name"} string folderName, 
                                  @display {label: "Parent Folder Id"} string? parentFolderId = ()) 
-                                 returns @tainted @display {label: "File"} File|error {
+                                 returns @tainted File|error {
         File fileData = {name : folderName, mimeType : MIME_PREFIX + FOLDER};
         CreateFileOptional optional = {supportsAllDrives : true};
         if (parentFolderId is string){
@@ -408,11 +408,11 @@ public client class Client {
     # + fileName - File name for the uploading file (optional). It will take the base name, if not provided.
     # + parentFolderId - Parent folder ID (optional). It will be uploaded to the root, if not provided.
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Upload file"} 
+    @display {label: "Upload File"} 
     remote isolated function uploadFile(@display {label: "Local Path"} string localPath, 
                                @display {label: "File Name"} string? fileName = (), 
                                @display {label: "Parent Folder Id"} string? parentFolderId = ()) 
-                               returns @tainted @display {label: "File"} File|error {
+                               returns @tainted File|error {
         string originalFileName = check file:basename(localPath);
         File fileMetadata = {name : originalFileName};
         if (fileName is string) {
@@ -431,12 +431,12 @@ public client class Client {
     # + fileName - File name for the uploading file (optional). It will take the base name, if not provided.
     # + parentFolderId - Parent folder ID (optional). It will be uploaded to the root, if not provided.
     # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Upload file using byte array"} 
+    @display {label: "Upload File Using Byte Array"} 
     remote isolated function uploadFileUsingByteArray(@display {label: "Byte Array"} byte[] byteArray, 
                                              @display {label: "File name"} string fileName, 
                                              @display {label: "Parent Folder Id"} 
                                              string? parentFolderId = ()) 
-                                             returns @tainted @display {label: "File"} File|error {
+                                             returns @tainted File|error {
         File fileMetadata = {name : fileName};
         UpdateFileMetadataOptional optional = {};
         if (parentFolderId is string){
@@ -449,9 +449,9 @@ public client class Client {
     # 
     # + fields - The paths of the fields you want included in the response
     # + return - If successful, returns `About`. Else returns `error`
-    @display {label: "Get information about drive"} 
+    @display {label: "Get Information About Drive"} 
     remote isolated function getAbout(@display {label: "Fields"} string? fields) 
-                             returns @tainted @display {label: "About"} About|error {
+                             returns @tainted About|error {
         return getDriveInfo(self.httpClient , fields);
     }
 
@@ -462,12 +462,12 @@ public client class Client {
     # + pageToken - The page token  
     # + expiration - The expiration time
     # + return - If successful, returns `WatchResponse`. Else returns `error`
-    @display {label: "Watch specific using file id"} 
+    @display {label: "Watch Specific Using File Id"} 
     remote isolated function watchFilesById(@display {label: "File Id"} string fileId, 
                                    @display {label: "Address"} string address, 
                                    @display {label: "Page token"} string? pageToken = (), 
                                    @display {label: "Expiration timestamp"} int? expiration = ()) 
-                                   returns @tainted @display {label: "Watch Response"} WatchResponse|error {
+                                   returns @tainted WatchResponse|error {
         WatchResponse payload = {};
         payload.id = uuid:createType1AsString();
         string token = EMPTY_STRING;
@@ -491,11 +491,11 @@ public client class Client {
     # + pageToken - 
     # + expiration - 
     # + return - If successful, returns `WatchResponse`. Else returns `error`
-    @display {label: "Watch all files"} 
+    @display {label: "Watch All Files"} 
     remote isolated function watchFiles(@display {label: "Address"} string address, 
                                @display {label: "Page Token"} string? pageToken = (), 
                                @display {label: "Expiration timestamp"} int? expiration = ()) 
-                               returns @tainted @display {label: "Watch response"} WatchResponse|error {
+                               returns @tainted WatchResponse|error {
         WatchResponse payload = {};
         WatchFileOptional optional = {};
         string token = EMPTY_STRING;
@@ -520,7 +520,7 @@ public client class Client {
     # + resourceId - An opaque ID that identifies the resource being watched on this channel.
     #                Stable across different API versions.
     # + return - If successful, returns `boolean`. Else returns `error`.
-    @display {label: "Stop all channels"} 
+    @display {label: "Stop All Channels"} 
     remote isolated function watchStop(@display {label: "Channel Id"} string channelId, 
                                        @display {label: "Resource Id"} string resourceId) 
                                        returns @tainted @display {label: "Result"} boolean|error {
@@ -537,10 +537,10 @@ public client class Client {
     #               from the getStartPageToken method.
     # + optional - 'ChangesListOptional' object with optionals.
     # + return - If successful, returns `ChangesListResponse`. Else returns `error`.
-    @display {label: "Get list of changes"} 
+    @display {label: "Get List of Changes"} 
     remote isolated function listChanges(@display {label: "Page Token"} string pageToken, 
                                 @display {label: "Change Optional Parameters"} ChangesListOptional? optional = ()) 
-                                returns @tainted @display {label: "Changes list"} ChangesListResponse|error {
+                                returns @tainted ChangesListResponse|error {
         return listChangesByPageToken(self.httpClient, pageToken, optional);
     }
 } 
