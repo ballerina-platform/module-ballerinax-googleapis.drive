@@ -20,8 +20,11 @@ import ballerina/http;
 #
 # + secureSocketConfig - Represents OAuth2 direct token configurations for OAuth2 authentication 
 # + clientConfig - Provides configurations for facilitating secure communication with a remote HTTP endpoint  
+@display{label: "Connection Config"}
 public type Configuration record {
+    @display{label: "Auth Config"}
     http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig clientConfig; 
+    @display{label: "SSL Config"}
     http:ClientSecureSocket secureSocketConfig?;
 };
 
@@ -38,6 +41,7 @@ public type Configuration record {
 # + folderColorPalette - The currently supported folder colors as RGB hex strings.
 # + driveThemes - A list of themes that are supported for shared drives.
 # + canCreateDrives - Whether the user can create shared drives.
+@display {label: "About"}
 public type About record {
     string kind?;
     User user?;
@@ -149,6 +153,7 @@ public type About record {
 # + properties - A collection of arbitrary key-value pairs which are visible to all apps.  
 # + originalFilename - The original filename of the uploaded content if available, or else the original value of the 
 #                      name field. This is only available for files with binary content in Google Drive  
+@display {label: "File"}
 public type File record {
     string kind?;
     string id?;  
@@ -412,7 +417,7 @@ public type CopyFileOptional record {
     string includePermissionsForView?;
     boolean keepRevisionForever?;
     string ocrLanguage?;
-    boolean? supportsAllDrives = true;
+    boolean supportsAllDrives;
 };
 
 # Optional Query Parameters in Create files
@@ -439,7 +444,7 @@ public type CreateFileOptional record {
     string includePermissionsForView?; 
     boolean keepRevisionForever?; 
     string ocrLanguage?;  
-    boolean? supportsAllDrives = true; 
+    boolean supportsAllDrives?; 
     boolean useContentAsIndexableText?; 
 };
 
@@ -462,7 +467,7 @@ public type UpdateFileMetadataOptional record {
    boolean keepRevisionForever?; 
    string ocrLanguage?; 
    string removeParents?; 
-   boolean? supportsAllDrives = true; 
+   boolean supportsAllDrives?; 
    boolean useContentAsIndexableText?; 
 };
 
@@ -668,7 +673,7 @@ public type ListFilesOptional record {
     string pageToken?;
     string q?;
     string spaces?;
-    boolean? supportsAllDrives = true;
+    boolean supportsAllDrives?;
 };
 
 # Mime types for file operations
@@ -737,6 +742,7 @@ public type WatchFileOptional record {
 # + type - The type of delivery mechanism used for this channel. Valid values are "web_hook" (or "webhook"). 
 #          Both values refer to a channel where Http requests are used to deliver messages. 
 # + token - An arbitrary string delivered to the target address with each notification delivered over this channel.  
+@display {label: "Watch Response"}
 public type WatchResponse record {
     string kind?;
     string id?;
@@ -773,6 +779,7 @@ public type WatchResponse record {
 # + fields - The paths of the fields you want included in the response. If not specified, the response includes a 
 #            default set of fields specific to this method.  
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)
+@display {label: "Changes list"}
 public type ChangesListOptional record {
     string driveId?;
     string fields?;

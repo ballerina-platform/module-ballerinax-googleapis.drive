@@ -85,10 +85,11 @@ isolated function mapEvents(drive:ChangesListResponse changeList, drive:Client d
             string fileOrFolderId = changeLog?.fileId.toString();
             drive:File|error fileOrFolder = driveClient->getFile(fileOrFolderId);
             string mimeType = changeLog?.file?.mimeType.toString();
-            if (changeLog?.removed == true && methods.isOnDelete) {
-                check callOnDeleteMethod(eventService, changeLog);
-            }
-            else if (mimeType != FOLDER) {
+            if (changeLog?.removed == true && fileOrFolder is error) {
+                if (methods.isOnDelete) {
+                    check callOnDeleteMethod(eventService, changeLog);
+                }
+            } else if (mimeType != FOLDER) {
                 log:printDebug("File change event found file id : " + fileOrFolderId + " | Mime type : " +mimeType);
                 check identifyFileEvent(fileOrFolderId, changeLog, eventService, driveClient, methods);
             } else {
