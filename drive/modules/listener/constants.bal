@@ -102,3 +102,15 @@ const string FALSE = "false";
 // URL encoding
 const string ENCODING_CHARSET = "utf-8";
 const string UNABLE_TO_ENCODE = "Unable to encode value: ";
+
+// Error
+const string ERR_CHANNEL_REGISTRATION = "Unable to register new channel.";
+const string ERR_SCHEDULE = "Unable to schedule subscription renewal.";
+
+// Warn constants
+const string WARN_CHANNEL_REGISTRATION = "Could not register watch channel";
+const string WARN_SCHEDULE = "Could not schedule subscription renewal";
+
+// Info constants
+const string INFO_RETRY_CHANNEL_REGISTRATION = "Retrying to register new channel. Attempt - ";
+const string INFO_RETRY_SCHEDULE = "Retrying to schedule subscription renewal. Attempt - ";
