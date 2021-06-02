@@ -13,6 +13,6 @@ observabilityIncluded = true
 
 [[platform.java11.dependency]]
 path = "../java-wrapper/build/libs/java-wrapper-0.1.4-SNAPSHOT.jar"
-groupId = "io.ballerinax.webhook"
+groupId = "org.ballerinalang.googleapis.drive"
 artifactId = "java-wrapper"
 version = "0.1.4-SNAPSHOT"
