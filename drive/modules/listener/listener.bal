@@ -29,8 +29,20 @@ import ballerina/time;
 public type ListenerConfiguration record {
     int port;
     string callbackURL;
-    drive:Configuration clientConfiguration;
+    Configuration clientConfiguration;
     string? specificFolderOrFileId = ();
+};
+
+# Represents configuration parameters to create Google drive Client.
+#
+# + secureSocketConfig - Represents OAuth2 direct token configurations for OAuth2 authentication 
+# + clientConfig - Provides configurations for facilitating secure communication with a remote HTTP endpoint  
+@display{label: "Connection Config"}
+public type Configuration record {
+    @display{label: "Auth Config"}
+    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig clientConfig; 
+    @display{label: "SSL Config"}
+    http:ClientSecureSocket secureSocketConfig?;
 };
 
 # Drive event listener   
@@ -41,10 +53,9 @@ public class Listener {
     # Watch Resource ID
     public string watchResourceId = EMPTY_STRING;
     private string currentToken = EMPTY_STRING;
-    private http:Client clientEP;
     private string specificFolderOrFileId = EMPTY_STRING;
     private drive:Client driveClient;
-    private drive:WatchResponse watchResponse;
+    private WatchResponse watchResponse;
     private boolean isWatchOnSpecificResource = false;
     private boolean isFolder = true;
     private ListenerConfiguration config;
@@ -59,7 +70,8 @@ public class Listener {
 
     public isolated function attach(SimpleHttpService s, string[]|string? name = ()) returns error? {
         self.httpService = new HttpService(s, self.channelUuid, self.currentToken, self.watchResourceId, 
-        self.driveClient, self.isWatchOnSpecificResource, self.isFolder, self.specificFolderOrFileId);
+                                            self.driveClient, self.config, self.isWatchOnSpecificResource, 
+                                            self.isFolder, self.specificFolderOrFileId);
         check self.httpListener.attach(self.httpService, name);
     
         time:Utc currentUtc = time:utcNow();
@@ -72,19 +84,19 @@ public class Listener {
     }
 
     public isolated function detach(service object {} s) returns @tainted error? {
-        check stopWatchChannel(self.driveClient, self.channelUuid, self.watchResourceId);
+        check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.detach(s);
     }
 
     public isolated function gracefulStop() returns @tainted error? {
-        check stopWatchChannel(self.driveClient, self.channelUuid, self.watchResourceId);
+        check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.gracefulStop();
     }
 
     public isolated function immediateStop() returns @tainted error? {
-        check stopWatchChannel(self.driveClient, self.channelUuid, self.watchResourceId);
+        check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.immediateStop();
     }

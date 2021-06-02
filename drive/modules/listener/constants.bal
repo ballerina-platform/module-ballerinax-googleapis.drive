@@ -14,6 +14,9 @@
 // specific language governing permissions and limitations
 // under the License.
 
+//Base URL
+const string BASE_URL = "https://www.googleapis.com";
+
 // MimeTypes
 const string FOLDER = "application/vnd.google-apps.folder";
 const string FILE = "application/vnd.google-apps.file";
@@ -28,9 +31,6 @@ const string AUDIO = "application/vnd.google-apps.audio";
 const string LOG_FILE = "text/x-log";
 const string TEXT_FILE = "text/plain";
 
-// Constants
-const string EMPTY_STRING = "";
-
 // Header constants
 const string GOOGLE_CHANNEL_ID = "X-Goog-Channel-ID";
 const string GOOGLE_RESOURCE_ID = "X-Goog-Resource-ID";
@@ -40,3 +40,65 @@ const string SYNC = "sync";
 // Watch 
 const decimal MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE = 86400;
 const decimal MAX_EXPIRATION_TIME_FOR_CHANGES_ALL_DRIVE = 604800;
+
+// Optional Query Parameters
+const string ACKKNOWLEDGE_ABUSE = "acknowledgeAbuse";
+const string FIELDS = "fields";
+const string INCLUDE_PERMISSIONS_FOR_VIEW = "includePermissionsForView";
+const string SUPPORTS_ALL_DRIVES = "supportsAllDrives";
+const string IGNORE_DEFAULT_VISIBILITY = "ignoreDefaultVisibility";
+const string KEEP_REVISION_FOREVER = "keepRevisionForever";
+const string OCR_LANGUAGE = "ocrLanguage";
+const string ADD_PARENTS = "addParents";
+const string REMOVE_PARENTS = "removeParents";
+const string USE_CONTENT_AS_INDEXABLE_TEXT = "useContentAsIndexableText";
+const string CORPORA = "corpora";
+const string DRIVE_ID = "driveId";
+const string ORDER_BY = "orderBy";
+const string PAGE_SIZE = "pageSize";
+const string SPACES = "spaces";
+const string INCLUDE_ITEMS_FROM_ALL_DRIVES = "includeItemsFromAllDrives";
+const string INCLUDE_CORPUS_REMOVALS = "includeCorpusRemovals";
+const string INCLUDE_REMOVED = "includeRemoved";
+const string RESTRICT_TO_MY_DRIVE = "restrictToMyDrive";
+
+// Drive
+const string DRIVE_URL = "https://www.googleapis.com";
+public const string REFRESH_URL = "https://www.googleapis.com/oauth2/v3/token";
+const string DRIVE_PATH = "/drive/v3";
+const string ABOUT = "/about";
+const string UPLOAD = "/upload";
+const string UPLOAD_TYPE = "uploadType";
+const string TYPE_MEDIA = "media";
+const string TYPE_MULTIPART = "multipart";
+const string TYPE_RESUMABLE = "resumable";
+const string FILES = "/files";
+const string CHANGES = "/changes";
+const string WATCH = "/watch";
+const string COPY = "/copy";
+const string CHANNELS = "/channels";
+const string STOP = "/stop";
+const string Q = "q";
+const string AMPERSAND = "&";
+const string PAGE_TOKEN = "pageToken";
+const string WEB_CONTENT_LINK = "webContentLink";
+const string WEB_HOOK = "web_hook";
+const string START_PAGE_TOKEN = "startPageToken";
+
+//Symbols
+const string QUESTION_MARK = "?";
+const string PATH_SEPARATOR = "/";
+const string EMPTY_STRING = "";
+const string WHITE_SPACE = " ";
+const string FORWARD_SLASH = "/";
+const string DASH_WITH_WHITE_SPACES_SYMBOL = " - ";
+const string COLON = ":";
+const string EXCLAMATION_MARK = "!";
+const string EQUAL = "=";
+const string _ALL = "*";
+const string TRUE = "true";
+const string FALSE = "false";
+
+// URL encoding
+const string ENCODING_CHARSET = "utf-8";
+const string UNABLE_TO_ENCODE = "Unable to encode value: ";
