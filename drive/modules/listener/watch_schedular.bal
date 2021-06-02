@@ -30,12 +30,20 @@ class Job {
     private boolean isWatchOnSpecificResource = false;
     private boolean isFolder = true;
 
-    private drive:WatchResponse watchResponse;
+    private WatchResponse watchResponse;
     private string channelUuid = EMPTY_STRING;
     private string specificFolderOrFileId = EMPTY_STRING;
     private string watchResourceId = EMPTY_STRING;
     private string currentToken = EMPTY_STRING;
     public decimal expiration = 0;
+
+    isolated function init(ListenerConfiguration config, drive:Client driveClient, 
+                            Listener httpListener, HttpService httpService) {
+        self.config = config;
+        self.driveClient = driveClient;
+        self.httpListener = httpListener;
+        self.httpService = httpService;
+    }
 
     public isolated function execute() {
         if (self.config.specificFolderOrFileId is string) {
@@ -45,19 +53,19 @@ class Job {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
-            self.watchResponse = checkpanic self.driveClient->watchFilesById(self.specificFolderOrFileId.toString(), 
+            self.watchResponse = checkpanic watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(), 
             self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
         } else if (self.config.specificFolderOrFileId is string && self.isFolder == false) {
             checkpanic validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
             self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
-            self.watchResponse = checkpanic self.driveClient->watchFilesById(self.specificFolderOrFileId.toString(), 
+            self.watchResponse = checkpanic watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(), 
             self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
         } else {
             self.specificFolderOrFileId = EMPTY_STRING;
-            self.watchResponse = checkpanic self.driveClient->watchFiles(self.config.callbackURL);
+            self.watchResponse = checkpanic watchFiles(self.config.clientConfiguration, self.config.callbackURL);
         }
         self.channelUuid = self.watchResponse?.id.toString();
         self.currentToken = self.watchResponse?.startPageToken.toString();
@@ -80,15 +88,7 @@ class Job {
         log:printDebug("timeDifference : " + timeDifference.toString());
         log:printDebug("newTime : " + newTime.toString());
 
-        task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self.httpListener, 
-            self.httpService), time);
-    }
-
-    isolated function init(ListenerConfiguration config, drive:Client driveClient, Listener httpListener, 
-                           HttpService httpService) {
-        self.config = config;
-        self.driveClient = driveClient;
-        self.httpListener = httpListener;
-        self.httpService = httpService;
+        task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, 
+                                                    self.httpListener,self.httpService), time);
     }
 }

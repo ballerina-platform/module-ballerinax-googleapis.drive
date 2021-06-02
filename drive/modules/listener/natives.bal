@@ -15,41 +15,40 @@
 // under the License.
 
 import ballerina/jballerina.java;
-import ballerinax/googleapis.drive as drive;
 
-isolated function callOnFileCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileCreateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
-isolated function callOnFolderCreateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFolderCreateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
-isolated function callOnFileUpdateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileUpdateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
-isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFolderUpdateMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
-isolated function callOnDeleteMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnDeleteMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
-isolated function callOnFileTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFileTrashMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
-isolated function callOnFolderTrashMethod(SimpleHttpService httpService, drive:Change changeInfo)
+isolated function callOnFolderTrashMethod(SimpleHttpService httpService, Change changeInfo)
                                 returns error? = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
 # Invoke native method to retrive implemented method names in the subscriber service
@@ -57,7 +56,7 @@ isolated function callOnFolderTrashMethod(SimpleHttpService httpService, drive:C
 # + httpService - current subscriber-service
 # + return - {@code string[]} containing the method-names in current implementation
 isolated function getServiceMethodNames(SimpleHttpService httpService) returns string[] = @java:Method {
-    'class: "io.ballerinax.webhook.WebhookNativeOperationHandler"
+    'class: "org.ballerinalang.googleapis.drive.HttpNativeOperationHandler"
 } external;
 
 

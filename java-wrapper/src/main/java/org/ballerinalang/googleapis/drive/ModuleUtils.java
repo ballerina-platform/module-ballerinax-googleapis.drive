@@ -1,3 +1,4 @@
+
 // Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
@@ -14,12 +15,27 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/jballerina.java;
+package org.ballerinalang.googleapis.drive;
 
-isolated function init() {
-    setModule();
+import io.ballerina.runtime.api.Environment;
+import io.ballerina.runtime.api.Module;
+
+/**
+ * {@code ModuleUtils} contains the utility methods for the module.
+ * 
+ * @since 2.0.0
+ */
+public class ModuleUtils {
+
+    private static Module websubModule;
+
+    private ModuleUtils() {}
+
+    public static void setModule(Environment environment) {
+        websubModule = environment.getCurrentModule();
+    }
+
+    public static Module getModule() {
+        return websubModule;
+    }
 }
-
-isolated function setModule() = @java:Method {
-    'class: "org.ballerinalang.googleapis.drive.ModuleUtils"
-} external;

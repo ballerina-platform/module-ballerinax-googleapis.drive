@@ -24,6 +24,7 @@ service class HttpService {
     public string currentToken;
     public string watchResourceId;
     public json[] currentFileStatus = [];
+    public ListenerConfiguration config;
     public string specificFolderOrFileId;
     public drive:Client driveClient;
     public boolean isWatchOnSpecificResource;
@@ -32,13 +33,14 @@ service class HttpService {
     public MethodNames methods = {};
 
     public isolated function init(SimpleHttpService httpService, string channelUuid, string currentToken, 
-                                    string watchResourceId, drive:Client driveClient, boolean isWatchOnSpecificResource, 
-                                    boolean isFolder,string specificFolderOrFileId) {
+                                    string watchResourceId, drive:Client driveClient, ListenerConfiguration config, 
+                                    boolean isWatchOnSpecificResource, boolean isFolder,string specificFolderOrFileId) {
         self.httpService = httpService;
         self.channelUuid = channelUuid;
         self.currentToken = currentToken;
         self.watchResourceId = watchResourceId;
         self.driveClient = driveClient;
+        self.config = config;
         self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
@@ -79,8 +81,8 @@ service class HttpService {
         if(check request.getHeader(GOOGLE_CHANNEL_ID) != self.channelUuid){
             fail error("Diffrent channel IDs found, Resend the watch request");
         } else {
-            drive:ChangesListResponse[] response = check getAllChangeList(self.currentToken, self.driveClient);
-            foreach drive:ChangesListResponse item in response {
+            ChangesListResponse[] response = check getAllChangeList(self.currentToken, self.config);
+            foreach ChangesListResponse item in response {
                 self.currentToken = item?.newStartPageToken.toString();
                 if (self.isWatchOnSpecificResource && self.isFolder) {
                     log:printDebug("Folder watch response processing");
