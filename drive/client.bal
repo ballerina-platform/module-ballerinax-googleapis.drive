@@ -319,19 +319,6 @@ public client class Client {
 
     # Create new file.
     # 
-    # + optional - 'CreateFileOptional' used to add query parameters to the request
-    # + fileData - 'File' Metadata is send to in the payload 
-    # + return - If successful, returns `File`. Else returns `error`
-    @display {label: "Create Metadata File"}
-    remote isolated function createMetaDataFile(@display {label: "Create Optional Parameters"} 
-                                                CreateFileOptional? optional = (), 
-                                                @display {label: "File Data"} File? fileData = ()) 
-                                                returns @tainted File|error {
-        return createMetaDataFile(self.httpClient, fileData, optional);
-    }
-
-    # Create new file.
-    # 
     # + fileName - Name of the new file to be created.
     # + mime - Type of file that is going to create. refer https://developers.google.com/drive/api/v3/mime-types
     #          You need to only specify the last word in the MIME type. 

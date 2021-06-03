@@ -109,7 +109,7 @@ type StartPageTokenResponse record {
 
 # A change to a file or shared drive.
 #
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#change".  
+# + kind - Identifies what kind of resource this is. Value: the fixed string "change".  
 # + driveId - The ID of the shared drive associated with this change.  
 # + removed - Whether the file or shared drive has been removed from this list of changes, for example by deletion or 
 #             loss of access.  
