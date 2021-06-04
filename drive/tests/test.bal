@@ -163,7 +163,7 @@ function testUpdateFile() {
     UpdateFileMetadataOptional optionalsFileMetadata = {
         addParents : parentFolderId
     };
-    File payloadFileMetadata = {
+    FileMetadata payloadFileMetadata = {
         name : fileName,
         mimeType : "application/vnd.google-apps.document",
         description : "A short description of the file"

@@ -305,16 +305,16 @@ public client class Client {
     # 
     # + fileId - ID of the file to be updated
     # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
-    # + fileResource - 'File' can added as a payload to change metadata
+    # + fileMetadata - 'FileMetadata' can added as a payload to change metadata
     # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
     @display {label: "Update File Metadata By Id"}
     remote isolated function updateFileMetadataById(@display {label: "File Id"} string fileId, 
                                                     @display {label: "File Resource"} 
-                                                    File? fileResource = (), 
+                                                    FileMetadata? fileMetadata = (), 
                                                     @display {label: "Optional Parameters"} 
                                                     UpdateFileMetadataOptional? optional = ()) 
                                                     returns @tainted File|error {
-        return updateFileById(self.httpClient, fileId, fileResource, optional);
+        return updateFileById(self.httpClient, fileId, fileMetadata, optional);
     }
 
     # Create new file.

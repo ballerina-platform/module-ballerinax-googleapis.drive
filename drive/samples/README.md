@@ -113,7 +113,7 @@
     UpdateFileMetadataOptional optionalsFileMetadata = {
         addParents : parentFolder
     };
-    File payloadFileMetadata = {
+    FileMetadata payloadFileMetadata = {
         name : "test"
     };
     File|error res = driveClient->updateFileMetadataById(fileId, optionalsFileMetadata, payloadFileMetadata);
