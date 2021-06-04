@@ -316,18 +316,7 @@ Configuration config = {
 ```ballerina
     boolean|error response = driveClient->deleteFile(fileId);
 ```
-### Create folder with metadata
-More details : https://developers.google.com/drive/api/v3/reference/files/update
-```ballerina
-    CreateFileOptional optionals_create_folder = {
-        ignoreDefaultVisibility : false
-    };
-    File payload_create_folder = {
-        mimeType : "application/vnd.google-apps.folder",
-        name : "folderInTheRoot"
-    };
-    File|error res = driveClient->createMetaDataFile(optionals_create_folder, payload_create_folder);
-```
+
 ### Upload file
 ```ballerina
     File|error response = driveClient->uploadFile(localFilePath);
