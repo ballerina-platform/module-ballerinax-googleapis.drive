@@ -57,33 +57,89 @@ public type About record {
 };
 
 # File Record Type
+@display {label: "File"}
+public type File record {
+    *FileMetadata;
+    *GeneratedFileMetadata;
+};
+
+# File Metadata Record Type
 #
-# + modifiedTime - The last time the file was modified by anyone (RFC 3339 date-time)  
-# + copyRequiresWriterPermission - Whether the options to copy, print, or download this file, should be disabled for 
-#                                  readers and commenters 
-# + owners - The owners of the file. Currently, only certain legacy files may have more than one owner. Not populated 
-#            for items in shared drives.  
+# + name - The name of the file. This is not necessarily unique within a folder. 
+#          Note that for immutable items such as the top level folders of shared drives, My Drive root folder, and 
+#          Application Data folder the name is constant. 
 # + mimeType - The MIME type of the file.Google Drive will attempt to automatically detect an appropriate value. 
 #              from uploaded content if no value is provided.  The value cannot be changed unless a new revision 
 #              is uploaded.
 #              If a file is created with a Google Doc MIME type, the uploaded content will be imported if possible. 
-#              The supported import formats are published in the About resource.  
+#              The supported import formats are published in the About resource.
+# + description - A short description of the file
+# + starred - Whether the user has starred the file. 
+# + trashed - Whether the file has been trashed, either explicitly or from a trashed parent folder. Only the owner may 
+#             trash a file. The trashed item is excluded from all files.
+#             list responses returned for any user who does not own the file. 
+#             However, all users with access to the file can see the trashed item metadata in an API response. 
+#             All users with access can copy, download, export, and share the file.  
+# + folderColorRgb - The color for a folder as an RGB hex string.
+# + appProperties - A collection of arbitrary key-value pairs which are private to the requesting app.  
+# + contentHints - Additional information about the content of the file. These fields are never populated in responses.
+# + copyRequiresWriterPermission - Whether the options to copy, print, or download this file, should be disabled for 
+#                                  readers and commenters 
+# + modifiedTime - The last time the file was modified by anyone (RFC 3339 date-time)  
+# + properties - A collection of arbitrary key-value pairs which are visible to all apps.  
+# + originalFilename - The original filename of the uploaded content if available, or else the original value of the 
+#                      name field. This is only available for files with binary content in Google Drive.
+# + viewedByMeTime - The last time the file was viewed by the user (RFC 3339 date-time). 
+# + writersCanShare - Whether users with only writer permission can modify the file's permissions. 
+@display {label: "File Metadata"}
+public type FileMetadata record {
+    @display{label: "File Name"} 
+    string name?;
+    @display{label: "MIME Type"} 
+    string mimeType?;
+    @display{label: "Description"} 
+    string description?;
+    @display{label: "Starred"}
+    boolean starred?;
+    @display{label: "Trashed"}
+    boolean trashed?;
+    @display{label: "Folder Color in RGB Hex String"} 
+    string folderColorRgb?;
+    @display{label: "App Properties"} 
+    StringKeyValuePairs appProperties?;
+    @display{label: "Content Hints"}
+    ContentHints contentHints?;
+    @display{label: "Copy Operation Needs Writers Permission"}
+    boolean copyRequiresWriterPermission?;
+    @display{label: "Modified Time"}
+    string modifiedTime?;
+    @display{label: "Original File Name"}
+    string originalFilename?;
+    @display{label: "Properties"}
+    StringKeyValuePairs properties?;
+    @display{label: "Last Time File Viewed"}
+    string viewedByMeTime?;
+    @display{label: "Only Writers Can Modify"}
+    boolean writersCanShare?;
+};
+
+# GeneratedFileMetadata Record Type
+#
+# + id - The ID of the file/folder.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#file". 
+# + owners - The owners of the file. Currently, only certain legacy files may have more than one owner. Not populated 
+#            for items in shared drives.    
 # + contentRestrictions - Restrictions for accessing the content of the file. Only populated if such a restriction 
-#                         exists.  
+#                         exists.
 # + version - A monotonically increasing version number for the file. This reflects every change made to the file on 
 #             the server, even those not visible to the user.  
-# + iconLink - A static, unauthenticated link to the file's icon. 
-# + starred - Whether the user has starred the file.  
+# + iconLink - A static, unauthenticated link to the file's icon.  
 # + permissions - The full list of permissions for the file. This is only available if the requesting user can share 
-#                 the file.  Not populated for items in shared drives. 
-# + contentHints - Additional information about the content of the file. These fields are never populated in responses  
+#                 the file.  Not populated for items in shared drives.   
 # + isAppAuthorized - Whether the file was created or opened by the requesting app.  
-# + createdTime - The time at which the file was created (RFC 3339 date-time).  
-# + id - The ID of the file/folder.  
+# + createdTime - The time at which the file was created (RFC 3339 date-time).    
 # + sharedWithMeTime - The time at which the file was shared with the user, if applicable (RFC 3339 date-time).  
-# + writersCanShare - Whether users with only writer permission can modify the file's permissions. 
-#                     Not populated for items in shared drives.  
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#file".   
+#                     Not populated for items in shared drives.   
 # + webViewLink - A link for opening the file in a relevant Google editor or viewer in a browser. 
 # + ownedByMe - Whether the user owns the file. Not populated for items in shared drives.  
 # + explicitlyTrashed - Whether the file has been explicitly trashed, 
@@ -92,34 +148,22 @@ public type About record {
 # + viewedByMe - Whether the file has been viewed by this user.  
 # + driveId - ID of the shared drive the file resides in. Only populated for items in shared drives  
 # + size - The size of the file's content in bytes. 
-#          This is applicable to binary files in Google Drive and Google Docs files.  
-# + name - The name of the file. This is not necessarily unique within a folder. 
-#          Note that for immutable items such as the top level folders of shared drives, My Drive root folder, and 
-#          Application Data folder the name is constant.  
+#          This is applicable to binary files in Google Drive and Google Docs files.    
 # + spaces - The list of spaces which contain the file. The currently supported values are 'drive', 
 #            'appDataFolder' and 'photos'.  
-# + imageMediaMetadata - Additional metadata about image media, if available.  
-# + trashed - Whether the file has been trashed, either explicitly or from a trashed parent folder. Only the owner may 
-#             trash a file. The trashed item is excluded from all files.
-#             list responses returned for any user who does not own the file. 
-#             However, all users with access to the file can see the trashed item metadata in an API response. 
-#             All users with access can copy, download, export, and share the file.  
+# + imageMediaMetadata - Additional metadata about image media, if available. 
 # + parents - The IDs of the parent folders which contain the file. If not specified as part of a create request, 
 #             the file will be placed directly in the user's My Drive folder. 
 #             If not specified as part of a copy request, 
 #             the file will inherit any discoverable parents of the source file. 
-#             Update requests must use the addParents and removeParents parameters to modify the parents list.
-# + appProperties - A collection of arbitrary key-value pairs which are private to the requesting app.  
-# + folderColorRgb - The color for a folder as an RGB hex string. 
-#                    The supported colors are published in the folderColorPalette field of the About resource.  
+#             Update requests must use the addParents and removeParents parameters to modify the parents list. 
 # + headRevisionId - The ID of the file's head revision. This is currently only available for files with binary content 
 #                    in Google Drive.  
 # + modifiedByMeTime - The last time the file was modified by the user (RFC 3339 date-time). 
 # + modifiedByMe - Whether the file has been modified by this user.
 # + shared - Whether the file has been shared. Not populated for items in shared drives.  
 # + hasAugmentedPermissions - Whether there are permissions directly on this file. 
-#                             This field is only populated for items in shared drives.  
-# + description - A short description of the file.  
+#                             This field is only populated for items in shared drives.    
 # + trashingUser - If the file has been explicitly trashed, the user who trashed it. Only populated for items in shared 
 #                  drives.  
 # + thumbnailLink - A short-lived link to the file's thumbnail, if available. Typically lasts on the order of hours. 
@@ -145,29 +189,17 @@ public type About record {
 #                  to the thumbnail.To check access,look for the presence of the thumbnailLink field.  
 # + capabilities - Capabilities the current user has on this file.  Each capability corresponds to a fine-grained 
 #                  action that a user may take.  
-# + viewedByMeTime - The last time the file was viewed by the user (RFC 3339 date-time).  
 # + videoMediaMetadata - Additional metadata about video media. This may not be available immediately upon upload.  
 # + thumbnailVersion - The thumbnail version for use in thumbnail cache invalidation.  
 # + exportLinks - Links for exporting Docs Editors files to specific formats.  
 # + sharingUser - The user who shared the file with the requesting user, if applicable.  
-# + properties - A collection of arbitrary key-value pairs which are visible to all apps.  
-# + originalFilename - The original filename of the uploaded content if available, or else the original value of the 
-#                      name field. This is only available for files with binary content in Google Drive  
-@display {label: "File"}
-public type File record {
+public type GeneratedFileMetadata record {
+    string id?;
     string kind?;
-    string id?;  
-    string name?;
-    string mimeType?;
-    string description?;
-    boolean starred?;
-    boolean trashed?;
     boolean explicitlyTrashed?;
     User trashingUser?;
     string trashedTime?;
     string[] parents?;
-    StringKeyValuePairs properties?;
-    StringKeyValuePairs appProperties?;
     string[] spaces?;
     int 'version?;
     string webContentLink?;
@@ -178,9 +210,7 @@ public type File record {
     int thumbnailVersion?;
     boolean viewedByMe?;
     boolean modifiedByMe?;
-    string viewedByMeTime?;
     string createdTime?;
-    string modifiedTime?;
     string modifiedByMeTime?;
     string sharedWithMeTime?;
     User sharingUser?;
@@ -190,20 +220,15 @@ public type File record {
     boolean shared?;
     boolean ownedByMe?;
     Capabilities capabilities?;
-    boolean copyRequiresWriterPermission?;
-    boolean writersCanShare?;
     Permissions[] permissions?;
     string[] permissionIds?;
     boolean hasAugmentedPermissions?;
-    string folderColorRgb?;
-    string originalFilename?;
     string fullFileExtension?;
     string fileExtension?;
     string md5Checksum?;
     int size?; 
     int quotaBytesUsed?;
     string headRevisionId?;
-    ContentHints contentHints?;
     ImageMediaMetadata imageMediaMetadata?;
     VideoMediaMetadata videoMediaMetadata?;
     boolean isAppAuthorized?;
@@ -448,7 +473,7 @@ public type CreateFileOptional record {
     boolean useContentAsIndexableText?; 
 };
 
-# Description
+# Update file optional parameters
 #
 # + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
 # + removeParents - A comma-separated list of parent IDs to remove. 
@@ -460,15 +485,23 @@ public type CreateFileOptional record {
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
 #                               Only 'published' is supported.
 # + addParents - A comma-separated list of parent IDs to add.
-# + supportsAllDrives -   
+# + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false)  
+@display {label: "File Metadata"}
 public type UpdateFileMetadataOptional record {
-   string addParents?; 
-   string includePermissionsForView?; 
-   boolean keepRevisionForever?; 
-   string ocrLanguage?; 
-   string removeParents?; 
-   boolean supportsAllDrives?; 
-   boolean useContentAsIndexableText?; 
+    @display {label: "Add Parents"}
+    string addParents?; 
+    @display {label: "Include Permissions for View"}
+    string includePermissionsForView?; 
+    @display {label: "Keep Revision Forever"}
+    boolean keepRevisionForever?; 
+    @display {label: "OCR Language hint"}
+    string ocrLanguage?; 
+    @display {label: "Remove Parents"}
+    string removeParents?;
+    @display {label: "Supports All Drives"} 
+    boolean supportsAllDrives?;
+    @display {label: "Use Uploaded Content as Indexable Text"} 
+    boolean useContentAsIndexableText?; 
 };
 
 # User Record
@@ -615,7 +648,6 @@ public type Permissions record {
     string expirationTime;
     PermissionDetails[] permissionDetails?;
     boolean deleted;
-
 };
 
 # Details of whether the permissions on this shared drive item are inherited or directly on this item. 
@@ -631,7 +663,6 @@ public type PermissionDetails record {
     string inheritedFrom;
     boolean inherited;
 };
-
 
 # Optionals used in Lists or searches files.
 #

@@ -51,7 +51,7 @@ string fileId = "<FILE_ID>";
 
 public function main() returns error? {
     drive:Client driveClient = check new (config);
-    drive:File payloadFileMetadata = {
+    drive:FileMetadata payloadFileMetadata = {
         name : "newFileNameonUpdate",
         mimeType : "application/vnd.google-apps.document",
         description : "A short description of the file"

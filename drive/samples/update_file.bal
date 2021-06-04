@@ -26,7 +26,7 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 drive:UpdateFileMetadataOptional optionalsFileMetadata = {
     addParents : "<GIVE_PARENT_FOLDER_ID>"
 };
-drive:File payloadFileMetadata = {
+drive:FileMetadata payloadFileMetadata = {
     name : "<GIVE_THE_FILE_NAME>",
     mimeType : "<GIVE_MIME_TYPE>",
     description : "<GIVE_THE_DESCRIPTION>"
