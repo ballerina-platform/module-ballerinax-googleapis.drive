@@ -36,6 +36,7 @@ const string GOOGLE_CHANNEL_ID = "X-Goog-Channel-ID";
 const string GOOGLE_RESOURCE_ID = "X-Goog-Resource-ID";
 const string GOOGLE_RESOURCE_STATE = "X-Goog-Resource-State";
 const string SYNC = "sync";
+const string CONTENT_TYPE = "Content-Type";
 
 // Watch 
 const decimal MAX_EXPIRATION_TIME_FOR_FILE_RESOURCE = 86400;
@@ -114,3 +115,5 @@ const string WARN_SCHEDULE = "Could not schedule subscription renewal";
 // Info constants
 const string INFO_RETRY_CHANNEL_REGISTRATION = "Retrying to register new channel. Attempt - ";
 const string INFO_RETRY_SCHEDULE = "Retrying to schedule subscription renewal. Attempt - ";
+const string GOOGLE_SITE_VERIFICATION_PREFIX = "google-site-verification";
+

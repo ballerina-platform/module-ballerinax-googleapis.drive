@@ -31,10 +31,12 @@ service class HttpService {
     public boolean isFolder = true;
     private SimpleHttpService httpService;
     public MethodNames methods = {};
+    private string dnsVerificationFileContent;
 
     public isolated function init(SimpleHttpService httpService, string channelUuid, string currentToken, 
                                     string watchResourceId, drive:Client driveClient, ListenerConfiguration config, 
-                                    boolean isWatchOnSpecificResource, boolean isFolder,string specificFolderOrFileId) {
+                                    boolean isWatchOnSpecificResource, boolean isFolder, string specificFolderOrFileId, 
+                                    string dnsVerificationFileContent) {
         self.httpService = httpService;
         self.channelUuid = channelUuid;
         self.currentToken = currentToken;
@@ -44,6 +46,7 @@ service class HttpService {
         self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
+        self.dnsVerificationFileContent = dnsVerificationFileContent;
 
         string[] methodNames = getServiceMethodNames(httpService);
 
@@ -100,6 +103,18 @@ service class HttpService {
             } 
             check caller->respond(http:STATUS_OK);
         }
+    }
+    resource isolated function get [string name](http:Caller caller) returns @tainted error? {
+        http:Response r = new();
+        if(self.dnsVerificationFileContent.length() < 100 && 
+                self.dnsVerificationFileContent.startsWith(GOOGLE_SITE_VERIFICATION_PREFIX)){
+            r.setHeader(CONTENT_TYPE, "text/html; charset=UTF-8");
+            r.setTextPayload(self.dnsVerificationFileContent);
+            log:printDebug("Domain verification on process");
+        } else {
+            fail error("Invalid input for domain verification");
+        }
+        check caller->respond(r);
     }
 }
 
