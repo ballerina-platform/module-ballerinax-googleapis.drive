@@ -104,6 +104,8 @@ service class HttpService {
             check caller->respond(http:STATUS_OK);
         }
     }
+    
+    // Resource function required for domain verification by Google
     resource isolated function get [string name](http:Caller caller) returns @tainted error? {
         http:Response r = new();
         if(self.dnsVerificationFileContent.length() < 100 && 
