@@ -24,11 +24,13 @@ import ballerina/time;
 #
 # + port - Port for the listener.  
 # + specificFolderOrFileId - Folder or file Id.  
+# + dnsVerificationFileContent - File content of HTML file used in domain verification.
 # + callbackURL - Callback URL registered.  
 # + clientConfiguration - Drive client connecter configuration.
 public type ListenerConfiguration record {
     int port;
     string callbackURL;
+    string dnsVerificationFileContent;
     Configuration clientConfiguration;
     string? specificFolderOrFileId = ();
 };
@@ -61,17 +63,19 @@ public class Listener {
     private ListenerConfiguration config;
     private http:Listener httpListener;
     private HttpService httpService;
+    private string dnsVerificationFileContent;
 
     public isolated function init(ListenerConfiguration config) returns @tainted error? {
         self.httpListener = check new (config.port);
         self.driveClient = check new (config.clientConfiguration);
         self.config = config;
+        self.dnsVerificationFileContent = config.dnsVerificationFileContent;
     }
 
     public isolated function attach(SimpleHttpService s, string[]|string? name = ()) returns error? {
         self.httpService = new HttpService(s, self.channelUuid, self.currentToken, self.watchResourceId, 
                                             self.driveClient, self.config, self.isWatchOnSpecificResource, 
-                                            self.isFolder, self.specificFolderOrFileId);
+                                            self.isFolder, self.specificFolderOrFileId, self.dnsVerificationFileContent);
         check self.httpListener.attach(self.httpService, name);
     
         time:Utc currentUtc = time:utcNow();
