@@ -23,6 +23,7 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshUrl = drive:REFRESH_URL;
 configurable string refreshToken = ?;
+configurable string domainVerificationFileContent = ?
 
 string folderName = "<NEW_FOLDER_NAME>";
 
@@ -38,7 +39,8 @@ string folderName = "<NEW_FOLDER_NAME>";
     listen:ListenerConfiguration configuration = {
         port: 9090,
         callbackURL: callbackURL,
-        clientConfiguration: config
+        clientConfiguration: config,
+        domainVerificationFileContent : domainVerificationFileContent
     };
 
     listener listen:Listener gDrivelistener = new (configuration);

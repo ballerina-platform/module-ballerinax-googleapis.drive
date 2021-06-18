@@ -23,6 +23,7 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshUrl = drive:REFRESH_URL;
 configurable string refreshToken = ?;
+configurable string domainVerificationFileContent = ?
 
 string fileId = "<FILE_ID_OF_THE_FILE_OR_FOLDER_TO_BE_DELETED>";
 
@@ -38,7 +39,8 @@ string fileId = "<FILE_ID_OF_THE_FILE_OR_FOLDER_TO_BE_DELETED>";
     listen:ListenerConfiguration configuration = {
         port: 9090,
         callbackURL: callbackURL,
-        clientConfiguration: config
+        clientConfiguration: config,
+        domainVerificationFileContent : domainVerificationFileContent
     };
 
     listener listen:Listener gDrivelistener = new (configuration);
