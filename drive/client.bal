@@ -37,11 +37,11 @@ public client class Client {
 
     # Retrieve file using the fileId.
     # 
-    # + fileId - Id of the file to retreive
+    # + fileId - ID of the file to retreive
     # + fields - The paths of the fields you want included in the response. 
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get File"}
-    remote isolated function getFile(@display {label: "File Id"} string fileId, 
+    remote isolated function getFile(@display {label: "File ID"} string fileId, 
                                      @display {label: "Fields"} string? fields = ()) 
                                      returns @tainted File|error {
         GetFileOptional optional = {};
@@ -54,10 +54,10 @@ public client class Client {
 
     # Download file using the fileId.
     # 
-    # + fileId - Id of the file to retreive
+    # + fileId - ID of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
     @display {label: "Download File"}
-    remote isolated function downloadFile(@display {label: "File Id"} string fileId) 
+    remote isolated function downloadFile(@display {label: "File ID"} string fileId) 
                                 returns @tainted @display {label: "Downloadable Link"} string|error {
         GetFileOptional optional = {supportsAllDrives : true, fields : WEB_CONTENT_LINK};
         File fileResponse = check getFileById(self.httpClient , fileId, optional);
@@ -244,8 +244,8 @@ public client class Client {
     # 
     # + fileId - ID of the file to delete
     # + return - If successful, returns `boolean` as true. Else returns `error`
-    @display {label: "Delete File By Id"}
-    remote isolated function deleteFile(@display {label: "File Id"} string fileId) 
+    @display {label: "Delete File By ID"}
+    remote isolated function deleteFile(@display {label: "File ID"} string fileId) 
                                returns @tainted @display {label: "Result"} boolean|error {
         DeleteFileOptional deleteOptional = {supportsAllDrives : true};
         return deleteFileById(self.httpClient, fileId, deleteOptional);
@@ -258,8 +258,8 @@ public client class Client {
     # + newFileName - Name of the New file
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Copy File"}
-    remote isolated function copyFile(@display {label: "File Id"} string fileId, 
-                             @display {label: "Destination Folder Id"} string? destinationFolderId = (), 
+    remote isolated function copyFile(@display {label: "File ID"} string fileId, 
+                             @display {label: "Destination Folder ID"} string? destinationFolderId = (), 
                              @display {label: "New File Name"} string? newFileName = ()) 
                              returns @tainted File|error {
         CopyFileOptional optional = {supportsAllDrives : true};
@@ -279,8 +279,8 @@ public client class Client {
     # + destinationFolderId - Folder ID of the destination
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Move File"} 
-    remote isolated function moveFile(@display {label: "File Id"} string fileId, 
-                             @display {label: "Destination Folder Id"} string destinationFolderId) 
+    remote isolated function moveFile(@display {label: "File ID"} string fileId, 
+                             @display {label: "Destination Folder ID"} string destinationFolderId) 
                              returns @tainted File|error {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
@@ -290,11 +290,11 @@ public client class Client {
 
     # Rename a file
     # 
-    # + fileId - File Id that need to be renamed
+    # + fileId - File ID that need to be renamed
     # + newFileName - New file name that should be renamed to.
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Rename File"} 
-    remote isolated function renameFile(@display {label: "File Id"} string fileId, 
+    remote isolated function renameFile(@display {label: "File ID"} string fileId, 
                                @display {label: "New File Name"} string newFileName) 
                                returns @tainted File|error {
         File fileResource = {name : newFileName};
@@ -307,8 +307,8 @@ public client class Client {
     # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
     # + fileMetadata - 'FileMetadata' can added as a payload to change metadata
     # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
-    @display {label: "Update File Metadata By Id"}
-    remote isolated function updateFileMetadataById(@display {label: "File Id"} string fileId, 
+    @display {label: "Update File Metadata By ID"}
+    remote isolated function updateFileMetadataById(@display {label: "File ID"} string fileId, 
                                                     @display {label: "File Resource"} 
                                                     FileMetadata? fileMetadata = (), 
                                                     @display {label: "Optional Parameters"} 
@@ -324,12 +324,12 @@ public client class Client {
     #          You need to only specify the last word in the MIME type. 
     #          For an example, If you want to create a Google document.. The value for this parameter should be
     #          "document" .. Google sheets -> "spreadsheet" etc.
-    # + folderId - Id of the parent folder that the new file wants to get created. 
+    # + folderId - ID of the parent folder that the new file wants to get created. 
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Create File"} 
     remote isolated function createFile(@display {label: "File Name"} string fileName, 
                                @display {label: "Mime Type"} MimeTypes? mime = (), 
-                               @display {label: "Folder Id"} string? folderId = ()) 
+                               @display {label: "Folder ID"} string? folderId = ()) 
                                returns @tainted File|error {
         CreateFileOptional optional = {supportsAllDrives : true};
         File fileData = {name : fileName};
@@ -345,11 +345,11 @@ public client class Client {
     # Create new folder.
     # 
     # + folderName - Name of the new folder to be created.
-    # + parentFolderId - Id of the parent folder.
+    # + parentFolderId - ID of the parent folder.
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Create Folder"} 
     remote isolated function createFolder(@display {label: "Folder Name"} string folderName, 
-                                 @display {label: "Parent Folder Id"} string? parentFolderId = ()) 
+                                 @display {label: "Parent Folder ID"} string? parentFolderId = ()) 
                                  returns @tainted File|error {
         File fileData = {name : folderName, mimeType : MIME_PREFIX + FOLDER};
         CreateFileOptional optional = {supportsAllDrives : true};
@@ -368,7 +368,7 @@ public client class Client {
     @display {label: "Upload File"} 
     remote isolated function uploadFile(@display {label: "Local Path"} string localPath, 
                                @display {label: "File Name"} string? fileName = (), 
-                               @display {label: "Parent Folder Id"} string? parentFolderId = ()) 
+                               @display {label: "Parent Folder ID"} string? parentFolderId = ()) 
                                returns @tainted File|error {
         string originalFileName = check file:basename(localPath);
         File fileMetadata = {name : originalFileName};
@@ -391,7 +391,7 @@ public client class Client {
     @display {label: "Upload File Using Byte Array"} 
     remote isolated function uploadFileUsingByteArray(@display {label: "Byte Array"} byte[] byteArray, 
                                              @display {label: "File name"} string fileName, 
-                                             @display {label: "Parent Folder Id"} 
+                                             @display {label: "Parent Folder ID"} 
                                              string? parentFolderId = ()) 
                                              returns @tainted File|error {
         File fileMetadata = {name : fileName};
