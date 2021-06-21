@@ -54,7 +54,7 @@ public client class Client {
 
     # Download file using the fileId.
     # 
-    # + fileId - ID of the file to retreive
+    # + fileId - Id of the file to retreive
     # + return - If successful, returns `string`. Else returns `error`
     @display {label: "Download File"}
     remote isolated function downloadFile(@display {label: "File ID"} string fileId) 

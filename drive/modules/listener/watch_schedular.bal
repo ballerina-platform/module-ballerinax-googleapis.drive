@@ -15,107 +15,117 @@
 // under the License.
 
 import ballerina/log;
-import ballerina/http;
+import ballerina/task;
+import ballerina/time;
+import ballerina/lang.runtime;
 import ballerinax/googleapis.drive as drive;
 
-service class HttpService {
+class Job {
+    *task:Job;
+    private HttpService httpService;
+    private Listener httpListener;
+    private drive:Client driveClient;
+    private ListenerConfiguration config; 
+
+    private boolean isWatchOnSpecificResource = false;
+    private boolean isFolder = true;
+
+    private WatchResponse watchResponse = {};
+    private string channelUuid = EMPTY_STRING;
+    private string specificFolderOrFileId = EMPTY_STRING;
+    private string watchResourceId = EMPTY_STRING;
+    private string currentToken = EMPTY_STRING;
+    public decimal expiration = 0;
     
-    public string channelUuid;
-    public string currentToken;
-    public string watchResourceId;
-    public json[] currentFileStatus = [];
-    public ListenerConfiguration config;
-    public string specificFolderOrFileId;
-    public drive:Client driveClient;
-    public boolean isWatchOnSpecificResource;
-    public boolean isFolder = true;
-    private SimpleHttpService httpService;
-    public MethodNames methods = {};
-    private string domainVerificationFileContent;
+    private int retryCount = 1;
+    private int retryScheduleCount = 1;
 
-    public isolated function init(SimpleHttpService httpService, string channelUuid, string currentToken, 
-                                    string watchResourceId, drive:Client driveClient, ListenerConfiguration config, 
-                                    boolean isWatchOnSpecificResource, boolean isFolder, string specificFolderOrFileId, 
-                                    string domainVerificationFileContent) {
-        self.httpService = httpService;
-        self.channelUuid = channelUuid;
-        self.currentToken = currentToken;
-        self.watchResourceId = watchResourceId;
-        self.driveClient = driveClient;
+    isolated function init(ListenerConfiguration config, drive:Client driveClient, 
+                            Listener httpListener, HttpService httpService) {
         self.config = config;
-        self.isFolder = isFolder;
-        self.isWatchOnSpecificResource = isWatchOnSpecificResource;
-        self.specificFolderOrFileId = specificFolderOrFileId;
-        self.domainVerificationFileContent = domainVerificationFileContent;
+        self.driveClient = driveClient;
+        self.httpListener = httpListener;
+        self.httpService = httpService;
+    }
 
-        string[] methodNames = getServiceMethodNames(httpService);
+    public isolated function execute() {
+        error? err = self.registerWatchChannel();
+        if (err is error) {
+            log:printWarn(WARN_CHANNEL_REGISTRATION, 'error = err);
+            if (self.retryCount <= 10) {
+                log:printInfo(INFO_RETRY_CHANNEL_REGISTRATION + self.retryCount.toString());
+                runtime:sleep(5);
+                self.retryCount += 1;
+                self.execute();
+            } else {
+                panic error(ERR_CHANNEL_REGISTRATION);
+            }
+        } else {
+            self.scheduleNextChannel();
+        }
+    }
 
-        foreach var methodName in methodNames {
-            match methodName {
-                "onFileCreate" => {
-                    self.methods.isOnNewFileCreate = true;
-                }
-                "onFolderCreate" => {
-                    self.methods.isOnNewFolderCreate = true;
-                }
-                "onFileUpdate" => {
-                    self.methods.isOnFileUpdate = true;
-                }
-                "onFolderUpdate" => {
-                    self.methods.isOnFolderUpdate = true;
-                }
-                "onDelete" => {
-                    self.methods.isOnDelete = true;
-                }
-                "onFileTrash" => {
-                    self.methods.isOnFileTrash = true;
-                }
-                "onFolderTrash" => {
-                    self.methods.isOnFolderTrash = true;
-                }
-                _ => {
-                    log:printError("Unrecognized method [" + methodName + "] found in the implementation");
-                }
+    isolated function registerWatchChannel() returns error? {
+       if (self.config.specificFolderOrFileId is string) {
+            self.isFolder = check checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
+       }
+       if (self.config.specificFolderOrFileId is string && self.isFolder == true) {
+            check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
+            self.driveClient);
+            self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
+            self.watchResponse = check watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(), 
+            self.config.callbackURL);
+            self.isWatchOnSpecificResource = true;
+        } else if (self.config.specificFolderOrFileId is string && self.isFolder == false) {
+            check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
+            self.driveClient);
+            self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
+            self.watchResponse = check watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(), 
+            self.config.callbackURL);
+            self.isWatchOnSpecificResource = true;
+        } else {
+            self.specificFolderOrFileId = EMPTY_STRING;
+            self.watchResponse = check watchFiles(self.config.clientConfiguration, self.config.callbackURL);
+        }
+        self.channelUuid = self.watchResponse?.id.toString();
+        self.currentToken = self.watchResponse?.startPageToken.toString();
+        self.watchResourceId = self.watchResponse?.resourceId.toString();
+        self.expiration = <decimal>self.watchResponse?.expiration;
+        log:printInfo("Watch channel started in Google, id : " + self.channelUuid);
+
+        self.httpService.channelUuid = self.channelUuid;
+        self.httpService.watchResourceId = self.watchResourceId;
+        self.httpService.currentToken = self.currentToken;
+
+        self.httpListener.channelUuid = self.channelUuid;
+        self.httpListener.watchResourceId = self.watchResourceId;
+    }
+
+    isolated function scheduleNextChannel() {
+        error? err = self.scheduleNextChannelRenewal();
+        if (err is error) {
+            log:printWarn(WARN_CHANNEL_REGISTRATION, 'error = err);
+            if (self.retryScheduleCount <= 10) {
+                log:printInfo(INFO_RETRY_SCHEDULE + self.retryScheduleCount.toString());
+                runtime:sleep(5);
+                self.retryScheduleCount += 1;
+                self.scheduleNextChannel();
+            } else {
+                panic error(ERR_SCHEDULE);
             }
         }
     }
 
-    resource isolated function post events(http:Caller caller, http:Request request) returns @tainted error? {
-        if(check request.getHeader(GOOGLE_CHANNEL_ID) != self.channelUuid){
-            fail error("Diffrent channel IDs found, Resend the watch request");
-        } else {
-            ChangesListResponse[] response = check getAllChangeList(self.currentToken, self.config);
-            foreach ChangesListResponse item in response {
-                self.currentToken = item?.newStartPageToken.toString();
-                if (self.isWatchOnSpecificResource && self.isFolder) {
-                    log:printDebug("Folder watch response processing");
-                    check mapEventForSpecificResource(<@untainted> self.specificFolderOrFileId, <@untainted> item, 
-                    <@untainted> self.driveClient, <@untainted> self.httpService, self.methods);
-                } else if (self.isWatchOnSpecificResource && self.isFolder == false) {
-                    log:printDebug("File watch response processing");
-                    check mapFileUpdateEvents(self.specificFolderOrFileId, item, self.driveClient, self.httpService, 
-                    self.methods);
-                } else {
-                    log:printDebug("Whole drive watch response processing");
-                    check mapEvents(<@untainted>item, <@untainted>self.driveClient, <@untainted>self.httpService, 
-                                    <@untainted>self.methods);
-                }
-            } 
-            check caller->respond(http:STATUS_OK);
-        }
-    }
+    isolated function scheduleNextChannelRenewal() returns error? {
+        time:Utc currentUtc = time:utcNow();
+        decimal timeDifference = (self.expiration/1000) - (<decimal>currentUtc[0]) - 60;
+        time:Utc newTime = time:utcAddSeconds(currentUtc, timeDifference);
+        time:Civil time = time:utcToCivil(newTime);
+        log:printDebug("currentUtc : " + currentUtc.toString());
+        log:printDebug("timeDifference : " + timeDifference.toString());
+        log:printDebug("newTime : " + newTime.toString());
 
-    // Resource function required for domain verification by Google
-    resource isolated function get [string name](http:Caller caller) returns @tainted error? {
-        http:Response r = new();
-        if(self.domainVerificationFileContent.length() < 100 && 
-                self.domainVerificationFileContent.startsWith(GOOGLE_SITE_VERIFICATION_PREFIX)){
-            r.setHeader(CONTENT_TYPE, "text/html; charset=UTF-8");
-            r.setTextPayload(self.domainVerificationFileContent);
-            log:printDebug("Domain verification on process");
-        } else {
-            fail error("Invalid input for domain verification");
-        }
-        check caller->respond(r);
+        task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, 
+                                                    self.httpListener,self.httpService), time);
     }
 }

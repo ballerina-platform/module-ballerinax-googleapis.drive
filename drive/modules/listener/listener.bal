@@ -105,4 +105,3 @@ public class Listener {
         return self.httpListener.immediateStop();
     }
 }
-
