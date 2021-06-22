@@ -31,10 +31,12 @@ service class HttpService {
     public boolean isFolder = true;
     private SimpleHttpService httpService;
     public MethodNames methods = {};
+    private string domainVerificationFileContent;
 
     public isolated function init(SimpleHttpService httpService, string channelUuid, string currentToken, 
                                     string watchResourceId, drive:Client driveClient, ListenerConfiguration config, 
-                                    boolean isWatchOnSpecificResource, boolean isFolder,string specificFolderOrFileId) {
+                                    boolean isWatchOnSpecificResource, boolean isFolder, string specificFolderOrFileId, 
+                                    string domainVerificationFileContent) {
         self.httpService = httpService;
         self.channelUuid = channelUuid;
         self.currentToken = currentToken;
@@ -44,6 +46,7 @@ service class HttpService {
         self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
+        self.domainVerificationFileContent = domainVerificationFileContent;
 
         string[] methodNames = getServiceMethodNames(httpService);
 
@@ -101,5 +104,18 @@ service class HttpService {
             check caller->respond(http:STATUS_OK);
         }
     }
-}
 
+    // Resource function required for domain verification by Google
+    resource isolated function get [string name](http:Caller caller) returns @tainted error? {
+        http:Response r = new();
+        if(self.domainVerificationFileContent.length() < 100 && 
+                self.domainVerificationFileContent.startsWith(GOOGLE_SITE_VERIFICATION_PREFIX)){
+            r.setHeader(CONTENT_TYPE, "text/html; charset=UTF-8");
+            r.setTextPayload(self.domainVerificationFileContent);
+            log:printDebug("Domain verification on process");
+        } else {
+            fail error("Invalid input for domain verification");
+        }
+        check caller->respond(r);
+    }
+}

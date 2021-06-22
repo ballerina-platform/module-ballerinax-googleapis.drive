@@ -68,6 +68,12 @@ Ballerina Swan Lake Alpha 5 is required.
 
 * Domain used in the callback URL needs to be registered in google console as a verified domain.
 https://console.cloud.google.com/apis/credentials/domainverification
+(If you are running locally, provide your ngrok url as to the domain verification)
+Then you will be able to download a HTML file (e.g : google2c627a893434d90e.html). 
+Copy the content of that HTML file & provide that as a config (`domainVerificationFileContent`) to Listener initialization.
+
+* In case if you failed to verify or setup, Please refer the documentation for domain verification process 
+https://docs.google.com/document/d/119jTQ1kpgg0hpNl1kycfgnGUIsm0LVGxAvhrd5T4YIA/edit?usp=sharing
 
 # Supported versions & limitations
 
@@ -115,6 +121,7 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshUrl = drive:REFRESH_URL;
 configurable string refreshToken = ?;
+configurable string domainVerificationFileContent = ?
 
 string fileName = "<NEW_FILE_NAME>";
 
@@ -130,6 +137,7 @@ string fileName = "<NEW_FILE_NAME>";
     listen:ListenerConfiguration configuration = {
         port: 9090,
         callbackURL: callbackURL,
+        domainVerificationFileContent : domainVerificationFileContent,
         clientConfiguration: config
     };
 
@@ -159,6 +167,7 @@ public function main() returns error? {
         port: 9090,
         callbackURL: callbackURL,
         clientConfiguration: config,
+        domainVerificationFileContent : domainVerificationFileContent,
         specificFolderOrFileId : parentFolderId
     };
 ```
@@ -168,6 +177,7 @@ public function main() returns error? {
         port: 9090,
         callbackURL: callbackURL,
         clientConfiguration: config,
+        domainVerificationFileContent : domainVerificationFileContent,
         specificFolderOrFileId : parentFolderId,
         expiration : 100000
     };

@@ -24,6 +24,7 @@ string clientId = os:getEnv("CLIENT_ID");
 string clientSecret = os:getEnv("CLIENT_SECRET");
 string refreshUrl = drive:REFRESH_URL;
 string refreshToken = os:getEnv("REFRESH_TOKEN");
+string domainVerificationFileContent = os:getEnv("DOMAIN_VERIFICATION_FILE_CONTENT");
 
 drive:Configuration clientConfiguration = {clientConfig: {
         clientId: clientId,
@@ -35,7 +36,8 @@ drive:Configuration clientConfiguration = {clientConfig: {
 ListenerConfiguration congifuration = {
     port: 9090,
     callbackURL: callbackURL,
-    clientConfiguration: clientConfiguration
+    clientConfiguration: clientConfiguration,
+    domainVerificationFileContent : domainVerificationFileContent
 };
 
 listener Listener gDriveListener = new (congifuration);
