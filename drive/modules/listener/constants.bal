@@ -116,4 +116,5 @@ const string WARN_SCHEDULE = "Could not schedule subscription renewal";
 const string INFO_RETRY_CHANNEL_REGISTRATION = "Retrying to register new channel. Attempt - ";
 const string INFO_RETRY_SCHEDULE = "Retrying to schedule subscription renewal. Attempt - ";
 const string GOOGLE_SITE_VERIFICATION_PREFIX = "google-site-verification";
+const string CHANNEL_REGISTRATION_IN_PROGRESS = "Google verification on progress...";
 

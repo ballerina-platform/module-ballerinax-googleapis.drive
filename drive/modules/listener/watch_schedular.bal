@@ -51,10 +51,14 @@ class Job {
     public isolated function execute() {
         error? err = self.registerWatchChannel();
         if (err is error) {
-            log:printWarn(WARN_CHANNEL_REGISTRATION, 'error = err);
+            if (self.retryCount == 1){
+                log:printInfo(CHANNEL_REGISTRATION_IN_PROGRESS);
+            } else {
+                log:printWarn(WARN_CHANNEL_REGISTRATION, 'error = err);
+            }
             if (self.retryCount <= 10) {
                 log:printInfo(INFO_RETRY_CHANNEL_REGISTRATION + self.retryCount.toString());
-                runtime:sleep(5);
+                runtime:sleep(300);
                 self.retryCount += 1;
                 self.execute();
             } else {
