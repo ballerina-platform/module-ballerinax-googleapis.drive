@@ -27,12 +27,37 @@ import ballerina/time;
 # + domainVerificationFileContent - File content of HTML file used in domain verification.
 # + callbackURL - Callback URL registered.  
 # + clientConfiguration - Drive client connecter configuration.
+# + channelRenewalConfig - Channel renewal configuration.
+@display{label: "Listener Config"}
 public type ListenerConfiguration record {
+    @display{label: "Port"}
     int port;
+    @display{label: "Callback URL"}
     string callbackURL;
+    @display{label: "Domain Verification File Content"}
     string domainVerificationFileContent;
     Configuration clientConfiguration;
+    @display{label: "Specific Folder ID"}
     string? specificFolderOrFileId = ();
+    ChannelRenewalConfig channelRenewalConfig?;
+};
+
+# Channel Renewal Configuration
+#
+# + retryCount - Maximum number of reties allowed to renew listener channel in seconds. (default : 20s)
+# + retryInterval - Time between retries to renew listener channel in seconds. (default: 100s)  
+# + leadTime - Time prior to expiration that renewal should happen happen. (default: 180s) 
+# + domainVerificationDelay - Initial wait time for domain verification check in seconds. (default: 300s)  
+@display{label: "Channel Renewal Config"}
+public type ChannelRenewalConfig record {
+    @display{label: "Retry Count"}
+    int retryCount?;
+    @display{label: "Retry Interval"}
+    int retryInterval?;
+    @display{label: "Lead Time"}
+    int leadTime?;
+    @display{label: "Domain Verification Delay"}
+    int domainVerificationDelay?;
 };
 
 # Represents configuration parameters to create Google drive Client.
