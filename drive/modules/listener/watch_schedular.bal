@@ -39,6 +39,10 @@ class Job {
     
     private int retryCount = 1;
     private int retryScheduleCount = 1;
+    private int retryMaxCount;
+    private int retryInterval;
+    private int leadTime;
+    private int domainVerificationDelay;
 
     isolated function init(ListenerConfiguration config, drive:Client driveClient, 
                             Listener httpListener, HttpService httpService) {
@@ -46,19 +50,31 @@ class Job {
         self.driveClient = driveClient;
         self.httpListener = httpListener;
         self.httpService = httpService;
+        self.retryMaxCount = config?.channelRenewalConfig?.retryCount ?: 20;
+        self.retryInterval = config?.channelRenewalConfig?.retryInterval ?: 100;
+        self.leadTime = config?.channelRenewalConfig?.leadTime ?: 180;
+        self.domainVerificationDelay = config?.channelRenewalConfig?.domainVerificationDelay ?: 300;
     }
 
     public isolated function execute() {
         error? err = self.registerWatchChannel();
         if (err is error) {
-            log:printWarn(WARN_CHANNEL_REGISTRATION, 'error = err);
-            if (self.retryCount <= 10) {
+            if (self.retryCount == 1){
+                log:printInfo(CHANNEL_REGISTRATION_IN_PROGRESS 
+                + " Waiting for " + self.domainVerificationDelay.toString() 
+                + " seconds to check result.");
+                log:printInfo(REQUEST_DOMAIN_VERIFICATION);
+                runtime:sleep(<decimal>self.domainVerificationDelay);
+                self.retryCount += 1;
+                self.execute();
+            } 
+            else if (self.retryCount <= self.retryMaxCount) {
                 log:printInfo(INFO_RETRY_CHANNEL_REGISTRATION + self.retryCount.toString());
-                runtime:sleep(5);
+                runtime:sleep(<decimal>self.retryInterval);
                 self.retryCount += 1;
                 self.execute();
             } else {
-                panic error(ERR_CHANNEL_REGISTRATION);
+                panic error(ERR_CHANNEL_REGISTRATION, 'error = err);
             }
         } else {
             self.scheduleNextChannel();
@@ -105,9 +121,9 @@ class Job {
         error? err = self.scheduleNextChannelRenewal();
         if (err is error) {
             log:printWarn(WARN_CHANNEL_REGISTRATION, 'error = err);
-            if (self.retryScheduleCount <= 10) {
+            if (self.retryScheduleCount <= self.retryMaxCount) {
                 log:printInfo(INFO_RETRY_SCHEDULE + self.retryScheduleCount.toString());
-                runtime:sleep(5);
+                runtime:sleep(<decimal>self.retryInterval);
                 self.retryScheduleCount += 1;
                 self.scheduleNextChannel();
             } else {
@@ -118,7 +134,7 @@ class Job {
 
     isolated function scheduleNextChannelRenewal() returns error? {
         time:Utc currentUtc = time:utcNow();
-        decimal timeDifference = (self.expiration/1000) - (<decimal>currentUtc[0]) - 60;
+        decimal timeDifference = (self.expiration/1000) - (<decimal>currentUtc[0]) - <decimal>self.leadTime;
         time:Utc newTime = time:utcAddSeconds(currentUtc, timeDifference);
         time:Civil time = time:utcToCivil(newTime);
         log:printDebug("currentUtc : " + currentUtc.toString());
