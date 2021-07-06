@@ -171,7 +171,7 @@ public function main() returns error? {
         specificFolderOrFileId : parentFolderId
     };
 ```
-2. If you want to specify a custom expiration time. Specify it in the listener configuration.
+2. If you want to specify a custom retry configuration values. Specify it in the listener configuration as `channelRenewalConfig`.
 ```
     listen:ListenerConfiguration configuration = {
         port: 9090,
@@ -179,7 +179,7 @@ public function main() returns error? {
         clientConfiguration: config,
         domainVerificationFileContent : domainVerificationFileContent,
         specificFolderOrFileId : parentFolderId,
-        expiration : 100000
+        ChannelRenewalConfig channelRenewalConfig?;
     };
 ```
 
