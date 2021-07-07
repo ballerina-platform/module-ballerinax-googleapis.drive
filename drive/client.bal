@@ -37,7 +37,7 @@ public client class Client {
 
     # Retrieve file using the fileId.
     # 
-    # + fileId - ID of the file to retreive
+    # + fileId - ID of the file to retrieve
     # + fields - The paths of the fields you want included in the response. 
     # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Get File"}
@@ -54,7 +54,7 @@ public client class Client {
 
     # Download file using the fileId.
     # 
-    # + fileId - ID of the file to retreive
+    # + fileId - ID of the file to retrieve
     # + return - If successful, returns `string`. Else returns `error`
     @display {label: "Download File"}
     remote isolated function downloadFile(@display {label: "File ID"} string fileId) 
@@ -306,7 +306,7 @@ public client class Client {
     # + fileId - ID of the file to be updated
     # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
     # + fileMetadata - 'FileMetadata' can added as a payload to change metadata
-    # + return - If successful, returnsoptionalsFileMetadata `File`. Else returns `error`
+    # + return - If successful, returns `File`. Else returns `error`
     @display {label: "Update File Metadata By ID"}
     remote isolated function updateFileMetadataById(@display {label: "File ID"} string fileId, 
                                                     @display {label: "File Resource"} 

@@ -87,7 +87,7 @@ https://docs.google.com/document/d/119jTQ1kpgg0hpNl1kycfgnGUIsm0LVGxAvhrd5T4YIA/
 ## Limitations
 
 Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels. Currently, 
-Google drive connecter supports operations related to Files, Channels and Changes only. .It doesn't support admin related operations like creatin new shared drives.
+Google drive connecter supports operations related to Files, Channels and Changes only. .It doesn't support admin related operations like creating new shared drives.
 
 # Quickstart
 
@@ -171,7 +171,7 @@ public function main() returns error? {
         specificFolderOrFileId : parentFolderId
     };
 ```
-2. If you want to specify a custom expiration time. Specify it in the listener configuration.
+2. If you want to specify a custom retry configuration values. Specify it in the listener configuration as `channelRenewalConfig`.
 ```
     listen:ListenerConfiguration configuration = {
         port: 9090,
@@ -179,7 +179,7 @@ public function main() returns error? {
         clientConfiguration: config,
         domainVerificationFileContent : domainVerificationFileContent,
         specificFolderOrFileId : parentFolderId,
-        expiration : 100000
+        ChannelRenewalConfig channelRenewalConfig?;
     };
 ```
 

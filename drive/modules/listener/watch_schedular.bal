@@ -59,7 +59,7 @@ class Job {
     public isolated function execute() {
         error? err = self.registerWatchChannel();
         if (err is error) {
-            if (self.retryCount == 1){
+            if (self.retryCount == 1 && err.message().includes(ERR_UNAUTHORIZED_WEBHOOK_CHANNEL)){
                 log:printInfo(CHANNEL_REGISTRATION_IN_PROGRESS 
                 + " Waiting for " + self.domainVerificationDelay.toString() 
                 + " seconds to check result.");
@@ -67,8 +67,9 @@ class Job {
                 runtime:sleep(<decimal>self.domainVerificationDelay);
                 self.retryCount += 1;
                 self.execute();
-            } 
-            else if (self.retryCount <= self.retryMaxCount) {
+            } else if (err.message().includes(ERR_FILE_NOT_FOUND)){
+                panic error(ERR_INVALID_FILE_OR_FOLDER, 'error = err);
+            } else if (self.retryCount <= self.retryMaxCount) {
                 log:printInfo(INFO_RETRY_CHANNEL_REGISTRATION + self.retryCount.toString());
                 runtime:sleep(<decimal>self.retryInterval);
                 self.retryCount += 1;
