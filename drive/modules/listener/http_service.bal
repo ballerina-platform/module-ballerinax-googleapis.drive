@@ -82,7 +82,7 @@ service class HttpService {
 
     resource isolated function post events(http:Caller caller, http:Request request) returns @tainted error? {
         if(check request.getHeader(GOOGLE_CHANNEL_ID) != self.channelUuid){
-            fail error("Diffrent channel IDs found, Resend the watch request");
+            fail error("Different channel IDs found, Resend the watch request");
         } else {
             ChangesListResponse[] response = check getAllChangeList(self.currentToken, self.config);
             foreach ChangesListResponse item in response {

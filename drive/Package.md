@@ -111,7 +111,7 @@ refreshToken = "<refresh_token>"
 ## Limitations
 
 Google API v3 supports resource types - Files, Permissions, Changes, Replies, Revisions, Drives and Channels. Currently, 
-Google drive connecter supports operations related to Files, Channels and Changes only. .It doesn't support admin related operations like creatin new shared drives.
+Google drive connecter supports operations related to Files, Channels and Changes only. .It doesn't support admin related operations like creating new shared drives.
 
 # Quickstart
 
