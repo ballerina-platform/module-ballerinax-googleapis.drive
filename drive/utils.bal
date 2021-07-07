@@ -214,6 +214,9 @@ isolated function prepareUrlWithFileOptional(string fileId , GetFileOptional? op
         if (optional?.fields is string) {
             optionalMap[FIELDS] = optional?.fields.toString();
         }
+        if (optional?.alt is string) {
+            optionalMap[ALT] = optional?.alt.toString();
+        }
         if (optional?.includePermissionsForView is string) {
             optionalMap[INCLUDE_PERMISSIONS_FOR_VIEW] = optional?.includePermissionsForView.toString();
         }
@@ -659,6 +662,23 @@ isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteAr
         return file;
     } else {
         return error(ERR_FILE_RESPONSE, file);
+    }
+}
+
+# Utility function to retrieve File content as a binary content with its MIME type.
+# 
+# + httpClient - Drive client
+# + path - GET URI path
+# + return - `FileContent` if successful, `error` if not.
+isolated function generateRecordFileContent(http:Client httpClient, string path) returns @tainted FileContent|error {
+    http:Response response = <http:Response> check httpClient->get(<@untainted>path);
+    if (response.statusCode == http:STATUS_OK) {
+        return {
+            content: check response.getBinaryPayload(),
+            mimeType: response.getContentType()
+        }; 
+    } else {
+        fail error(check response.getTextPayload());
     }
 }
 

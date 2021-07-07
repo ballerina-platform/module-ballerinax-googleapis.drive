@@ -73,6 +73,8 @@ const string JSON_ACCESSING_ERROR_MSG = "Error occurred while accessing the JSON
 // Optional Query Parameters
 const string ACKKNOWLEDGE_ABUSE = "acknowledgeAbuse";
 const string FIELDS = "fields";
+const string ALT = "alt";
+const string MEDIA = "media";
 const string INCLUDE_PERMISSIONS_FOR_VIEW = "includePermissionsForView";
 const string SUPPORTS_ALL_DRIVES = "supportsAllDrives";
 const string IGNORE_DEFAULT_VISIBILITY = "ignoreDefaultVisibility";
