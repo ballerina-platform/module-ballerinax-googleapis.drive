@@ -69,10 +69,13 @@ const string ERR_JSON_TO_STRING_CONVERSION = "Unable to convert from JSON to str
 const string HTTP_ERROR_MSG = "Error occurred while getting the HTTP response : ";
 const string ERR_EXTRACTING_ERROR_MSG = "Error occured while extracting errors from payload.";
 const string JSON_ACCESSING_ERROR_MSG = "Error occurred while accessing the JSON payload of the response.";
+const string ERR_EXTRACTING_BINARY_PAYLOAD = "Error occurred while extracting the binary payload.";
 
 // Optional Query Parameters
 const string ACKKNOWLEDGE_ABUSE = "acknowledgeAbuse";
 const string FIELDS = "fields";
+const string ALT = "alt";
+const string MEDIA = "media";
 const string INCLUDE_PERMISSIONS_FOR_VIEW = "includePermissionsForView";
 const string SUPPORTS_ALL_DRIVES = "supportsAllDrives";
 const string IGNORE_DEFAULT_VISIBILITY = "ignoreDefaultVisibility";

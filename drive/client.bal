@@ -52,6 +52,18 @@ public client class Client {
         return getFileById(self.httpClient, fileId, optional);
     }
 
+    # Retrieve file content using the fileId.
+    # 
+    # + fileId - Id of the file to retrieve file content
+    # + return - If successful, returns `FileContent`. Else returns `error`
+    @display {label: "Get File Content"}
+    remote isolated function getFileContent(@display {label: "File ID"} string fileId) returns FileContent|error {
+        GetFileOptional optional = {};
+        optional.supportsAllDrives = true;
+        optional.alt = MEDIA;
+        return check generateRecordFileContent(self.httpClient, prepareUrlWithFileOptional(fileId, optional));
+    }
+
     # Download file using the fileId.
     # 
     # + fileId - ID of the file to retreive
