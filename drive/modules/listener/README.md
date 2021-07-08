@@ -193,15 +193,12 @@ listener listen:Listener gDrivelistener = new (configuration);
 
 service / on gDrivelistener {
     remote function onFileCreate(listen:Change event) returns error? {
-        // Write your logic here.....
-        log:printInfo("Received onFileCreate event ", eventMsg = event);
         _ = @strand { thread: "any" } start userLogic(event);
     }
 }
 
 function userLogic(listen:Change event) returns error? {
     // Write your logic here
-    log:printInfo("Received onFileCreate event", eventMsg = event);
 }
 ```
 
