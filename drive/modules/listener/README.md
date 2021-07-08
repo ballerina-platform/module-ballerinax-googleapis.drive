@@ -182,6 +182,25 @@ public function main() returns error? {
         ChannelRenewalConfig channelRenewalConfig?;
     };
 ```
+> **NOTE:**
+At user function implementation if there was an error we throw it up & the http client will return status 500 error. 
+If no any error occurred & the user logic is executed successfully we respond with status 200 OK. 
+If the user logic in listener remote operations include heavy processing, the user may face http timeout issues. 
+To solve this issue, user must use asynchronous processing when it includes heavy processing.
+
+```ballerina
+listener listen:Listener gDrivelistener = new (configuration);
+
+service / on gDrivelistener {
+    remote function onFileCreate(listen:Change event) returns error? {
+        _ = @strand { thread: "any" } start userLogic(event);
+    }
+}
+
+function userLogic(listen:Change event) returns error? {
+    // Write your logic here
+}
+```
 
 ## Sample logs
 
