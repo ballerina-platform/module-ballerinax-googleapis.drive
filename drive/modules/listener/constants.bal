@@ -109,7 +109,7 @@ const string ERR_CHANNEL_REGISTRATION = "Unable to register new channel.";
 const string ERR_SCHEDULE = "Unable to schedule subscription renewal.";
 const string ERR_UNAUTHORIZED_WEBHOOK_CHANNEL = "Unauthorized WebHook callback channel";
 const string ERR_FILE_NOT_FOUND ="File not found";
-const string ERR_INVALID_FILE_OR_FOLDER ="Invalid folder or file !!";
+const string ERR_INVALID_FILE_OR_FOLDER ="Cannot register watch to file or folder specified";
 
 // Warn constants
 const string WARN_CHANNEL_REGISTRATION = "Could not register watch channel";
