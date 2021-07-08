@@ -396,14 +396,16 @@ public type FilesResponse record {
 #                      This is only applicable when alt=media. (Default: false)  
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
 #                               Only 'published' is supported. 
+# + alt -  If you provide the URL parameter alt=media, then the response includes the file contents in the response body. 
 # + fields - The paths of the fields you want included in the response. 
 #            If not specified, the response includes a default set of fields specific to this method. For development 
 #            you can use the special value * to return all fields, but you'll achieve greater performance by only 
 #            selecting the fields you need  
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
-public type GetFileOptional record {
+type GetFileOptional record {
     boolean acknowledgeAbuse?;
     string fields?;
+    string alt?;
     string includePermissionsForView?;
     boolean? supportsAllDrives = true;
 };
@@ -412,7 +414,7 @@ public type GetFileOptional record {
 # Permanently deletes a file owned by the user without moving it to the trash. 
 #
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
-public type DeleteFileOptional record {
+type DeleteFileOptional record {
     boolean? supportsAllDrives = true;
 };
 
@@ -436,7 +438,7 @@ public type DeleteFileOptional record {
 #            specific to this method. For development you can use the special value * to return all fields, 
 #            but you'll achieve greater performance by only selecting the fields you need   
 # + supportsAllDrives -   Whether the requesting application supports both My Drives and shared drives.(Default: false)
-public type CopyFileOptional record {
+type CopyFileOptional record {
     string fields?;
     boolean ignoreDefaultVisibility?;
     string includePermissionsForView?;
@@ -463,7 +465,7 @@ public type CopyFileOptional record {
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
 #                               Only 'published' is supported. 
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)
-public type CreateFileOptional record {
+type CreateFileOptional record {
     never uploadType?; 
     boolean ignoreDefaultVisibility?;
     string includePermissionsForView?; 
@@ -487,7 +489,7 @@ public type CreateFileOptional record {
 # + addParents - A comma-separated list of parent IDs to add.
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 @display {label: "File Metadata"}
-public type UpdateFileMetadataOptional record {
+type UpdateFileMetadataOptional record {
     @display {label: "Add Parents"}
     string addParents?; 
     @display {label: "Include Permissions for View"}
@@ -693,7 +695,7 @@ public type PermissionDetails record {
 # + fields - The paths of the fields you want included in the response
 #            If not specified, the response includes a default set of fields specific to this method.
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false) 
-public type ListFilesOptional record {
+type ListFilesOptional record {
     string corpora?; 
     string driveId?;
     string fields?; 
@@ -744,3 +746,11 @@ public enum MimeTypes {
     VIDEO = "application/vnd.google-apps.video"
 }
  
+# File content record.
+#
+# + content - A `byte[]` which represents the content of a file
+# + mimeType - The MIME type for the file
+public type FileContent record {
+    byte[] content;
+    string mimeType;
+};

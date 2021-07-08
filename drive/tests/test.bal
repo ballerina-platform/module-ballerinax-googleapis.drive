@@ -70,6 +70,25 @@ function testGetFileById() {
     }
 }
 
+#########################
+# Get File Content By Id
+# #######################
+
+@test:Config {
+    dependsOn: [testCreateFile]
+}
+function testGetFileContentById() {
+    log:printInfo("Gdrive Client -> testGetFileContentById()");
+    FileContent|error response = driveClient->getFileContent(fileId);
+    if (response is FileContent) {
+        log:printInfo(response.toString());
+    } 
+    else {
+        test:assertFail(response.message());
+        log:printError(response.message());
+    }
+}
+
 #######################
 # Delete File by ID
 # #####################

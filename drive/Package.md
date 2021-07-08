@@ -204,6 +204,10 @@ Configuration config = {
 ```ballerina
     File|error response = driveClient->getFile(fileId);
 ```
+### Get file content by id
+```ballerina
+    FileContent|error response = driveClient->getFileContent(fileId);
+```
 ### Copy File
 ```ballerina
     File|error response = driveClient->copyFile(sourceFileId);
