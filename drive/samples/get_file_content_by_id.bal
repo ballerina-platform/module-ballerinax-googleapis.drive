@@ -26,7 +26,7 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
 
 ###################################################################################
-# Get files by ID
+# Get file content by ID
 # ################################################################################
 # More details : https://developers.google.com/drive/api/v3/reference/files/get
 # #################################################################################
@@ -41,12 +41,11 @@ public function main() {
         }
     };
     drive:Client driveClient = checkpanic new (config);
-    drive:File | error testGetFile = driveClient->getFile(fileId);
-    //Print file ID
-    if(testGetFile is drive:File){
-        string id = testGetFile?.id.toString();
-        log:printInfo(id);
-    } else {
-        log:printError(testGetFile.message());
+    drive:FileContent|error response = driveClient->getFileContent(fileId);
+    if (response is drive:FileContent) {
+        log:printInfo(response.toString());
+    } 
+    else {
+        log:printError(response.message());
     }
 }
