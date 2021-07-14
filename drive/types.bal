@@ -16,10 +16,10 @@
 
 import ballerina/http;
 
-# Represents configuration parameters to create Google drive Client.
+# Represents configuration parameters to create Google Drive client.
 #
-# + secureSocketConfig - Represents OAuth2 direct token configurations for OAuth2 authentication 
-# + clientConfig - Provides configurations for facilitating secure communication with a remote HTTP endpoint  
+# + clientConfig - Represents OAuth2 configurations
+# + secureSocketConfig - Provides configurations for facilitating secure communication with a remote HTTP endpoint  
 @display{label: "Connection Config"}
 public type Configuration record {
     @display{label: "Auth Config"}
@@ -28,19 +28,19 @@ public type Configuration record {
     http:ClientSecureSocket secureSocketConfig?;
 };
 
-# Drive Info Record Type
+# Represents drive information.
 #
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#about".  
-# + user - The authenticated user.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#about"
+# + user - The authenticated user
 # + storageQuota - The user's storage quota limits and usage. All fields are measured in bytes
-# + importFormats - A map of source MIME type to possible targets for all supported imports.
-# + exportFormats - A map of source MIME type to possible targets for all supported exports.
-# + maxImportSizes - A map of maximum import sizes by MIME type, in bytes.
-# + maxUploadSize - The maximum upload size in bytes.
-# + appInstalled - Whether the user has installed the requesting app.
-# + folderColorPalette - The currently supported folder colors as RGB hex strings.
-# + driveThemes - A list of themes that are supported for shared drives.
-# + canCreateDrives - Whether the user can create shared drives.
+# + importFormats - A map of source MIME type to possible targets for all supported imports
+# + exportFormats - A map of source MIME type to possible targets for all supported exports
+# + maxImportSizes - A map of maximum import sizes by MIME type, in bytes
+# + maxUploadSize - The maximum upload size in bytes
+# + appInstalled - Whether the user has installed the requesting app
+# + folderColorPalette - The currently supported folder colors as RGB hex strings
+# + driveThemes - A list of themes that are supported for shared drives
+# + canCreateDrives - Indicates whether the user can create shared drives
 @display {label: "About"}
 public type About record {
     string kind?;
@@ -56,41 +56,41 @@ public type About record {
     boolean canCreateDrives?;
 };
 
-# File Record Type
+# Represents File.
 @display {label: "File"}
 public type File record {
     *FileMetadata;
     *GeneratedFileMetadata;
 };
 
-# File Metadata Record Type
+# Represents file metadata.
 #
-# + name - The name of the file. This is not necessarily unique within a folder. 
-#          Note that for immutable items such as the top level folders of shared drives, My Drive root folder, and 
-#          Application Data folder the name is constant. 
-# + mimeType - The MIME type of the file.Google Drive will attempt to automatically detect an appropriate value. 
-#              from uploaded content if no value is provided.  The value cannot be changed unless a new revision 
-#              is uploaded.
+# + name - The name of the file. This is not necessarily unique within a folder.
+#          Note that the name is constant for immutable items such as the top level folders of shared drives, 
+#          `My Drive` root folder, and the `Application Data` folder
+# + mimeType - The MIME (Multipurpose Internet Mail Extensions) type of file. If no value is provided, 
+#              Google Drive attempts to automatically detect an appropriate value from uploaded content. 
+#              The value cannot be changed unless a new revision is uploaded.
 #              If a file is created with a Google Doc MIME type, the uploaded content will be imported if possible. 
-#              The supported import formats are published in the About resource.
+#              The supported import formats are published in the `About` resource
 # + description - A short description of the file
-# + starred - Whether the user has starred the file. 
+# + starred - Whether the user has starred the file
 # + trashed - Whether the file has been trashed, either explicitly or from a trashed parent folder. Only the owner may 
 #             trash a file. The trashed item is excluded from all files.
-#             list responses returned for any user who does not own the file. 
-#             However, all users with access to the file can see the trashed item metadata in an API response. 
-#             All users with access can copy, download, export, and share the file.  
-# + folderColorRgb - The color for a folder as an RGB hex string.
-# + appProperties - A collection of arbitrary key-value pairs which are private to the requesting app.  
+#             list responses returned for any user who does not own the file.
+#             However, all users with access to the file can see the trashed item metadata in an API response.
+#             All users with access can copy, download, export, and share the file
+# + folderColorRgb - The color for a folder as an RGB hex string
+# + appProperties - A collection of arbitrary key-value pairs which are private to the requesting app
 # + contentHints - Additional information about the content of the file. These fields are never populated in responses.
 # + copyRequiresWriterPermission - Whether the options to copy, print, or download this file, should be disabled for 
 #                                  readers and commenters 
 # + modifiedTime - The last time the file was modified by anyone (RFC 3339 date-time)  
-# + properties - A collection of arbitrary key-value pairs which are visible to all apps.  
+# + properties - A collection of arbitrary key-value pairs which are visible to all apps
 # + originalFilename - The original filename of the uploaded content if available, or else the original value of the 
-#                      name field. This is only available for files with binary content in Google Drive.
-# + viewedByMeTime - The last time the file was viewed by the user (RFC 3339 date-time). 
-# + writersCanShare - Whether users with only writer permission can modify the file's permissions. 
+#                      name field. This is only available for files with binary content in Google Drive
+# + viewedByMeTime - The last time the file was viewed by the user (RFC 3339 date-time)
+# + writersCanShare - Whether users with only writer permission can modify the file's permissions
 @display {label: "File Metadata"}
 public type FileMetadata record {
     @display{label: "File Name"} 
@@ -123,76 +123,76 @@ public type FileMetadata record {
     boolean writersCanShare?;
 };
 
-# GeneratedFileMetadata Record Type
+# Represents generated file metadata
 #
-# + id - The ID of the file/folder.
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#file". 
+# + id - The ID of the file/folder
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#file"
 # + owners - The owners of the file. Currently, only certain legacy files may have more than one owner. Not populated 
-#            for items in shared drives.    
+#            for items in shared drives 
 # + contentRestrictions - Restrictions for accessing the content of the file. Only populated if such a restriction 
-#                         exists.
+#                         exists
 # + version - A monotonically increasing version number for the file. This reflects every change made to the file on 
-#             the server, even those not visible to the user.  
-# + iconLink - A static, unauthenticated link to the file's icon.  
+#             the server, even those not visible to the user
+# + iconLink - A static, unauthenticated link to the file's icon
 # + permissions - The full list of permissions for the file. This is only available if the requesting user can share 
-#                 the file.  Not populated for items in shared drives.   
-# + isAppAuthorized - Whether the file was created or opened by the requesting app.  
-# + createdTime - The time at which the file was created (RFC 3339 date-time).    
-# + sharedWithMeTime - The time at which the file was shared with the user, if applicable (RFC 3339 date-time).  
-#                     Not populated for items in shared drives.   
-# + webViewLink - A link for opening the file in a relevant Google editor or viewer in a browser. 
-# + ownedByMe - Whether the user owns the file. Not populated for items in shared drives.  
+#                 the file.  Not populated for items in shared drives
+# + isAppAuthorized - Whether the file was created or opened by the requesting app
+# + createdTime - The time at which the file was created (RFC 3339 date-time)
+# + sharedWithMeTime - The time at which the file was shared with the user, if applicable (RFC 3339 date-time).
+#                     Not populated for items in shared drives
+# + webViewLink - A link for opening the file in a relevant Google editor or viewer in a browser
+# + ownedByMe - Whether the user owns the file. Not populated for items in shared drives
 # + explicitlyTrashed - Whether the file has been explicitly trashed, 
-#                       as opposed to recursively trashed from a parent folder.  
-# + trashedTime - The time that the item was trashed (RFC 3339 date-time). Only populated for items in shared drives.  
-# + viewedByMe - Whether the file has been viewed by this user.  
+#                       as opposed to recursively trashed from a parent folder
+# + trashedTime - The time that the item was trashed (RFC 3339 date-time). Only populated for items in shared drives  
+# + viewedByMe - Whether the file has been viewed by this user
 # + driveId - ID of the shared drive the file resides in. Only populated for items in shared drives  
 # + size - The size of the file's content in bytes. 
-#          This is applicable to binary files in Google Drive and Google Docs files.    
+#          This is applicable to binary files in Google Drive and Google Docs files    
 # + spaces - The list of spaces which contain the file. The currently supported values are 'drive', 
-#            'appDataFolder' and 'photos'.  
-# + imageMediaMetadata - Additional metadata about image media, if available. 
+#            'appDataFolder' and 'photos'
+# + imageMediaMetadata - Additional metadata about image media, if available
 # + parents - The IDs of the parent folders which contain the file. If not specified as part of a create request, 
 #             the file will be placed directly in the user's My Drive folder. 
 #             If not specified as part of a copy request, 
-#             the file will inherit any discoverable parents of the source file. 
+#             the file will inherit any discoverable parents of the source file
 #             Update requests must use the addParents and removeParents parameters to modify the parents list. 
 # + headRevisionId - The ID of the file's head revision. This is currently only available for files with binary content 
-#                    in Google Drive.  
-# + modifiedByMeTime - The last time the file was modified by the user (RFC 3339 date-time). 
-# + modifiedByMe - Whether the file has been modified by this user.
-# + shared - Whether the file has been shared. Not populated for items in shared drives.  
+#                    in Google Drive
+# + modifiedByMeTime - The last time the file was modified by the user (RFC 3339 date-time)
+# + modifiedByMe - Whether the file has been modified by this user
+# + shared - Whether the file has been shared. Not populated for items in shared drives 
 # + hasAugmentedPermissions - Whether there are permissions directly on this file. 
-#                             This field is only populated for items in shared drives.    
+#                             This field is only populated for items in shared drives   
 # + trashingUser - If the file has been explicitly trashed, the user who trashed it. Only populated for items in shared 
-#                  drives.  
+#                  drives
 # + thumbnailLink - A short-lived link to the file's thumbnail, if available. Typically lasts on the order of hours. 
 #                   Only populated when the requesting app can access the file's content. 
 #                   If the file isn't shared publicly, the URL returned in Files.thumbnailLink must be fetched using 
-#                   a credentialed request.  
-# + permissionIds - List of permission IDs for users with access to this file.  
+#                   a credentialed request
+# + permissionIds - List of permission IDs for users with access to this file
 # + quotaBytesUsed - The number of storage quota bytes used by the file.  This includes the head revision as well as 
-#                    previous revisions with keepForever enabled.  
-# + lastModifyingUser - The last user to modify the file.  
+#                    previous revisions with keepForever enabled 
+# + lastModifyingUser - The last user to modify the file
 # + md5Checksum - The MD5 checksum for the content of the file. This is only applicable to files with binary content
-#                 in Google Drive.  
+#                 in Google Drive
 # + fileExtension - The final component of fullFileExtension. This is only available for files with binary content 
-#                   in Google Drive.  
+#                   in Google Drive
 # + fullFileExtension - The full file extension extracted from the name field.  May contain multiple concatenated 
 #                       extensions, such as "tar.gz".This is only available for files with binary content in Google 
-#                       Drive.  
+#                       Drive
 # + webContentLink - A link for downloading the content of the file in a browser. This is only available for files with 
-#                    binary content in Google Drive.  
+#                    binary content in Google Drive
 # + shortcutDetails - Shortcut file details.Only populated for shortcut files, which have the mimeType field set to 
 #                     application/vnd.google-apps.shortcut  
 # + hasThumbnail - Whether this file has a thumbnail. This does not indicate whether the requesting app has access 
-#                  to the thumbnail.To check access,look for the presence of the thumbnailLink field.  
+#                  to the thumbnail.To check access,look for the presence of the thumbnailLink field
 # + capabilities - Capabilities the current user has on this file.  Each capability corresponds to a fine-grained 
-#                  action that a user may take.  
-# + videoMediaMetadata - Additional metadata about video media. This may not be available immediately upon upload.  
-# + thumbnailVersion - The thumbnail version for use in thumbnail cache invalidation.  
-# + exportLinks - Links for exporting Docs Editors files to specific formats.  
-# + sharingUser - The user who shared the file with the requesting user, if applicable.  
+#                  action that a user may take
+# + videoMediaMetadata - Additional metadata about video media. This may not be available immediately upon upload 
+# + thumbnailVersion - The thumbnail version for use in thumbnail cache invalidation
+# + exportLinks - Links for exporting Docs Editors files to specific formats
+# + sharingUser - The user who shared the file with the requesting user, if applicable
 public type GeneratedFileMetadata record {
     string id?;
     string kind?;
@@ -237,17 +237,17 @@ public type GeneratedFileMetadata record {
     ContentRestrictions contentRestrictions?;
 };
  
-# Record Type to accpet string values  
+# Record Type to accpet string values.  
 public type StringKeyValuePairs record {|
     string...;
 |};
 
-# Record Type to accept string[] values
+# Record Type to accept string[] values.
 public type StringArrayValuePairs record {|
     string[]...;
 |};
 
-# Record Type to accept float values  
+# Record Type to accept float values.
 public type StorageQuota record {|
     float...;
 |};
@@ -255,13 +255,13 @@ public type StorageQuota record {|
 # Restrictions for accessing the content of the file. Only populated if such a restriction exists.
 #
 # + reason - Reason for why the content of the file is restricted. This is only mutable on requests that also 
-#            set readOnly=true.  
+#            set readOnly=true
 # + readOnly - Whether the content of the file is read-only. If a file is read-only, a new revision of the file may not 
-#              be added,comments may not be added or modified, and the title of the file may not be modified.  
-# + restrictionTime - The time at which the content restriction was set (formatted RFC 3339 timestamp). 
-#                     Only populated if readOnly is true.  
-# + type - The type of the content restriction. Currently the only possible value is globalContentRestriction.  
-# + restrictingUser - The user who set the content restriction. Only populated if readOnly is true.  
+#              be added,comments may not be added or modified, and the title of the file may not be modified
+# + restrictionTime - The time at which the content restriction was set (formatted RFC 3339 timestamp)
+#                     Only populated if readOnly is true
+# + type - The type of the content restriction. Currently the only possible value is globalContentRestriction
+# + restrictingUser - The user who set the content restriction. Only populated if readOnly is true
 public type ContentRestrictions record {
     boolean readOnly;
     string reason;
@@ -273,9 +273,9 @@ public type ContentRestrictions record {
 # Shortcut file details. Only populated for shortcut files, 
 # which have the mimeType field set to application/vnd.google-apps.shortcut.
 #
-# + targetId - The ID of the file that this shortcut points to.  
+# + targetId - The ID of the file that this shortcut points to 
 # + targetMimeType - The MIME type of the file that this shortcut points to. The value of this field is a snapshot of 
-#                    the target's MIME type, captured when the shortcut is created.  
+#                    the target's MIME type, captured when the shortcut is created
 public type ShortcutDetails record {
     string targetId;
     string targetMimeType;
@@ -284,37 +284,37 @@ public type ShortcutDetails record {
 # Additional metadata about video media. This may not be available immediately upon upload.
 #
 # + width - The width of the video in pixelsn  
-# + durationMillis - The duration of the video in milliseconds.  
-# + height - The height of the video in pixels.  
+# + durationMillis - The duration of the video in milliseconds
+# + height - The height of the video in pixels
 public type VideoMediaMetadata record {
     int width;
     int height;
     float durationMillis;
 };
 
-# Additional metadata about image media, if available.
+# Additional metadata about image media, if available
 #
-# + meteringMode - The metering mode used to create the photo. 
-# + exposureTime - The length of the exposure, in seconds.
+# + meteringMode - The metering mode used to create the photo
+# + exposureTime - The length of the exposure in seconds
 # + whiteBalance - The white balance mode used to create the photo
-# + rotation - The number of clockwise 90 degree rotations applied from the image's original orientation. 
-# + maxApertureValue - The smallest f-number of the lens at the focal length used to create the photo (APEX value).
-# + lens - The lens used to create the photo.
+# + rotation - The number of clockwise 90 degree rotations applied from the image's original orientation
+# + maxApertureValue - The smallest f-number of the lens at the focal length used to create the photo (APEX value)
+# + lens - The lens used to create the photo
 # + exposureBias - The exposure bias of the photo (APEX value)
 # + colorSpace - The color space of the photo
-# + aperture - The aperture used to create the photo (f-number).
-# + flashUsed - Whether a flash was used to create the photo. 
-# + subjectDistance - The distance to the subject of the photo, in meters.
-# + width - The width of the video in pixels.  
-# + cameraModel - The model of the camera used to create the photo. 	
-# + location - Geographic location information stored in the image.
-# + isoSpeed - The ISO speed used to create the photo.  
+# + aperture - The aperture used to create the photo (f-number)
+# + flashUsed - Whether a flash was used to create the photo
+# + subjectDistance - The distance to the subject of the photo, in meters
+# + width - The width of the video in pixels
+# + cameraModel - The model of the camera used to create the photo	
+# + location - Geographic location information stored in the image
+# + isoSpeed - The ISO speed used to create the photo
 # + sensor - The type of sensor used to create the photo
-# + time - The date and time the photo was taken (EXIF DateTime). 
-# + cameraMake - The make of the camera used to create the photo.
-# + exposureMode - The length of the exposure, in seconds.
-# + height - The height of the image in pixels.
-# + focalLength - The focal length used to create the photo, in millimeters.
+# + time - The date and time the photo was taken (EXIF DateTime)
+# + cameraMake - The make of the camera used to create the photo
+# + exposureMode - The length of the exposure, in seconds
+# + height - The height of the image in pixels
+# + focalLength - The focal length used to create the photo, in millimeters
 public type ImageMediaMetadata record {
     int width;
     int height;
@@ -341,9 +341,9 @@ public type ImageMediaMetadata record {
 
 # Geographic location information stored in the image.
 #
-# + altitude - The altitude stored in the image.  
-# + latitude - The latitude stored in the image  
-# + longitude - The longitude stored in the image.  
+# + altitude - The altitude stored in the image
+# + latitude - The latitude stored in the image
+# + longitude - The longitude stored in the image
 public type Location record {
     float latitude; 
     float longitude; 
@@ -352,9 +352,9 @@ public type Location record {
 
 # Additional information about the content of the file. These fields are never populated in responses.
 #
-# + thumbnail - A thumbnail for the file. This will only be used if Google Drive cannot generate a standard thumbnail.  
-# + indexableText - Text to be indexed for the file to improve fullText queries. 
-#                   This is limited to 128KB in length and may contain HTML elements.  
+# + thumbnail - A thumbnail for the file. This will only be used if Google Drive cannot generate a standard thumbnail
+# + indexableText - Text to be indexed for the file to improve fullText queries.
+#                   This is limited to 128KB in length and may contain HTML elements
 public type ContentHints record {
     Thumbnail thumbnail;
     string indexableText;
@@ -362,21 +362,21 @@ public type ContentHints record {
 
 # A thumbnail for the file. This will only be used if Google Drive cannot generate a standard thumbnail.
 #
-# + image - The thumbnail data encoded with URL-safe Base64 (RFC 4648 section 5). 
-# + mimeType - The MIME type of the thumbnail.  
+# + image - The thumbnail data encoded with URL-safe Base64 (RFC 4648 section 5)
+# + mimeType - The MIME type of the thumbnail
 public type Thumbnail record {
     byte image;
     string mimeType;
 };
 
-# Response from File search 
+# Response from file search 
 #
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#fileList".
-# + nextPageToken - The page token for the next page of files. 
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#fileList"
+# + nextPageToken - The page token for the next page of files.
 #                   This will be absent if the end of the files list has been reached.
 #                   If the token is rejected for any reason, it should be discarded, 
-#                   and pagination should be restarted from the first page of results  
-# + files - The list of files. 
+#                   and pagination should be restarted from the first page of results
+# + files - The list of files.
 #           If nextPageToken is populated, 
 #           then this list may be incomplete and an additional page of results should be fetched. 
 # + incompleteSearch - Whether the search process was incomplete. If true, then some search results may be missing, 
@@ -390,13 +390,13 @@ public type FilesResponse record {
     File[] files;
 };
 
-# Optional Query Parameters in GET files.
+# Optional query parameters in get files.
 #
 # + acknowledgeAbuse - Whether the user is acknowledging the risk of downloading known malware or other abusive files. 
 #                      This is only applicable when alt=media. (Default: false)  
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
-#                               Only 'published' is supported. 
-# + alt -  If you provide the URL parameter alt=media, then the response includes the file contents in the response body. 
+#                               Only 'published' is supported
+# + alt -  If you provide the URL parameter alt=media, then the response includes the file contents in the response body
 # + fields - The paths of the fields you want included in the response. 
 #            If not specified, the response includes a default set of fields specific to this method. For development 
 #            you can use the special value * to return all fields, but you'll achieve greater performance by only 
@@ -410,7 +410,7 @@ type GetFileOptional record {
     boolean? supportsAllDrives = true;
 };
 
-# Optional Query Parameters in DELETE files
+# Optional query parameters in delete files.
 # Permanently deletes a file owned by the user without moving it to the trash. 
 #
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
@@ -418,10 +418,10 @@ type DeleteFileOptional record {
     boolean? supportsAllDrives = true;
 };
 
-# Optional Query Parameters in COPY files
+# Optional query parameters in copy files.
 # Creates a copy of a file and applies any requested updates with patch semantics. Folders cannot be copied.
 #
-# + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
+# + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code)
 # + keepRevisionForever -  Whether to set the 'keepForever' field in the new head revision. 
 #                          This is only applicable to files with binary content in Google Drive. 
 #                          Only 200 revisions for the file can be kept forever. If the limit is reached,
@@ -432,7 +432,7 @@ type DeleteFileOptional record {
 #                             this parameter bypasses that behavior for the request. 
 #                             Permissions are still inherited from parent folders. (Default: false) 
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
-#                               Only 'published' is supported. 
+#                               Only 'published' is supported
 # + fields - The paths of the fields you want included in the response. 
 #            If not specified, the response includes a default set of fields 
 #            specific to this method. For development you can use the special value * to return all fields, 
@@ -447,7 +447,7 @@ type CopyFileOptional record {
     boolean supportsAllDrives;
 };
 
-# Optional Query Parameters in Create files
+# Optional query parameters in create files.
 #
 # + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
 # + keepRevisionForever - Whether to set the 'keepForever' field in the new head revision. 
@@ -463,7 +463,7 @@ type CopyFileOptional record {
 # + uploadType - The type of upload request to the /upload URI. If you are uploading data (using an /upload URI), 
 #                More details : https://developers.google.com/drive/api/v3/reference/files/create
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
-#                               Only 'published' is supported. 
+#                               Only 'published' is supported 
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)
 type CreateFileOptional record {
     never uploadType?; 
@@ -475,18 +475,18 @@ type CreateFileOptional record {
     boolean useContentAsIndexableText?; 
 };
 
-# Update file optional parameters
+# Update file optional parameters.
 #
-# + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code).
-# + removeParents - A comma-separated list of parent IDs to remove. 
+# + ocrLanguage - A language hint for OCR processing during image import (ISO 639-1 code)
+# + removeParents - A comma-separated list of parent IDs to remove
 # + keepRevisionForever - Whether to set the 'keepForever' field in the new head revision. 
 #                         This is only applicable to files with binary content in Google Drive. 
 #                         Only 200 revisions for the file can be kept forever. If the limit is reached,
 #                         try deleting pinned revisions. (Default: false)
 # + useContentAsIndexableText - Whether to use the uploaded content as indexable text. (Default: false)
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
-#                               Only 'published' is supported.
-# + addParents - A comma-separated list of parent IDs to add.
+#                               Only 'published' is supported
+# + addParents - A comma-separated list of parent IDs to add
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 @display {label: "File Metadata"}
 type UpdateFileMetadataOptional record {
@@ -506,15 +506,15 @@ type UpdateFileMetadataOptional record {
     boolean useContentAsIndexableText?; 
 };
 
-# User Record
+# Represents User.
 #
-# + permissionId - The user's ID as visible in Permission resources.  
+# + permissionId - The user's ID as visible in Permission resources  
 # + emailAddress - The email address of the user. This may not be present in certain contexts if the user has not made. 
-#                   their email address visible to the requester.
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#user". 
-# + displayName - A plain text displayable name for this user.
-# + me - Whether this user is the requesting user. 
-# + photoLink - A link to the user's profile photo, if available.
+#                   their email address visible to the requester
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#user".
+# + displayName - A plain text displayable name for this user
+# + me - Whether this user is the requesting user 
+# + photoLink - A link to the user's profile photo, if available
 public type User record {
     string kind?;
     string displayName?;
@@ -529,61 +529,61 @@ public type User record {
 #
 # + canReadRevisions - Whether the current user can read the revisions resource of this file. For a shared drive item, 
 #                      whether revisions of non-folder descendants of this item, 
-#                        or this item itself if it is not a folder, can be read.
+#                        or this item itself if it is not a folder, can be read
 # + canMoveItemOutOfDrive - Whether the current user can move this item outside of this drive by changing its parent. 
 #                           Note that a request to change the parent of the item may still fail depending on the new 
-#                           parent that is being added.
+#                           parent that is being added
 # + canEdit - Whether the current user can edit this file. 
 #             Other factors may limit the type of changes a user can make to a file. 
-#             For example, see canChangeCopyRequiresWriterPermission or canModifyContent.
-# + canRename - Whether the current user can rename this file.
+#             For example, see canChangeCopyRequiresWriterPermission or canModifyContent
+# + canRename - Whether the current user can rename this file
 # + canAddMyDriveParent - Whether the current user can add a parent for the item without removing 
 #                         an existing parent in the same request. 
-#                         Not populated for shared drive files. 
+#                         Not populated for shared drive files
 # + canTrashChildren - Whether the current user can trash children of this folder. 
 #                      This is false when the item is not a folder. 
-#                      Only populated for items in shared drives. 
+#                      Only populated for items in shared drives
 # + canAddChildren - Whether the current user can add children to this folder. 
-#                    This is always false when the item is not a folder. 
+#                    This is always false when the item is not a folder
 # + canListChildren -  Whether the current user can list the children of this folder. 
-#                      This is always false when the item is not a folder.
-# + canTrash - Whether the current user can move this file to trash.  
+#                      This is always false when the item is not a folder
+# + canTrash - Whether the current user can move this file to trash
 # + canRemoveMyDriveParent - Whether the current user can remove a parent from the item without adding 
 #                            another parent in the same request. 
-#                            Not populated for shared drive files. 
+#                            Not populated for shared drive files
 # + canCopy - Whether the current user can copy this file. For an item in a shared drive, 
 #             whether the current user can copy non-folder 
-#             descendants of this item, or this item itself if it is not a folder.
-# + canDownload - Whether the current user can download this file.
-# + canDelete - Whether the current user can delete this file. 
+#             descendants of this item, or this item itself if it is not a folder
+# + canDownload - Whether the current user can download this file
+# + canDelete - Whether the current user can delete this file
 # + canAddFolderFromAnotherDrive - Whether the current user can add a folder from 
 #                                  another drive (different shared drive or My Drive) to this folder. 
 #                                  This is false when the item is not a folder. Only populated for items 
-#                                  in shared drives. 
-# + canComment - Whether the current user can comment on this file.  
-# + canUntrash - Whether the current user can restore this file from trash.   
+#                                  in shared drives
+# + canComment - Whether the current user can comment on this file
+# + canUntrash - Whether the current user can restore this file from trash
 # + canMoveChildrenWithinDrive - Whether the current user can move children of this folder within this drive. 
 #                                This is false when the item is not a folder. 
 #                                Note that a request to move the child may still fail depending on the 
 #                                current user's access to the child and to the destination folder
 # + canModifyContentRestriction - Whether the current user can modify restrictions on content of this file  
 # + canChangeCopyRequiresWriterPermission - Whether the current user can change the copyRequiresWriterPermission 
-#                                           restriction of this file.
+#                                           restriction of this file
 # + canMoveChildrenOutOfDrive - Whether the current user can move children of this folder outside of the shared drive. 
 #                               This is false when the item is not a folder.Only populated for items in shared drives. 
-# + canReadDrive - Whether the current user can read the shared drive to which this file belongs. 
-#                  Only populated for items in shared drives. 
+# + canReadDrive - Whether the current user can read the shared drive to which this file belongs
+#                  Only populated for items in shared drives
 # + canDeleteChildren - Whether the current user can delete children of this folder. 
 #                       This is false when the item is not a folder. 
-#                       Only populated for items in shared drives.
+#                       Only populated for items in shared drives
 # + canMoveItemWithinDrive - Whether the current user can move this item within this drive. 
 #                            Note that a request to change the parent of the item may still fail 
-#                            depending on the new parent that is being added and the parent that is being removed. 
-# + canModifyContent - Whether the current user can modify the content of this file. 
+#                            depending on the new parent that is being added and the parent that is being removed
+# + canModifyContent - Whether the current user can modify the content of this file
 # + canRemoveChildren - Whether the current user can remove children from this folder. This is always false when the 
 #                       item is not a folder. For a folder in a shared drive, use canDeleteChildren or canTrashChildren 
-#                       instead.   
-# + canShare - Whether the current user can modify the sharing settings for this file.
+#                       instead
+# + canShare - Whether the current user can modify the sharing settings for this file
 public type Capabilities record {
     boolean	canAddChildren;
     boolean canAddFolderFromAnotherDrive;
@@ -616,26 +616,26 @@ public type Capabilities record {
 # A permission for a file. 
 # A permission grants a user, group, domain or the world access to a file or a folder hierarchy.
 #
-# + role - The role granted by this permission.    
-# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#permission". 
-# + displayName - The "pretty" name of the value of the permission.
-# + emailAddress - The email address of the user or group to which this permission refers.  
-# + view - Indicates the view for this permission. 
-#          Only populated for permissions that belong to a view. published is the only supported value.
-# + deleted - Whether the account associated with this permission has been deleted. 
-#             This field only pertains to user and group permissions.
+# + role - The role granted by this permission
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#permission"
+# + displayName - The "pretty" name of the value of the permission
+# + emailAddress - The email address of the user or group to which this permission refers
+# + view - Indicates the view for this permission.
+#          Only populated for permissions that belong to a view. published is the only supported value
+# + deleted - Whether the account associated with this permission has been deleted.
+#             This field only pertains to user and group permissions
 # + permissionDetails - Details of whether the permissions on this shared drive item 
-#                       are inherited or directly on this item. 
+#                       are inherited or directly on this item 
 #                       This is an output-only field which is present only for shared drive items.
-# + expirationTime - The time at which this permission will expire (RFC 3339 date-time). 
-# + domain - The domain to which this permission refers.  
+# + expirationTime - The time at which this permission will expire (RFC 3339 date-time)
+# + domain - The domain to which this permission refers
 # + id - The ID of this permission. This is a unique identifier for the grantee, 
 #        and is published in User resources as permissionId. 
-#        IDs should be treated as opaque values.
-# + photoLink - A link to the user's profile photo, if available.
-# + type - The type of the grantee.  
+#        IDs should be treated as opaque values
+# + photoLink - A link to the user's profile photo, if available
+# + type - The type of the grantee  
 # + allowFileDiscovery - Whether the permission allows the file to be discovered through search. 
-#                        This is only applicable for permissions of type domain or anyone.
+#                        This is only applicable for permissions of type domain or anyone
 public type Permissions record {
     string kind;
     string id;
@@ -655,8 +655,8 @@ public type Permissions record {
 # Details of whether the permissions on this shared drive item are inherited or directly on this item. 
 # This is an output-only field which is present only for shared drive items.
 #
-# + permissionType - The permission type for this user.   
-# + role - The primary role for this user.  
+# + permissionType - The permission type for this user
+# + role - The primary role for this user
 # + inherited - Whether this permission is inherited. This field is always populated. This is an output-only field  
 # + inheritedFrom - The ID of the item from which this permission is inherited. This is an output-only field
 public type PermissionDetails record {
@@ -669,29 +669,29 @@ public type PermissionDetails record {
 # Optionals used in Lists or searches files.
 #
 # + includeItemsFromAllDrives - Whether both My Drive and shared drive items. 
-#                               should be included in results. (Default: false).  
+#                               should be included in results. (Default: false) 
 # + q - A query for filtering the file results. See the "Search for files" guide for the supported syntax.
 #       https://developers.google.com/drive/api/v3/search-files
-# + driveId - ID of the shared drive to search. 
+# + driveId - ID of the shared drive to search
 # + spaces - A comma-separated list of spaces to query within the corpus. 
-#             Supported values are 'drive', 'appDataFolder' and 'photos'.  
+#             Supported values are 'drive', 'appDataFolder' and 'photos'
 # + corpora - Groupings of files to which the query applies. 
 #             Supported groupings are: 'user' (files created by, opened by, or shared directly with the user),
 #             'drive' (files in the specified shared drive as indicated by the 'driveId'), 
 #             'domain' (files shared to the user's domain), and 'allDrives' 
 #             (A combination of 'user' and 'drive' for all drives where the user is a member). 
-#             When able, use 'user' or 'drive', instead of 'allDrives', for efficiency.  
+#             When able, use 'user' or 'drive', instead of 'allDrives', for efficiency
 # + includePermissionsForView - Specifies which additional view's permissions to include in the response. 
-#                               Only 'published' is supported.
+#                               Only 'published' is supported
 # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 
 #             'modifiedByMeTime', 'modifiedTime', 'name', 
 #            'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', and 'viewedByMeTime'. 
 #             Each key sorts ascending by default, but may be reversed with the 'desc' modifier   
 # + pageSize - The maximum number of files to return per page
 #              Partial or empty result pages are possible even before the end of the files list has been reached
-#              Acceptable values are 1 to 1000, inclusive. (Default: 100).  
+#              Acceptable values are 1 to 1000, inclusive. (Default: 100)
 # + pageToken - The token for continuing a previous list request on the next page
-#               This should be set to the value of 'nextPageToken' from the previous response.
+#               This should be set to the value of 'nextPageToken' from the previous response
 # + fields - The paths of the fields you want included in the response
 #            If not specified, the response includes a default set of fields specific to this method.
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false) 
@@ -709,7 +709,7 @@ type ListFilesOptional record {
     boolean supportsAllDrives?;
 };
 
-# Mime types for file operations
+# Mime types for file operations.
 # 
 # + DOCS - Google documents MIME type
 # + SHEETS - Google spreadsheets MIME type
@@ -746,7 +746,7 @@ public enum MimeTypes {
     VIDEO = "application/vnd.google-apps.video"
 }
  
-# File content record.
+# Represents file content.
 #
 # + content - A `byte[]` which represents the content of a file
 # + mimeType - The MIME type for the file

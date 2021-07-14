@@ -90,6 +90,10 @@ public class Listener {
     private HttpService httpService;
     private string domainVerificationFileContent;
 
+    # Initializes Google Drive connector listener.
+    # 
+    # + config - Listener configuration
+    # + return - An error on failure of initialization or else `()`
     public isolated function init(ListenerConfiguration config) returns @tainted error? {
         self.httpListener = check new (config.port);
         self.driveClient = check new (config.clientConfiguration);
