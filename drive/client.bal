@@ -25,6 +25,10 @@ public client class Client {
     public http:Client httpClient;
     Configuration driveConfiguration;
 
+    # Initializes Google Drive connector client.
+    #
+    # + driveConfig -  Configurations required to initialize the `Client`
+    # + return - An error on failure of initialization or else `()`
     public isolated function init(Configuration driveConfig) returns error? {    
         self.driveConfiguration = driveConfig;
         http:ClientSecureSocket? socketConfig = driveConfig?.secureSocketConfig;
@@ -35,11 +39,11 @@ public client class Client {
         });
     }
 
-    # Retrieve file using the fileId.
+    # Retrieves file using the file ID.
     # 
     # + fileId - ID of the file to retrieve
-    # + fields - The paths of the fields you want included in the response. 
-    # + return - If successful, returns `File`. Else returns `error`
+    # + fields - The paths of the fields you want included in the response
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Get File"}
     remote isolated function getFile(@display {label: "File ID"} string fileId, 
                                      @display {label: "Fields"} string? fields = ()) 
@@ -52,10 +56,10 @@ public client class Client {
         return getFileById(self.httpClient, fileId, optional);
     }
 
-    # Retrieve file content using the fileId.
+    # Retrieves file content using the fileId.
     # 
     # + fileId - Id of the file to retrieve file content
-    # + return - If successful, returns `FileContent`. Else returns `error`
+    # + return - If successful, `FileContent`. Else an `error`
     @display {label: "Get File Content"}
     remote isolated function getFileContent(@display {label: "File ID"} string fileId) returns FileContent|error {
         GetFileOptional optional = {};
@@ -64,10 +68,10 @@ public client class Client {
         return check generateRecordFileContent(self.httpClient, prepareUrlWithFileOptional(fileId, optional));
     }
 
-    # Download file using the fileId.
+    # Downloads file using the fileId.
     # 
     # + fileId - ID of the file to retrieve
-    # + return - If successful, returns `string`. Else returns `error`
+    # + return - If successful, downloadable link value. Else an `error`
     @display {label: "Download File"}
     remote isolated function downloadFile(@display {label: "File ID"} string fileId) 
                                 returns @tainted @display {label: "Downloadable Link"} string|error {
@@ -76,14 +80,14 @@ public client class Client {
         return fileResponse?.webContentLink.toString();
     }
 
-    # Retrieve all the files in the drive.
+    # Retrieves all the files in the drive.
     # 
     # + filterString - Query used to find what you need. Read documentation for query string patterns.
     #                  https://github.com/ballerina-platform/module-ballerinax-googleapis.drive/blob/main/drive/README.md#filter-files
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get All Files"}
     remote isolated function getAllFiles(@display {label: "Filter String"} string? filterString = (), 
                                         @display {label: "Order By"} string? orderBy = ()) 
@@ -101,13 +105,13 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     }
 
-    # Retrieve files by Name
+    # Retrieves files by name.
     # 
     # + fileName - Name of the file to search (Partial search)
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Files By Name"}
     remote isolated function getFilesByName(@display {label: "File Name"} string fileName, 
                                    @display {label: "Order By"} string? orderBy = ())    
@@ -124,9 +128,9 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     } 
 
-    # Retrieve all Google spreadsheets
+    # Retrieves all Google spreadsheets.
     # 
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get All Spreadsheets"}
     remote isolated function getAllSpreadsheets() returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
@@ -137,13 +141,13 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     }
 
-    # Retrieve Google spreadsheets by Name
+    # Retrieves Google spreadsheets by name
     # 
     # + fileName - Name of the file to search (Partial search)
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Spreadsheets"}
     remote isolated function getSpreadsheetsByName(@display {label: "File Name"} string fileName, 
                                           @display {label: "Order By"} string? orderBy = ()) 
@@ -160,13 +164,13 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     } 
 
-    # Retrieve Google documents by Name
+    # Retrieves Google documents by name
     # 
-    # + fileName - Name of the file to search (Partial search)
+    # + fileName - Name of the file to be searched (Partial search)
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Documents"}
     remote isolated function getDocumentsByName(@display {label: "File Name"} string fileName, 
                                        @display {label: "Order By"} string? orderBy = ()) 
@@ -183,13 +187,13 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     }
 
-    # Retrieve Google forms by Name
+    # Retrieves Google forms by name.
     # 
-    # + fileName - Name of the file to search (Partial search)
+    # + fileName - Name of the file to be searched (Partial search)
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Forms"}
     remote isolated function getFormsByName(@display {label: "File Name"} string fileName, 
                                    @display {label: "Order By"} string? orderBy = ()) 
@@ -206,13 +210,13 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     }
 
-    # Retrieve Google slides by Name
+    # Retrieves Google slides by name.
     # 
-    # + fileName - Name of the file to search (Partial search)
+    # + fileName - Name of the file to be searched (Partial search)
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Slides"}
     remote isolated function getSlidesByName(@display {label: "File Name"} string fileName, 
                                     @display {label: "Order By"} string? orderBy = ()) 
@@ -229,13 +233,13 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     }
 
-    # Retrieve folders by Name
+    # Retrieves folders by name.
     # 
-    # + folderName - Name of the folder to search (Partial search)
+    # + folderName - Name of the folder to be searched (Partial search)
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'.  
-    # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
+    # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Folders"}
     remote isolated function getFoldersByName(@display {label: "Folder Name"} string folderName, 
                                      @display {label: "Order By"} string? orderBy = ()) 
@@ -252,10 +256,10 @@ public client class Client {
         return getFiles(self.httpClient, optional);
     }
 
-    # Delete file using the fileID.
+    # Deletes file using the file ID.
     # 
     # + fileId - ID of the file to delete
-    # + return - If successful, returns `boolean` as true. Else returns `error`
+    # + return - If successful, `boolean` as true. Else an `error`
     @display {label: "Delete File By ID"}
     remote isolated function deleteFile(@display {label: "File ID"} string fileId) 
                                returns @tainted @display {label: "Result"} boolean|error {
@@ -263,12 +267,12 @@ public client class Client {
         return deleteFileById(self.httpClient, fileId, deleteOptional);
     }
 
-    # Copy file using the fileID.
+    # Copies file using the file ID.
     # 
-    # + fileId - ID of the file to copy
+    # + fileId - ID of the file to be copied
     # + destinationFolderId - Folder ID of the destination
     # + newFileName - Name of the New file
-    # + return - If successful, returns `File`. Else returns `error`
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Copy File"}
     remote isolated function copyFile(@display {label: "File ID"} string fileId, 
                              @display {label: "Destination Folder ID"} string? destinationFolderId = (), 
@@ -285,11 +289,11 @@ public client class Client {
         return copyFile(self.httpClient, fileId, optional, fileResource);
     }
 
-    # Move file using the fileID.
+    # Moves file using the file ID.
     # 
-    # + fileId - ID of the file to move
+    # + fileId - ID of the file to be moved
     # + destinationFolderId - Folder ID of the destination
-    # + return - If successful, returns `File`. Else returns `error`
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Move File"} 
     remote isolated function moveFile(@display {label: "File ID"} string fileId, 
                              @display {label: "Destination Folder ID"} string destinationFolderId) 
@@ -300,11 +304,11 @@ public client class Client {
         return updateFileById(self.httpClient, fileId, null, optionalsFileMetadata);
     }
 
-    # Rename a file
+    # Renames a file.
     # 
     # + fileId - File ID that need to be renamed
-    # + newFileName - New file name that should be renamed to.
-    # + return - If successful, returns `File`. Else returns `error`
+    # + newFileName - New file name that should be renamed to
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Rename File"} 
     remote isolated function renameFile(@display {label: "File ID"} string fileId, 
                                @display {label: "New File Name"} string newFileName) 
@@ -313,12 +317,12 @@ public client class Client {
         return updateFileById(self.httpClient, fileId, fileResource);
     }
 
-    # Update file metadata using the fileID.
+    # Updates file metadata using the file ID.
     # 
     # + fileId - ID of the file to be updated
     # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
     # + fileMetadata - 'FileMetadata' can added as a payload to change metadata
-    # + return - If successful, returns `File`. Else returns `error`
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Update File Metadata By ID"}
     remote isolated function updateFileMetadataById(@display {label: "File ID"} string fileId, 
                                                     @display {label: "File Resource"} 
@@ -329,15 +333,15 @@ public client class Client {
         return updateFileById(self.httpClient, fileId, fileMetadata, optional);
     }
 
-    # Create new file.
+    # Creates new file.
     # 
-    # + fileName - Name of the new file to be created.
+    # + fileName - Name of the new file to be created
     # + mime - Type of file that is going to create. refer https://developers.google.com/drive/api/v3/mime-types
-    #          You need to only specify the last word in the MIME type. 
+    #          You need to only specify the last word in the MIME type.
     #          For an example, If you want to create a Google document.. The value for this parameter should be
-    #          "document" .. Google sheets -> "spreadsheet" etc.
-    # + folderId - ID of the parent folder that the new file wants to get created. 
-    # + return - If successful, returns `File`. Else returns `error`
+    #          "document" .. Google sheets -> "spreadsheet" etc
+    # + folderId - ID of the parent folder that the new file wants to get created
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Create File"} 
     remote isolated function createFile(@display {label: "File Name"} string fileName, 
                                @display {label: "Mime Type"} MimeTypes? mime = (), 
@@ -354,11 +358,11 @@ public client class Client {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
-    # Create new folder.
+    # Creates new folder.
     # 
-    # + folderName - Name of the new folder to be created.
-    # + parentFolderId - ID of the parent folder.
-    # + return - If successful, returns `File`. Else returns `error`
+    # + folderName - Name of the new folder to be created
+    # + parentFolderId - ID of the parent folder
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Create Folder"} 
     remote isolated function createFolder(@display {label: "Folder Name"} string folderName, 
                                  @display {label: "Parent Folder ID"} string? parentFolderId = ()) 
@@ -371,12 +375,12 @@ public client class Client {
         return createMetaDataFile(self.httpClient, fileData, optional);
     }
 
-    # Upload new file.
+    # Uploads new file.
     # 
     # + localPath - Path to the file object to be uploaded
-    # + fileName - File name for the uploading file (optional). It will take the base name, if not provided.
-    # + parentFolderId - Parent folder ID (optional). It will be uploaded to the root, if not provided.
-    # + return - If successful, returns `File`. Else returns `error`
+    # + fileName - File name for the uploading file (optional). It will take the base name, if not provided
+    # + parentFolderId - Parent folder ID (optional). It will be uploaded to the root, if not provided
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Upload File"} 
     remote isolated function uploadFile(@display {label: "Local Path"} string localPath, 
                                @display {label: "File Name"} string? fileName = (), 
@@ -394,12 +398,12 @@ public client class Client {
         return uploadFile(self.httpClient, localPath, fileMetadata, optional);
     }
     
-    # Upload new file using a Byte array.
+    # Uploads new file using a Byte array.
     # 
     # + byteArray - Byte array that represents the file object
-    # + fileName - File name for the uploading file (optional). It will take the base name, if not provided.
-    # + parentFolderId - Parent folder ID (optional). It will be uploaded to the root, if not provided.
-    # + return - If successful, returns `File`. Else returns `error`
+    # + fileName - File name for the uploading file (optional). It will take the base name, if not provided
+    # + parentFolderId - Parent folder ID (optional). It will be uploaded to the root, if not provided
+    # + return - If successful, `File`. Else an `error`
     @display {label: "Upload File Using Byte Array"} 
     remote isolated function uploadFileUsingByteArray(@display {label: "Byte Array"} byte[] byteArray, 
                                              @display {label: "File name"} string fileName, 
