@@ -27,13 +27,13 @@ import ballerinax/googleapis.drive as drive;
 # + isOnFolderTrash - Trigger on folder trash operation (Temporary delete). 
 # + isOnDelete - Trigger on delete operation (Permenantly delete).  
 public type MethodNames record {
-    boolean isOnNewFileCreate = false;
-    boolean isOnNewFolderCreate = false;
-    boolean isOnFileUpdate = false;
-    boolean isOnFolderUpdate = false;
-    boolean isOnFileTrash = false;
-    boolean isOnFolderTrash = false;
-    boolean isOnDelete = false;
+    boolean isOnNewFileCreate;
+    boolean isOnNewFolderCreate;
+    boolean isOnFileUpdate;
+    boolean isOnFolderUpdate;
+    boolean isOnFileTrash;
+    boolean isOnFolderTrash;
+    boolean isOnDelete;
 };
 
 # Optional parameters for the watch files.

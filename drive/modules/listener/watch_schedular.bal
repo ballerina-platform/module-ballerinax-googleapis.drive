@@ -87,15 +87,13 @@ class Job {
             self.isFolder = check checkMimeType(self.driveClient, self.config.specificFolderOrFileId.toString());
        }
        if (self.config.specificFolderOrFileId is string && self.isFolder == true) {
-            check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
-            self.driveClient);
+            check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
             self.watchResponse = check watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(), 
             self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
         } else if (self.config.specificFolderOrFileId is string && self.isFolder == false) {
-            check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), 
-            self.driveClient);
+            check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
             self.watchResponse = check watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(), 
             self.config.callbackURL);
@@ -110,9 +108,9 @@ class Job {
         self.expiration = <decimal>self.watchResponse?.expiration;
         log:printInfo("Watch channel started in Google, id : " + self.channelUuid);
 
-        self.httpService.channelUuid = self.channelUuid;
-        self.httpService.watchResourceId = self.watchResourceId;
-        self.httpService.currentToken = self.currentToken;
+        self.httpService.setChannelUuid(self.channelUuid);
+        self.httpService.setWatchResourceId(self.watchResourceId);
+        self.httpService.setCurrentToken(self.currentToken);
 
         self.httpListener.channelUuid = self.channelUuid;
         self.httpListener.watchResourceId = self.watchResourceId;
