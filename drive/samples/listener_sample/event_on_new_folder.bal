@@ -47,7 +47,7 @@ string folderName = "<NEW_FOLDER_NAME>";
 
     service / on gDrivelistener {
         isolated remote function onFolderCreate(listen:Change changeInfo) returns error? {
-            log:printInfo("Trigger > onFolderCreate > changeInfo : ", changeInfo);     
+            log:printInfo("Trigger > onFolderCreate > changeInfo : " + changeInfo.toString());     
         }
     }
 

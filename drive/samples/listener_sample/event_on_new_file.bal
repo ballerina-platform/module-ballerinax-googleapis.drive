@@ -47,7 +47,7 @@ string fileName = "<NEW_FILE_NAME>";
 
     service / on gDrivelistener {
         isolated remote function onFileCreate(listen:Change changeInfo) returns error? {
-            log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
+            log:printInfo("Trigger > onFileCreate > changeInfo : " + changeInfo.toString());     
         }
     }
 
