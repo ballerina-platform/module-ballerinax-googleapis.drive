@@ -98,9 +98,10 @@ public class Listener {
     }
 
     public isolated function attach(SimpleHttpService s, string[]|string? name = ()) returns error? {
-        self.httpService = new HttpService(s, self.channelUuid, self.currentToken, self.watchResourceId, 
-                                            self.driveClient, self.config, self.isWatchOnSpecificResource, 
-                                            self.isFolder, self.specificFolderOrFileId, self.domainVerificationFileContent);
+        HttpToGDriveAdaptor adaptor = check new (s);
+        self.httpService = new HttpService(adaptor, self.channelUuid, self.currentToken, self.watchResourceId, 
+                                            self.config, self.isWatchOnSpecificResource, self.isFolder, 
+                                            self.specificFolderOrFileId, self.domainVerificationFileContent);
         check self.httpListener.attach(self.httpService, name);
     
         time:Utc currentUtc = time:utcNow();
