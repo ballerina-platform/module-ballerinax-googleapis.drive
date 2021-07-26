@@ -47,14 +47,14 @@ string fileId = "<FILE_ID>";
 
     service / on gDrivelistener {
         isolated remote function onFolderUpdate(listen:Change changeInfo) returns error? {
-            log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
+            log:printInfo("Trigger > onFolderUpdate > changeInfo : " + changeInfo.toString());     
         } 
     }
 
 public function main() returns error? {
     drive:Client driveClient = check new (config);
     drive:FileMetadata payloadFileMetadata = {
-        name : "newFileNameonUpdate",
+        name : "newFileNameOnUpdate",
         mimeType : "application/vnd.google-apps.document",
         description : "A short description of the file"
     };

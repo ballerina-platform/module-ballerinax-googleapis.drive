@@ -33,36 +33,36 @@ drive:Configuration clientConfiguration = {clientConfig: {
         refreshToken: refreshToken
 }};
 
-ListenerConfiguration congifuration = {
+ListenerConfiguration configuration = {
     port: 9090,
     callbackURL: callbackURL,
     clientConfiguration: clientConfiguration,
     domainVerificationFileContent : domainVerificationFileContent
 };
 
-listener Listener gDriveListener = new (congifuration);
+listener Listener gDriveListener = new (configuration);
 
 service / on gDriveListener {
     // isolated remote function onFileCreate(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onFileCreate > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onFileCreate > changeInfo : " + changeInfo.toString());     
     // }
     // isolated remote function onFolderCreate(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onFolderCreate > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onFolderCreate > changeInfo : " + changeInfo.toString());     
     // }
     // isolated remote function onFileUpdate(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onFileUpdate > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onFileUpdate > changeInfo : " + changeInfo.toString());     
     // }
     // isolated remote function onFolderUpdate(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onFolderUpdate > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onFolderUpdate > changeInfo : " + changeInfo.toString());     
     // }
     // isolated remote function onFileTrash(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onFileTrash > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onFileTrash > changeInfo : " + changeInfo.toString());     
     // }
     // isolated remote function onFolderTrash(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onFolderTrash > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onFolderTrash > changeInfo : " + changeInfo.toString());     
     // }
     // isolated remote function onDelete(Change changeInfo) returns error? {
-    //     log:printInfo("Trigger > onPermenantDelete > changeInfo : ", changeInfo);     
+    //     log:printInfo("Trigger > onPermanentDelete > changeInfo : " + changeInfo.toString());     
     // }
 }
 
