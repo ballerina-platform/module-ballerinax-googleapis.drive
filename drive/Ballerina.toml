@@ -1,7 +1,7 @@
 [package]
 org = "ballerinax"
 name = "googleapis.drive"
-version = "0.1.4-SNAPSHOT"
+version = "1.0.1"
 export= ["googleapis.drive", "googleapis.drive.listener"]
 authors = ["Ballerina"]
 keywords = ["google", "drive", "storage"]
@@ -12,7 +12,7 @@ license = ["Apache-2.0"]
 observabilityIncluded = true
 
 [[platform.java11.dependency]]
-path = "../java-wrapper/build/libs/java-wrapper-0.1.4-SNAPSHOT.jar"
+path = "../java-wrapper/build/libs/java-wrapper-1.0.1.jar"
 groupId = "org.ballerinalang.googleapis.drive"
 artifactId = "java-wrapper"
-version = "0.1.4-SNAPSHOT"
+version = "1.0.1"
