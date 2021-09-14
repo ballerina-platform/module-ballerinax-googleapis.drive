@@ -25,8 +25,8 @@ configurable string refreshUrl = drive:REFRESH_URL;
 configurable string refreshToken = ?;
 configurable string domainVerificationFileContent = ?;
 
-drive:Configuration config = {
-        clientConfig: {
+drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

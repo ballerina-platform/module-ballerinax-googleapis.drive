@@ -34,8 +34,8 @@ string destinationFolderId = "<PLACE_YOUR_DESTINATION_FOLDER_ID_HERE>";
 # ################################################################################
 
 public function main() {
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

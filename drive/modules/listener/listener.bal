@@ -36,7 +36,7 @@ public type ListenerConfiguration record {
     string callbackURL;
     @display{label: "Domain Verification File Content"}
     string domainVerificationFileContent;
-    Configuration clientConfiguration;
+    drive:ConnectionConfig clientConfiguration;
     @display{label: "Specific Folder ID"}
     string? specificFolderOrFileId = ();
     ChannelRenewalConfig channelRenewalConfig?;
@@ -60,20 +60,8 @@ public type ChannelRenewalConfig record {
     int domainVerificationDelay?;
 };
 
-# Represents configuration parameters to create Google drive Client.
-#
-# + secureSocketConfig - Represents OAuth2 direct token configurations for OAuth2 authentication 
-# + clientConfig - Provides configurations for facilitating secure communication with a remote HTTP endpoint  
-@display{label: "Connection Config"}
-public type Configuration record {
-    @display{label: "Auth Config"}
-    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig clientConfig; 
-    @display{label: "SSL Config"}
-    http:ClientSecureSocket secureSocketConfig?;
-};
-
 # Drive event listener   
-@display {label: "Google Drive Listener"}
+@display {label: "Google Drive Listener", iconPath: "resources/googleapis.drive.svg"}
 public class Listener {
     # Watch Channel ID
     public string channelUuid = EMPTY_STRING;

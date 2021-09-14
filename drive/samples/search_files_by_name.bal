@@ -48,8 +48,8 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 #|Files shared with the authorized user with "hello" in the name	   |      sharedWithMe and name contains 'hello'                            |
 
 public function main() {
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

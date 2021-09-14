@@ -25,7 +25,7 @@ isolated service class HttpService {
     private json[] currentFileStatus = [];
     private final ListenerConfiguration & readonly config;
     private final string specificFolderOrFileId;
-    private final drive:Configuration & readonly driveConfig;
+    private final drive:ConnectionConfig & readonly driveConfig;
     private final boolean isWatchOnSpecificResource;
     private final boolean isFolder;
     private final HttpToGDriveAdaptor adaptor;

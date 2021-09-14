@@ -20,7 +20,7 @@ import ballerinax/googleapis.drive;
 All the actions return a valid response or error. If the action is a success, then the requested resource is returned. If not, an error is returned.
 
 ### Step 2: Create a new connector instance
-Create a drive:Configuration with the OAuth2 tokens obtained, and initialize the connector with it.
+Create a drive:ConnectionConfig with the OAuth2 tokens obtained, and initialize the connector with it.
 ```ballerina
 
 configurable string refreshToken = ?;
@@ -28,8 +28,8 @@ configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshUrl = drive:REFRESH_URL;
 
-drive:Configuration config = {
-    clientConfig: {
+drive:ConnectionConfig config = {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshUrl: refreshUrl,

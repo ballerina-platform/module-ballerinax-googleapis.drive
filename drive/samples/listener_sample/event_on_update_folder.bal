@@ -27,8 +27,8 @@ configurable string domainVerificationFileContent = ?
 
 string fileId = "<FILE_ID>";
 
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

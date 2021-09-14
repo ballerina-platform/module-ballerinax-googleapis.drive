@@ -27,8 +27,8 @@ configurable string domainVerificationFileContent = ?
 
 string fileId = "<FILE_ID_OF_THE_FILE_OR_FOLDER_TO_BE_DELETED>";
 
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

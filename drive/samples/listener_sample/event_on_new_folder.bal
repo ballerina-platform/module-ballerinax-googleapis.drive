@@ -27,8 +27,8 @@ configurable string domainVerificationFileContent = ?
 
 string folderName = "<NEW_FOLDER_NAME>";
 
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

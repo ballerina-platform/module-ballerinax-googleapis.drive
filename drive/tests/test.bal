@@ -35,8 +35,8 @@ const string localFilePath = "./tests/resources/bar.jpeg";
 //     }
 // };
 
-Configuration config = {
-    clientConfig: {
+ConnectionConfig config = {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshUrl: REFRESH_URL,

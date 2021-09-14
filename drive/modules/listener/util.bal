@@ -161,7 +161,7 @@ isolated function getStartPageToken(http:Client httpClient) returns @tainted str
 # + adaptor - HttpToGDriveAdaptor object   
 # + methods - Methods
 # + return - if unsucessful, returns error.
-isolated function mapEvents(ChangesListResponse changeList, drive:Configuration driveConfig,
+isolated function mapEvents(ChangesListResponse changeList, drive:ConnectionConfig driveConfig,
                             HttpToGDriveAdaptor adaptor, MethodNames methods) returns @tainted error? {
     Change[]? changes = changeList?.changes;
     if (changes is Change[] && changes.length() > 0) {
@@ -196,7 +196,7 @@ isolated function mapEvents(ChangesListResponse changeList, drive:Configuration 
 # + specFolderId - Spec folder ID
 # + return - if unsucessful, returns error.
 isolated function identifyFolderEvent(string folderId, Change changeLog, HttpToGDriveAdaptor adaptor, 
-        drive:Configuration driveConfig, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
+        drive:ConnectionConfig driveConfig, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
         returns @tainted error? {
     drive:Client driveClient = check new (driveConfig);
     drive:File folder = check driveClient->getFile(folderId, "createdTime,modifiedTime,trashed,parents");
@@ -238,7 +238,7 @@ isolated function identifyFolderEvent(string folderId, Change changeLog, HttpToG
 # + specFolderId - Spec folder ID
 # + return - if unsucessful, returns error.
 isolated function identifyFileEvent(string fileId, Change changeLog, HttpToGDriveAdaptor adaptor, 
-        drive:Configuration driveConfig, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
+        drive:ConnectionConfig driveConfig, MethodNames methods, boolean isSepcificFolder = false, string? specFolderId = ()) 
         returns @tainted error? {
     drive:Client driveClient = check new(driveConfig);
     drive:File file = check driveClient->getFile(fileId, "createdTime,modifiedTime,trashed,parents");
@@ -316,7 +316,7 @@ isolated function validateSpecificFolderExsistence(string folderId, drive:Client
 # + methods - Methods
 # + return - If unsuccessful, return error.
 isolated function mapEventForSpecificResource(string resourceId, ChangesListResponse changeList, 
-                                              drive:Configuration driveConfig, HttpToGDriveAdaptor adaptor, 
+                                              drive:ConnectionConfig driveConfig, HttpToGDriveAdaptor adaptor, 
                                               MethodNames methods) returns @tainted error? {
     Change[]? changes = changeList?.changes;
     if (changes is Change[] && changes.length() > 0) {
@@ -342,7 +342,7 @@ isolated function mapEventForSpecificResource(string resourceId, ChangesListResp
 # + adaptor - HttpToGDriveAdaptor object   
 # + methods - Methods
 # + return - If it is modified, returns boolean(true). Else error.
-isolated function mapFileUpdateEvents(string resourceId, ChangesListResponse changeList, drive:Configuration driveConfig, 
+isolated function mapFileUpdateEvents(string resourceId, ChangesListResponse changeList, drive:ConnectionConfig driveConfig, 
                                         HttpToGDriveAdaptor adaptor, MethodNames methods) returns @tainted error? {
     Change[]? changes = changeList?.changes;
     if (changes is Change[] && changes.length() > 0) {
@@ -633,21 +633,18 @@ isolated function stopChannelRequest(http:Client httpClient, string path, json j
     return getDriveError(jsonResponse);
 }
 
-isolated function getClient(Configuration driveConfig) returns http:Client|error {    
-    http:ClientSecureSocket? socketConfig = driveConfig?.secureSocketConfig;
-    return check new (BASE_URL, {
-        auth: driveConfig.clientConfig,
-        secureSocket: socketConfig,
-        http1Settings: {chunking: http:CHUNKING_NEVER}
-    });
+isolated function getClient(drive:ConnectionConfig driveConfig) returns http:Client|error {
+    drive:ConnectionConfig connectionConfig = driveConfig;
+    connectionConfig.http1Settings = {chunking: http:CHUNKING_NEVER};
+    return check new (BASE_URL, connectionConfig);
 }
 
-isolated function listChanges(Configuration driveConfig, string pageToken) returns @tainted ChangesListResponse|error {
+isolated function listChanges(drive:ConnectionConfig driveConfig, string pageToken) returns @tainted ChangesListResponse|error {
     http:Client httpClient = check getClient(driveConfig);
     return listChangesByPageToken(httpClient, pageToken);
 }
 
-isolated function watchFilesById(Configuration driveConfig, string fileId, string address, string? pageToken = (), 
+isolated function watchFilesById(drive:ConnectionConfig driveConfig, string fileId, string address, string? pageToken = (), 
                         int? expiration = ()) returns @tainted WatchResponse|error {
     http:Client httpClient = check getClient(driveConfig);
     WatchResponse payload = {};
@@ -667,7 +664,7 @@ isolated function watchFilesById(Configuration driveConfig, string fileId, strin
     return watchFilesUsingId(httpClient, fileId, payload, optional);
 }
 
-isolated function watchFiles(Configuration driveConfig, string address, string? pageToken = (), int? expiration = ()) 
+isolated function watchFiles(drive:ConnectionConfig driveConfig, string address, string? pageToken = (), int? expiration = ()) 
                             returns @tainted WatchResponse|error {
     http:Client httpClient = check getClient(driveConfig);
     WatchResponse payload = {};
@@ -688,7 +685,7 @@ isolated function watchFiles(Configuration driveConfig, string address, string? 
     return watchAllFiles(httpClient, payload, optional);
 }
 
-isolated function watchStop(Configuration driveConfig, string channelId,string resourceId) 
+isolated function watchStop(drive:ConnectionConfig driveConfig, string channelId,string resourceId) 
                     returns @tainted boolean|error {
     http:Client httpClient = check getClient(driveConfig);
     WatchResponse payload = {};

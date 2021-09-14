@@ -38,8 +38,8 @@ string folderName = "<FOLDER_NAME>";
 # #################################################################################
 
 public function main() {
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,
