@@ -40,8 +40,8 @@ import ballerinax/googleapis.drive.'listener as listen;
 Initialize the Google Drive configuration as follows.
 
 ```ballerina
-drive:Configuration clientConfig = {
-    clientConfig: {
+drive:ConnectionConfig clientConfig = {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshUrl: refreshUrl,

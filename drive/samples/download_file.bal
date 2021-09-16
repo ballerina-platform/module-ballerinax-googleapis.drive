@@ -33,8 +33,8 @@ string downloadFileId = "<PLACE_YOUR_FILE_ID_HERE>";
 # ################################################################################
 
 public function main() {
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

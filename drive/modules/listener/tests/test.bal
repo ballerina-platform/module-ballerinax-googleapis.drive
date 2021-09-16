@@ -26,12 +26,14 @@ string refreshUrl = drive:REFRESH_URL;
 string refreshToken = os:getEnv("REFRESH_TOKEN");
 string domainVerificationFileContent = os:getEnv("DOMAIN_VERIFICATION_FILE_CONTENT");
 
-drive:Configuration clientConfiguration = {clientConfig: {
+drive:ConnectionConfig clientConfiguration = {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshUrl: refreshUrl,
         refreshToken: refreshToken
-}};
+    }
+};
 
 ListenerConfiguration configuration = {
     port: 9090,

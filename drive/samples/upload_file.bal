@@ -30,8 +30,8 @@ string locaFilePath = "<PATH_TO_FILE_TO_BE_UPLOADED>";
 # #################################################
 
 public function main() {
-    drive:Configuration config = {
-        clientConfig: {
+    drive:ConnectionConfig config = {
+        auth: {
             clientId: clientId,
             clientSecret: clientSecret,
             refreshUrl: refreshUrl,

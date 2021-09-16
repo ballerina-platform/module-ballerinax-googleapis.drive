@@ -21,23 +21,18 @@ import ballerina/http;
 # Google Drive API provides operations related to files, channels and changes in Google Drive.
 #
 # + httpClient - The HTTP Client
-@display {label: "Google Drive", iconPath: "logo.png"}
+@display {label: "Google Drive", iconPath: "resources/googleapis.drive.svg"}
 public isolated client class Client {
     final http:Client httpClient;
-    final readonly& Configuration driveConfiguration;
 
     # Initialize the connector.
     #
     # + driveConfig -  Configurations required to initialize the `Client`
     # + return - An error on failure of initialization or else `()`
-    public isolated function init(Configuration driveConfig) returns error? {    
-        self.driveConfiguration = driveConfig.cloneReadOnly();
-        http:ClientSecureSocket? socketConfig = driveConfig?.secureSocketConfig;
-        self.httpClient = check new (BASE_URL, {
-            auth: driveConfig.clientConfig,
-            secureSocket: socketConfig,
-            http1Settings: {chunking: http:CHUNKING_NEVER}
-        });
+    public isolated function init(ConnectionConfig driveConfig) returns error? {
+        ConnectionConfig connectionConfig = driveConfig;
+        connectionConfig.http1Settings = {chunking: http:CHUNKING_NEVER};
+        self.httpClient = check new (BASE_URL, connectionConfig);
     }   
 
     # Retrieves file using the file ID.
