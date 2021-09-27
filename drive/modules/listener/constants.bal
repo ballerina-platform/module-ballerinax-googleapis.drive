@@ -119,6 +119,6 @@ const string WARN_SCHEDULE = "Could not schedule subscription renewal";
 const string INFO_RETRY_CHANNEL_REGISTRATION = "Retrying to register new channel. Attempt - ";
 const string INFO_RETRY_SCHEDULE = "Retrying to schedule subscription renewal. Attempt - ";
 const string GOOGLE_SITE_VERIFICATION_PREFIX = "google-site-verification";
-const string CHANNEL_REGISTRATION_IN_PROGRESS = "Google verification on progress...";
+const string CHANNEL_REGISTRATION_IN_PROGRESS = "Google verification in progress...";
 const string REQUEST_DOMAIN_VERIFICATION = "Please register the callback URL " +
 "by visiting https://console.cloud.google.com/apis/credentials/domainverification";
