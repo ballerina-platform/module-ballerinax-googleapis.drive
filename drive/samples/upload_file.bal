@@ -38,7 +38,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);   
+    drive:Client driveClient = check new (config);   
     drive:File|error res = driveClient->uploadFile(locaFilePath);
     // drive:File|error res = driveClient->uploadFile(locaFilePath, fileName);
     // drive:File|error res = driveClient->uploadFile(locaFilePath, fileName, parentFolderId);

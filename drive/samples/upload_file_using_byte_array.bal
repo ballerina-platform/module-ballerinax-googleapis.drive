@@ -40,7 +40,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };  
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
     drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName);
     // drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);

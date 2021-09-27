@@ -38,7 +38,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     stream<drive:File>|error res = driveClient->getAllFiles();
     if (res is stream<drive:File>){
         error? e = res.forEach(function (drive:File file) {

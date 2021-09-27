@@ -44,7 +44,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     //Do not supply a request body with this method.
     //If successful, this method returns an empty response body.
     boolean|error res = driveClient->deleteFile(fileId);

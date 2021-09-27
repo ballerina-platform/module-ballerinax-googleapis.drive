@@ -41,7 +41,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     string|error response = driveClient->downloadFile(downloadFileId);
     //Print download link
     if(response is string){

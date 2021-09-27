@@ -42,7 +42,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     drive:File|error res = driveClient->moveFile(sourceFileId, destinationFolderId);
     //Print file ID
     if(res is drive:File){

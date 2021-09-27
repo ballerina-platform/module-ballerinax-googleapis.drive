@@ -40,7 +40,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     drive:File|error response = driveClient->createFile(fileName);
     // drive:File|error response = driveClient->createFile(fileName, DOCUMENT);
     // drive:File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
