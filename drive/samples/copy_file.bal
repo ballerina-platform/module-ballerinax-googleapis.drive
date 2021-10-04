@@ -43,7 +43,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     drive:File|error res = driveClient->copyFile(sourceFileId);
     // drive:File|error response = driveClient->copyFile(sourceFileId, destinationFolderId);
     // drive:File|error response = driveClient->copyFile(sourceFileId, destinationFolderId, newFileName);

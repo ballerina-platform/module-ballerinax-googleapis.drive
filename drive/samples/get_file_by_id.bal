@@ -40,7 +40,7 @@ public function main() {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = checkpanic new (config);
+    drive:Client driveClient = check new (config);
     drive:File | error testGetFile = driveClient->getFile(fileId);
     //Print file ID
     if(testGetFile is drive:File){
