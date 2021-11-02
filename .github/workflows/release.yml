@@ -27,7 +27,7 @@ jobs:
             - name: Ballerina Build
               uses: ballerina-platform/ballerina-action/@master
               with:
-                  args: build -c --skip-tests ./drive
+                  args: pack ./drive
               env:
                   JAVA_HOME: /usr/lib/jvm/default-jvm
                   CLIENT_ID: ${{ secrets.CLIENT_ID }}

@@ -35,18 +35,26 @@ jobs:
                 JAVA_OPTS: -DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true
               run: |
                 ./gradlew build
+
             # Build the ballerina project
             - name: Ballerina Build
               uses: ballerina-platform/ballerina-action/@nightly
               with:
                   args:
-                      build -c
+                      pack
               env:
                 WORKING_DIR: ./drive
                 JAVA_HOME: /usr/lib/jvm/default-jvm
-                CLIENT_ID: ${{ secrets.CLIENT_ID }}
-                CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-                REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          
+          # Test the ballerina project
+            - name: Ballerina Test
+              uses: ballerina-platform/ballerina-action/@nightly
+              with:
+                  args:
+                      test
+              env:
+                WORKING_DIR: ./drive
+                JAVA_HOME: /usr/lib/jvm/default-jvm
 
             # Send notification when build fails
             - name: Notify failure
