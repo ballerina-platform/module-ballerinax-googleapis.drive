@@ -75,5 +75,4 @@ public isolated function testDriveAPITrigger() {
     while (true) {
         i = 0;
     }
-    test:assertTrue(true, msg = "expected to be created a watch in google drive");
 }
