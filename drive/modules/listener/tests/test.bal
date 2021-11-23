@@ -14,37 +14,37 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/log;
-import ballerina/os;
-import ballerina/test;
-import ballerinax/googleapis.drive as drive;
+// import ballerina/log;
+// import ballerina/os;
+// import ballerina/test;
+// import ballerinax/googleapis.drive as drive;
 
-string callbackURL = os:getEnv("CALLBACK_URL");
-string clientId = os:getEnv("CLIENT_ID");
-string clientSecret = os:getEnv("CLIENT_SECRET");
-string refreshUrl = drive:REFRESH_URL;
-string refreshToken = os:getEnv("REFRESH_TOKEN");
-string domainVerificationFileContent = os:getEnv("DOMAIN_VERIFICATION_FILE_CONTENT");
+// string callbackURL = os:getEnv("CALLBACK_URL");
+// string clientId = os:getEnv("CLIENT_ID");
+// string clientSecret = os:getEnv("CLIENT_SECRET");
+// string refreshUrl = drive:REFRESH_URL;
+// string refreshToken = os:getEnv("REFRESH_TOKEN");
+// string domainVerificationFileContent = os:getEnv("DOMAIN_VERIFICATION_FILE_CONTENT");
 
-drive:ConnectionConfig clientConfiguration = {
-    auth: {
-        clientId: clientId,
-        clientSecret: clientSecret,
-        refreshUrl: refreshUrl,
-        refreshToken: refreshToken
-    }
-};
+// drive:ConnectionConfig clientConfiguration = {
+//     auth: {
+//         clientId: clientId,
+//         clientSecret: clientSecret,
+//         refreshUrl: refreshUrl,
+//         refreshToken: refreshToken
+//     }
+// };
 
-ListenerConfiguration configuration = {
-    port: 9090,
-    callbackURL: callbackURL,
-    clientConfiguration: clientConfiguration,
-    domainVerificationFileContent : domainVerificationFileContent
-};
+// ListenerConfiguration configuration = {
+//     port: 9090,
+//     callbackURL: callbackURL,
+//     clientConfiguration: clientConfiguration,
+//     domainVerificationFileContent : domainVerificationFileContent
+// };
 
-listener Listener gDriveListener = new (configuration);
+// listener Listener gDriveListener = new (configuration);
 
-service / on gDriveListener {
+// service / on gDriveListener {
     // isolated remote function onFileCreate(Change changeInfo) returns error? {
     //     log:printInfo("Trigger > onFileCreate > changeInfo : " + changeInfo.toString());     
     // }
@@ -66,14 +66,13 @@ service / on gDriveListener {
     // isolated remote function onDelete(Change changeInfo) returns error? {
     //     log:printInfo("Trigger > onPermanentDelete > changeInfo : " + changeInfo.toString());     
     // }
-}
+// }
 
-@test:Config {enable: false}
-public isolated function testDriveAPITrigger() {
-    log:printInfo("gDriveClient -> watchFiles()");
-    int i = 0;
-    while (true) {
-        i = 0;
-    }
-    test:assertTrue(true, msg = "expected to be created a watch in google drive");
-}
+// @test:Config {enable: false}
+// public isolated function testDriveAPITrigger() {
+//     log:printInfo("gDriveClient -> watchFiles()");
+//     int i = 0;
+//     while (true) {
+//         i = 0;
+//     }
+// }

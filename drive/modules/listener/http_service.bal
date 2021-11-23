@@ -19,6 +19,7 @@ import ballerina/http;
 import ballerinax/googleapis.drive as drive;
 
 isolated service class HttpService {
+    *http:Service;
     private string channelUuid;
     private string currentToken;
     private string watchResourceId;

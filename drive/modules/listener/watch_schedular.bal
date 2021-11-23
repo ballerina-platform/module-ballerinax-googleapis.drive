@@ -140,7 +140,7 @@ class Job {
         log:printDebug("timeDifference : " + timeDifference.toString());
         log:printDebug("newTime : " + newTime.toString());
 
-        task:JobId result = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, 
+        _ = checkpanic task:scheduleOneTimeJob(new Job(self.config, self.driveClient, 
                                                     self.httpListener,self.httpService), time);
     }
 }

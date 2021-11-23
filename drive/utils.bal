@@ -629,7 +629,7 @@ isolated function getFilesStream(http:Client httpClient, @tainted File[] files, 
         string? nextPageToken = res?.nextPageToken;
         if (nextPageToken is string && optional is ListFilesOptional) {
             optional.pageToken = nextPageToken;
-            var streams = check getFilesStream(httpClient, files, optional);
+            _ = check getFilesStream(httpClient, files, optional);
         }
         return filesStream;
     } else {
