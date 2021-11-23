@@ -322,7 +322,6 @@ isolated function mapEventForSpecificResource(string resourceId, ChangesListResp
     if (changes is Change[] && changes.length() > 0) {
         foreach Change changeLog in changes {
             string fileOrFolderId = changeLog?.fileId.toString();
-            string changeTime = changeLog?.time.toString();
             string mimeType = changeLog?.file?.mimeType.toString();
             if (mimeType != FOLDER) {
                 check identifyFileEvent(fileOrFolderId, changeLog, adaptor, driveConfig, methods, true, resourceId);
@@ -625,7 +624,6 @@ isolated function stopChannelRequest(http:Client httpClient, string path, json j
         httpRequest.setJsonPayload(<@untainted>jsonPayload);
     }
     http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);
-    int statusCode = httpResponse.statusCode;
     if(httpResponse.statusCode == http:STATUS_NO_CONTENT){
         return true;
     }

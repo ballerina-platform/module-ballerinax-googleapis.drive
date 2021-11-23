@@ -75,7 +75,7 @@ public class Listener {
     private boolean isFolder = true;
     private ListenerConfiguration config;
     private http:Listener httpListener;
-    private HttpService httpService;
+    private HttpService? httpService;
     private string domainVerificationFileContent;
 
     # Initializes Google Drive connector listener.
@@ -87,18 +87,20 @@ public class Listener {
         self.driveClient = check new (config.clientConfiguration);
         self.config = config;
         self.domainVerificationFileContent = config.domainVerificationFileContent;
+        self.httpService = ();
     }
 
     public isolated function attach(SimpleHttpService s, string[]|string? name = ()) returns error? {
         HttpToGDriveAdaptor adaptor = check new (s);
-        self.httpService = new HttpService(adaptor, self.channelUuid, self.currentToken, self.watchResourceId, 
+        HttpService currentHttpService = new (adaptor, self.channelUuid, self.currentToken, self.watchResourceId, 
                                             self.config, self.isWatchOnSpecificResource, self.isFolder, 
                                             self.specificFolderOrFileId, self.domainVerificationFileContent);
-        check self.httpListener.attach(self.httpService, name);
+        self.httpService = currentHttpService;
+        check self.httpListener.attach(currentHttpService, name);
     
         time:Utc currentUtc = time:utcNow();
         time:Civil time = time:utcToCivil(currentUtc);
-        task:JobId result = check task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self, self.httpService), time);
+        _ = check task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self, currentHttpService), time);
     }
 
     public isolated function 'start() returns error? {
@@ -108,7 +110,10 @@ public class Listener {
     public isolated function detach(service object {} s) returns @tainted error? {
         check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
-        return self.httpListener.detach(s);
+        HttpService? currentHttpService = self.httpService;
+        if currentHttpService is HttpService {
+            return self.httpListener.detach(currentHttpService);
+        }
     }
 
     public isolated function gracefulStop() returns @tainted error? {
