@@ -21,7 +21,7 @@ import ballerina/http;
 # Google Drive API provides operations related to files, channels and changes in Google Drive.
 #
 # + httpClient - The HTTP Client
-@display {label: "Google Drive", iconPath: "resources/googleapis.drive.svg"}
+@display {label: "Google Drive", iconPath: "icon.png"}
 public isolated client class Client {
     final http:Client httpClient;
 
