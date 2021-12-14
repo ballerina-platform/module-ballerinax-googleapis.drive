@@ -32,7 +32,7 @@ string newFileName = "<NEW_NAME>";
 # Files can be renamed using this function.
 # ################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

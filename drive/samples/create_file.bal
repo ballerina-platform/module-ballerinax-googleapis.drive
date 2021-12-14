@@ -31,7 +31,7 @@ string fileName = "<NEW_FILE_NAME>";
 # More details : https://developers.google.com/drive/api/v3/reference/files/create
 # #################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

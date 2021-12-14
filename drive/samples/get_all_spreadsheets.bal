@@ -27,7 +27,7 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 # Get all spreadsheets
 # #####################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

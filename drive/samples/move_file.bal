@@ -33,7 +33,7 @@ string destinationFolderId = "<PLACE_YOUR_DESTINATION_FOLDER_ID_HERE>";
 # folderId
 # ################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,
