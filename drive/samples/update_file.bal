@@ -45,7 +45,7 @@ string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
 # E.g : If you want to rename/move a file. There are specified functions.
 # #################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

@@ -29,7 +29,7 @@ string locaFilePath = "<PATH_TO_FILE_TO_BE_UPLOADED>";
 # Upload file 
 # #################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

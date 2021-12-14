@@ -35,7 +35,7 @@ string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
 # More details : https://developers.google.com/drive/api/v3/reference/files/delete
 # #################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

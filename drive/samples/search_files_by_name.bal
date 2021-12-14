@@ -47,7 +47,7 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 #|Files modified after a given date	                                   |      modifiedTime > '2012-06-04T12:00:00' // default time zone is UTC  |
 #|Files shared with the authorized user with "hello" in the name	   |      sharedWithMe and name contains 'hello'                            |
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,
