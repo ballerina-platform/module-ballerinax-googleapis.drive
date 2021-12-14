@@ -65,8 +65,8 @@ function testGetFileById() {
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:printInfo(response.toString());
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -84,8 +84,8 @@ function testGetFileContentById() {
         log:printInfo(response.toString());
     } 
     else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -123,8 +123,8 @@ function testCopyFile() {
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:printInfo(response?.id.toString());
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -144,8 +144,8 @@ function testMoveFile(){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:printInfo(response?.id.toString());
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -165,8 +165,8 @@ function testRenameFile() {
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:printInfo(response?.id.toString());
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -193,8 +193,8 @@ function testUpdateFile() {
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         log:printInfo(response?.id.toString());
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -214,8 +214,8 @@ function testCreateFolder() {
         //Set variable fileId for other unit tests
         parentFolderId = <@untainted> response?.id.toString();
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -238,8 +238,8 @@ function testCreateFile() {
         //Set variable fileId for other unit tests
         fileId = <@untainted> response?.id.toString();
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -257,8 +257,8 @@ function testGetFilesByName() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -276,8 +276,8 @@ function testGetFoldersByName() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -295,8 +295,8 @@ function testAllGetFiles() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -313,8 +313,8 @@ function testGetAllSpreadsheets() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -332,8 +332,8 @@ function testGetSpreadsheetsByName() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -351,8 +351,8 @@ function testGetDocumentsByName() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -370,8 +370,8 @@ function testGetFormsByName() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -389,8 +389,8 @@ function testGetSlidesByName() {
             test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -408,8 +408,8 @@ function testUploadFile() {
     if(response is File){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
@@ -449,8 +449,8 @@ function testUploadFileUsingByteArray() {
         log:printInfo(id);
         test:assertNotEquals(id, EMPTY_STRING, msg = "Expect File id");
     } else {
-        test:assertFail(response.message());
         log:printError(response.message());
+        test:assertFail(response.message());
     }
 }
 
