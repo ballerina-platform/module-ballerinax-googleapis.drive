@@ -32,7 +32,7 @@ string downloadFileId = "<PLACE_YOUR_FILE_ID_HERE>";
 # It will not work for documents, presentations, etc. created inside Google Drive.
 # ################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

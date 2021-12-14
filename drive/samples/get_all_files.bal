@@ -29,7 +29,7 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 # More details : https://developers.google.com/drive/api/v3/reference/files/list
 # #################################################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,

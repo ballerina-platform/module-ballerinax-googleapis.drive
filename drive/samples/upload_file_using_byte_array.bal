@@ -31,7 +31,7 @@ string fileName = "<NEW_FILE_NAME>";
 # You can set byte array as the source and upload. 
 # #################################################
 
-public function main() {
+public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
             clientId: clientId,
