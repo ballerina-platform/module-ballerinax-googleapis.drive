@@ -10,7 +10,7 @@ The `ballerinax/googleapis.drive.'listener` is a [Ballerina](https://ballerina.i
 ### Compatibility
 |                    | Version         |
 |--------------------|-----------------|
-| Ballerina Language | Swan Lake Beta3 |
+| Ballerina Language | Swan Lake Beta6 |
 | Google Drive API   | V3              |
 
 ## Report issues
