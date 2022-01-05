@@ -253,8 +253,8 @@ function testGetFilesByName() {
     stream<File>|error response = driveClient->getFilesByName("ballerina");
     // stream<File>|error response = driveClient->getFilesByName("ballerina", "createdTime");
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -272,8 +272,8 @@ function testGetFoldersByName() {
     stream<File>|error response = driveClient->getFoldersByName("ballerina");
     // stream<File>|error response = driveClient->getFoldersByName("ballerina", "createdTime");
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -291,8 +291,8 @@ function testAllGetFiles() {
     stream<File>|error response = driveClient->getAllFiles("not name contains 'hello'");
     // stream<File>|error response = driveClient->getAllFiles();
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -309,8 +309,8 @@ function testGetAllSpreadsheets() {
     log:printInfo("Gdrive Client -> testGetAllSpreadsheets()");
     stream<File>|error response = driveClient->getAllSpreadsheets();
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -328,8 +328,8 @@ function testGetSpreadsheetsByName() {
     stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina");
     // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina","createdTime");
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -347,8 +347,8 @@ function testGetDocumentsByName() {
     stream<File>|error response = driveClient->getDocumentsByName("ballerina");
     // stream<File>|error response = driveClient->getDocumentsByName("ballerina", "createdTime");
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -366,8 +366,8 @@ function testGetFormsByName() {
     stream<File>|error response = driveClient->getFormsByName("ballerina");
     // stream<File>|error response = driveClient->getFormsByName("ballerina", "createdTime");
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
@@ -385,8 +385,8 @@ function testGetSlidesByName() {
     stream<File>|error response = driveClient->getSlidesByName("ballerina");
     // stream<File>|error response = driveClient->getSlidesByName("ballerina", "createdTime");
     if (response is stream<File>){
-        response.forEach(isolated function (File response) {
-            test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
+        response.forEach(isolated function (File file) {
+            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
         });
     } else {
         log:printError(response.message());
