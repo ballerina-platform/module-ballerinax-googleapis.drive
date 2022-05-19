@@ -6,19 +6,15 @@
 
 [Google Drive](https://developers.google.com/drive/api) allows users to store files on their servers, synchronize files across devices, and share files. Google Drive encompasses Google Docs, Google Sheets, and Google Slides, which are a part of the Google Docs Editors office suite that permits the collaborative editing of documents, spreadsheets, presentations, drawings, forms, and more.
 
-The connector supports file and folder management operations related to creating, deleting, updating and retrieving and to get notification for events occurred in the drive.
+The connector supports file and folder management operations related to creating, deleting, updating and retrieving.
+
 For more information about configuration and operations, go to the module.
 - [ballerinax/googleapis.drive](drive/Module.md)
-- [ballerinax/googleapis.drive.listener](drive/modules/listener/Module.md)
 
 ## Building from the source
 
 ### Setting up the prerequisites
-1. Download and install Java SE Development Kit (JDK) version 11. You can install either [OpenJDK](https://adoptopenjdk.net/) or [Oracle](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html).
-
-    > **Note:** Set the JAVA_HOME environment variable to the path name of the directory into which you installed JDK.
-
-2. Download and install [Ballerina Swan Lake](https://ballerina.io/). 
+1. Download and install [Ballerina Swan Lake](https://ballerina.io/). 
 
 ### Building the source
 

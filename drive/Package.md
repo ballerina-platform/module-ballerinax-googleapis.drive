@@ -1,16 +1,13 @@
 Connects to [Google Drive API](https://developers.google.com/drive) from Ballerina
 
 ## Package overview
-The `ballerinax/googleapis.drive` is a [Ballerina](https://ballerina.io/) connector for Google Drive API.
 
 The `ballerinax/googleapis.drive` is a [Ballerina](https://ballerina.io/) connector for Google Drive. This package provides the capability to easily access Google Drive. 
-
-The `ballerinax/googleapis.drive.'listener` is a [Ballerina](https://ballerina.io/) listener for Google Drive. This package provides the capability to listen to Google Drive events.
 
 ### Compatibility
 |                    | Version            |
 |--------------------|--------------------|
-| Ballerina Language | Swan Lake 2201.0.0 |
+| Ballerina Language | Swan Lake 2201.0.2 |
 | Google Drive API   | V3                 |
 
 ## Report issues
