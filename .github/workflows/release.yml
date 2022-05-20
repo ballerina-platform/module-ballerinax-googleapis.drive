@@ -16,7 +16,6 @@ jobs:
               with:
                   args: pack ./drive
               env:
-                  JAVA_HOME: /usr/lib/jvm/default-jvm
                   CLIENT_ID: ${{ secrets.CLIENT_ID }}
                   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
                   REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
@@ -26,5 +25,4 @@ jobs:
                   args: push
               env:
                   WORKING_DIR: ./drive
-                  JAVA_HOME: /usr/lib/jvm/default-jvm
                   BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_ACCESS_TOKEN }}

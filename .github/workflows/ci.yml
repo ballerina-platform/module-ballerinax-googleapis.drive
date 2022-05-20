@@ -13,14 +13,12 @@ jobs:
                   args: pack
               env:
                   WORKING_DIR: ./drive
-                  JAVA_HOME: /usr/lib/jvm/default-jvm
             - name: Ballerina Tests
               uses: ballerina-platform/ballerina-action/@nightly
               with:
                   args: test --code-coverage
               env:
                   WORKING_DIR: ./drive
-                  JAVA_HOME: /usr/lib/jvm/default-jvm
                   CLIENT_ID: ${{ secrets.CLIENT_ID }}
                   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
                   REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
@@ -38,4 +36,6 @@ jobs:
             # Print the code coverage information
             - name: Code Coverage
               run: |
+                echo "Covered Code Lines : ${{fromJson(steps.test_results.outputs.testResultsJson).coveredLines}}"
+                echo "Total Code Lines : $(expr ${{fromJson(steps.test_results.outputs.testResultsJson).missedLines}} + ${{fromJson(steps.test_results.outputs.testResultsJson).coveredLines}})"
                 echo "Code Coverage Percentage : ${{fromJson(steps.test_results.outputs.testResultsJson).coveragePercentage}}"
