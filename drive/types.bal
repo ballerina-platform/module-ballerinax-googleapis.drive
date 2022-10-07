@@ -14,6 +14,18 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/http;
+import ballerinax/'client.config;
+
+# Client configuration details.
+@display {label: "Connection Config"}
+public type ConnectionConfig record {|
+    *config:ConnectionConfig;
+    # Configurations related to client authentication
+    http:BearerTokenConfig|config:OAuth2RefreshTokenGrantConfig auth;
+    http:HttpVersion httpVersion = http:HTTP_1_1;
+|};
+
 # Client configuration for cookies.
 #
 # + enabled - User agents provide users with a mechanism for disabling or enabling cookies

@@ -13,42 +13,6 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-# Represents configuration parameters to create Google Drive client.
-# 
-# Client configuration details.
-@display {label: "Connection Config"}
-public type ConnectionConfig record {|
-    # Configurations related to client authentication
-    BearerTokenConfig|OAuth2RefreshTokenGrantConfig auth;
-    # The HTTP version understood by the client
-    HttpVersion httpVersion = HTTP_V1_1;
-    # Configurations related to HTTP/1.x protocol
-    ClientHttp1Settings http1Settings = {chunking: CHUNKING_NEVER};
-    # Configurations related to HTTP/2 protocol
-    ClientHttp2Settings http2Settings = {};
-    # The maximum time to wait (in seconds) for a response before closing the connection
-    decimal timeout = 60;
-    # The choice of setting `forwarded`/`x-forwarded` header
-    string forwarded = "disable";
-    # Configurations associated with request pooling
-    PoolConfiguration poolConfig?;
-    # HTTP caching related configurations
-    CacheConfig cache = {};
-    # Specifies the way of handling compression (`accept-encoding`) header
-    Compression compression = COMPRESSION_AUTO;
-    # Configurations associated with the behaviour of the Circuit Breaker
-    CircuitBreakerConfig circuitBreaker?;
-    # Configurations associated with retrying
-    RetryConfig retryConfig?;
-    # Configurations associated with inbound response size limits
-    ResponseLimitConfigs responseLimits = {};
-    #SSL/TLS-related options
-    ClientSecureSocket secureSocket?;
-    # Proxy server related options
-    ProxyConfig proxy?;
-    # Enables the inbound payload validation functionalty which provided by the constraint package. Enabled by default
-    boolean validation = true;
-|};
 
 # Represents token for Bearer token authentication.
 #
