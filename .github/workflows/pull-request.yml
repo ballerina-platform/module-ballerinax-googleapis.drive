@@ -15,5 +15,15 @@ jobs:
                   CLIENT_ID: ${{ secrets.CLIENT_ID }}
                   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
                   REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-                  
-                  
+            - name: Ballerina Test
+              uses: ballerina-platform/ballerina-action/@nightly
+              with:
+                  args:
+                      test --test-report --code-coverage --coverage-format=xml
+              env:
+                  CLIENT_ID: ${{ secrets.CLIENT_ID }}
+                  CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+                  REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+                  WORKING_DIR: ./drive
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v3
