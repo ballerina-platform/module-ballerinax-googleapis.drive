@@ -23,14 +23,9 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
-
-###################################################################################
-# Get file content by ID
-# ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/get
-# #################################################################################
-
+# ######################
+# Get all spreadsheets
+# #####################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -41,11 +36,10 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    drive:FileContent|error response = driveClient->getFileContent(fileId);
-    if (response is drive:FileContent) {
-        log:printInfo(response.toString());
-    } 
-    else {
-        log:printError(response.message());
+    stream<drive:File>|error res = driveClient->getAllSpreadsheets();
+    if (res is stream<drive:File>) {
+        error? e = res.forEach(function(drive:File file) {
+            log:printInfo(file?.id.toString());
+        });
     }
 }

@@ -25,15 +25,15 @@ configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
 string sourceFileId = "<PLACE_YOUR_FILE_ID_HERE>";
 
-###################################################################################
+# ##################################################################################
 # Copy file by ID
-###################################################################################
+# ##################################################################################
 # Creates a copy of a file and applies any requested updates with patch semantics. 
 # **Folders cannot be copied
 # ################################################################################
 # More details : https://developers.google.com/drive/api/v3/reference/files/copy
 # #################################################################################
-# 
+#
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -48,10 +48,10 @@ public function main() returns error? {
     // drive:File|error response = driveClient->copyFile(sourceFileId, destinationFolderId);
     // drive:File|error response = driveClient->copyFile(sourceFileId, destinationFolderId, newFileName);
     //Print file ID
-    if(res is drive:File){
+    if (res is drive:File) {
         string id = res?.id.toString();
         log:printInfo(id);
     } else {
         log:printError(res.message());
-    }  
+    }
 }

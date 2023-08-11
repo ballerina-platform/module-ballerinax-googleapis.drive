@@ -23,10 +23,17 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-##########################
-# Search Gslides by name
-# ########################
+string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
 
+# ##################################################################################
+# Delete file by ID
+# ##################################################################################
+# Permanently deletes a file owned by the user without moving it to the trash. 
+# If the file belongs to a shared drive the user must be an organizer on the parent. 
+# If the target is a folder, all descendants owned by the user are also deleted.
+# ################################################################################
+# More details : https://developers.google.com/drive/api/v3/reference/files/delete
+# #################################################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -37,15 +44,12 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    stream<drive:File>|error res = driveClient->getSlidesByName("ballerina");
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2);
-    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2, "createdTime");
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            json|error jsonObject = file.cloneWithType(json);
-            if (jsonObject is json) {
-                log:printInfo(jsonObject.toString());
-            }
-        });
+    //Do not supply a request body with this method.
+    //If successful, this method returns an empty response body.
+    boolean|error res = driveClient->deleteFile(fileId);
+    if (res is boolean) {
+        log:printInfo("File Deleted");
+    } else {
+        log:printError(res.message());
     }
 }

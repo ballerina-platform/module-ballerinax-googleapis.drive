@@ -23,12 +23,9 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-###################################################################################
-# Get files
-# ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/list
-# #################################################################################
-
+# #########################
+# Search Gslides by name
+# ########################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -39,9 +36,11 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    stream<drive:File>|error res = driveClient->getAllFiles();
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
+    stream<drive:File>|error res = driveClient->getSlidesByName("ballerina");
+    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2);
+    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2, "createdTime");
+    if (res is stream<drive:File>) {
+        error? e = res.forEach(function(drive:File file) {
             json|error jsonObject = file.cloneWithType(json);
             if (jsonObject is json) {
                 log:printInfo(jsonObject.toString());

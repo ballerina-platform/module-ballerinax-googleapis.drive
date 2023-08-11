@@ -23,20 +23,14 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string folderName = "<FOLDER_NAME>";
+string downloadFileId = "<PLACE_YOUR_FILE_ID_HERE>";
 
-###################################################################################
-# Create folder 
-###################################################################################
-# Creates a new folder
-# Specify the file Name inside the payload. Else it will be uploaded as Untitled 
-# folder.
-# Specify the mime type as application/vnd.google-apps.folder
-# More details : https://developers.google.com/drive/api/v3/mime-types
-# ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/create
 # #################################################################################
-
+# Download file
+# ################################################################################
+# Note: This will only work for files that you upload to Google Drive. 
+# It will not work for documents, presentations, etc. created inside Google Drive.
+# ################################################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -47,13 +41,12 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    drive:File|error res = driveClient->createFolder(folderName);
-    // drive:File|error response = driveClient->createFolder(folderName, parentFolderId);
-    //Print folder ID
-    if(res is drive:File){
-        string id = res?.id.toString();
-        log:printInfo(id);
+    string|error response = driveClient->downloadFile(downloadFileId);
+    //Print download link
+    if (response is string) {
+        string downloadLink = response;
+        log:printInfo(downloadLink);
     } else {
-        log:printError(res.message());
+        log:printError(response.message());
     }
 }

@@ -23,14 +23,9 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string fileName = "<NEW_FILE_NAME>";
-
-###################################################
-# Upload file using Byte Array
-# #################################################
-# You can set byte array as the source and upload. 
-# #################################################
-
+# #########################
+# Search Gslides by name
+# ########################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -39,16 +34,17 @@ public function main() returns error? {
             refreshUrl: refreshUrl,
             refreshToken: refreshToken
         }
-    };  
+    };
     drive:Client driveClient = check new (config);
-    byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
-    drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName);
-    // drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
-    //Print file ID
-    if(res is drive:File){
-        string id = res?.id.toString();
-        log:printInfo(id);
-    } else {
-        log:printError(res.message());
+    stream<drive:File>|error res = driveClient->getSlidesByName("ballerina");
+    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2);
+    // stream<drive:File>|error res = driveClient->getSlidesByName("ballerina", 2, "createdTime");
+    if (res is stream<drive:File>) {
+        error? e = res.forEach(function(drive:File file) {
+            json|error jsonObject = file.cloneWithType(json);
+            if (jsonObject is json) {
+                log:printInfo(jsonObject.toString());
+            }
+        });
     }
 }

@@ -23,12 +23,13 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string locaFilePath = "<PATH_TO_FILE_TO_BE_UPLOADED>";
+string fileName = "<NEW_FILE_NAME>";
 
-###################################################
-# Upload file 
-# #################################################
-
+# ##################################################################################
+# Create file 
+# ################################################################################
+# More details : https://developers.google.com/drive/api/v3/reference/files/create
+# #################################################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -38,15 +39,15 @@ public function main() returns error? {
             refreshToken: refreshToken
         }
     };
-    drive:Client driveClient = check new (config);   
-    drive:File|error res = driveClient->uploadFile(locaFilePath);
-    // drive:File|error res = driveClient->uploadFile(locaFilePath, fileName);
-    // drive:File|error res = driveClient->uploadFile(locaFilePath, fileName, parentFolderId);
-    //Print file ID
-    if(res is drive:File){
-        string id = res?.id.toString();
+    drive:Client driveClient = check new (config);
+    drive:File|error response = driveClient->createFile(fileName);
+    // drive:File|error response = driveClient->createFile(fileName, DOCUMENT);
+    // drive:File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
+    //Print folder ID
+    if (response is drive:File) {
+        string id = response?.id.toString();
         log:printInfo(id);
     } else {
-        log:printError(res.message());
+        log:printError(response.message());
     }
 }

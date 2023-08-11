@@ -23,10 +23,19 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-#######################
-# Get all spreadsheets
-# #####################
+string folderName = "<FOLDER_NAME>";
 
+# ##################################################################################
+# Create folder 
+# ##################################################################################
+# Creates a new folder
+# Specify the file Name inside the payload. Else it will be uploaded as Untitled 
+# folder.
+# Specify the mime type as application/vnd.google-apps.folder
+# More details : https://developers.google.com/drive/api/v3/mime-types
+# ################################################################################
+# More details : https://developers.google.com/drive/api/v3/reference/files/create
+# #################################################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -37,10 +46,13 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    stream<drive:File>|error res = driveClient->getAllSpreadsheets();
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            log:printInfo(file?.id.toString());
-        });
+    drive:File|error res = driveClient->createFolder(folderName);
+    // drive:File|error response = driveClient->createFolder(folderName, parentFolderId);
+    //Print folder ID
+    if (res is drive:File) {
+        string id = res?.id.toString();
+        log:printInfo(id);
+    } else {
+        log:printError(res.message());
     }
 }

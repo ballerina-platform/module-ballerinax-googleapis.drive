@@ -23,10 +23,13 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-##########################
-# Search Gdocs by name
-# ########################
+string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
 
+# ##################################################################################
+# Get file by ID
+# ################################################################################
+# More details : https://developers.google.com/drive/api/v3/reference/files/get
+# #################################################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -37,15 +40,12 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    stream<drive:File>|error res = driveClient->getDocumentsByName("ballerina");
-    // stream<drive:File>|error res = driveClient->getDocumentsByName("ballerina", 2);
-    // stream<drive:File>|error res = driveClient->getDocumentsByName("ballerina", 2, "createdTime");
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            json|error jsonObject = file.cloneWithType(json);
-            if (jsonObject is json) {
-                log:printInfo(jsonObject.toString());
-            }
-        });
+    drive:File|error testGetFile = driveClient->getFile(fileId);
+    //Print file ID
+    if (testGetFile is drive:File) {
+        string id = testGetFile?.id.toString();
+        log:printInfo(id);
+    } else {
+        log:printError(testGetFile.message());
     }
 }
