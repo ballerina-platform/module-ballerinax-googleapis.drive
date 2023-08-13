@@ -415,7 +415,7 @@ public type FilesResponse record {
 #            you can use the special value * to return all fields, but you'll achieve greater performance by only 
 #            selecting the fields you need  
 # + supportsAllDrives - Whether the requesting application supports both My Drives and shared drives. (Default: false)  
-type GetFileOptional record {
+public type GetFileOptional record {
     boolean acknowledgeAbuse?;
     string fields?;
     string alt?;
@@ -502,7 +502,7 @@ type CreateFileOptional record {
 # + addParents - A comma-separated list of parent IDs to add
 # + supportsAllDrives -  Whether the requesting application supports both My Drives and shared drives. (Default: false)  
 @display {label: "File Metadata"}
-type UpdateFileMetadataOptional record {
+public type UpdateFileMetadataOptional record {
     @display {label: "Add Parents"}
     string addParents?; 
     @display {label: "Include Permissions for View"}
