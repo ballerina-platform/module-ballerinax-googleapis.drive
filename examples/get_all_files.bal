@@ -23,18 +23,11 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
-
-###################################################################################
-# Delete file by ID
-###################################################################################
-# Permanently deletes a file owned by the user without moving it to the trash. 
-# If the file belongs to a shared drive the user must be an organizer on the parent. 
-# If the target is a folder, all descendants owned by the user are also deleted.
+# ##################################################################################
+# Get files
 # ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/delete
+# More details : https://developers.google.com/drive/api/v3/reference/files/list
 # #################################################################################
-
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -45,12 +38,13 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    //Do not supply a request body with this method.
-    //If successful, this method returns an empty response body.
-    boolean|error res = driveClient->deleteFile(fileId);
-    if(res is boolean){
-        log:printInfo("File Deleted");
-    } else {
-        log:printError(res.message());
+    stream<drive:File>|error res = driveClient->getAllFiles();
+    if (res is stream<drive:File>) {
+        error? e = res.forEach(function(drive:File file) {
+            json|error jsonObject = file.cloneWithType(json);
+            if (jsonObject is json) {
+                log:printInfo(jsonObject.toString());
+            }
+        });
     }
 }

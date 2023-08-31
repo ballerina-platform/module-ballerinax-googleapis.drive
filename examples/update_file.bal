@@ -23,15 +23,27 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
+drive:UpdateFileMetadataOptional optionalsFileMetadata = {
+    addParents: "<GIVE_PARENT_FOLDER_ID>"
+};
+drive:FileMetadata payloadFileMetadata = {
+    name: "<GIVE_THE_FILE_NAME>",
+    mimeType: "<GIVE_MIME_TYPE>",
+    description: "<GIVE_THE_DESCRIPTION>"
+};
+
 string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
-string newFileName = "<NEW_NAME>";
 
-###################################################################################
-# Rename file by ID
-###################################################################################
-# Files can be renamed using this function.
-# ################################################################################
-
+# ##################################################################################
+# Update file with metadata
+# ##################################################################################
+# Update a file with any metadata that is supported by the Drive API.
+# e.g :You can update the description of a file, MIME type of a file..
+# This function is a more generalized function to update a file.
+# You can use this method to do many updates at once.
+# But if you want to do only one change, You can use other specified functions also.
+# E.g : If you want to rename/move a file. There are specified functions.
+# #################################################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -42,12 +54,12 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    drive:File|error res = driveClient->renameFile(fileId, newFileName);
+    drive:File|error res = driveClient->updateFileMetadataById(fileId, payloadFileMetadata, optionalsFileMetadata);
     //Print file ID
-    if(res is drive:File){
+    if (res is drive:File) {
         string id = res?.id.toString();
         log:printInfo(id);
     } else {
         log:printError(res.message());
-    }   
+    }
 }

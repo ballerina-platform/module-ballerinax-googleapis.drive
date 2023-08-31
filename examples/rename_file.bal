@@ -24,13 +24,13 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
 string fileId = "<PLACE_YOUR_FILE_ID_HERE>";
+string newFileName = "<NEW_NAME>";
 
-###################################################################################
-# Get file by ID
+# ##################################################################################
+# Rename file by ID
+# ##################################################################################
+# Files can be renamed using this function.
 # ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/get
-# #################################################################################
-
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -41,12 +41,12 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    drive:File | error testGetFile = driveClient->getFile(fileId);
+    drive:File|error res = driveClient->renameFile(fileId, newFileName);
     //Print file ID
-    if(testGetFile is drive:File){
-        string id = testGetFile?.id.toString();
+    if (res is drive:File) {
+        string id = res?.id.toString();
         log:printInfo(id);
     } else {
-        log:printError(testGetFile.message());
+        log:printError(res.message());
     }
 }

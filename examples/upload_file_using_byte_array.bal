@@ -23,10 +23,13 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-##############################
-# Search Google forms by name
-# ###########################
+string fileName = "<NEW_FILE_NAME>";
 
+# ##################################################
+# Upload file using Byte Array
+# #################################################
+# You can set byte array as the source and upload. 
+# #################################################
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -37,15 +40,14 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    stream<drive:File>|error res = driveClient->getFormsByName("ballerina");
-    // stream<drive:File>|error res = driveClient->getFormsByName("ballerina", 2);
-    // stream<drive:File>|error res = driveClient->getFormsByName("ballerina", 2, "createdTime");
-    if (res is stream<drive:File>){
-        error? e = res.forEach(function (drive:File file) {
-            json|error jsonObject = file.cloneWithType(json);
-            if (jsonObject is json) {
-                log:printInfo(jsonObject.toString());
-            }
-        });
+    byte[] byteArray = [116, 101, 115, 116, 45, 115, 116, 114, 105, 110, 103];
+    drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName);
+    // drive:File|error res = driveClient->uploadFileUsingByteArray(byteArray, fileName, parentFolderId);
+    //Print file ID
+    if (res is drive:File) {
+        string id = res?.id.toString();
+        log:printInfo(id);
+    } else {
+        log:printError(res.message());
     }
 }

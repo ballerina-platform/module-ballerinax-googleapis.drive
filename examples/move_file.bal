@@ -23,14 +23,15 @@ configurable string clientSecret = os:getEnv("CLIENT_SECRET");
 configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 configurable string refreshUrl = os:getEnv("REFRESH_URL");
 
-string fileName = "<NEW_FILE_NAME>";
+string sourceFileId = "<PLACE_YOUR_FILE_ID_HERE>";
+string destinationFolderId = "<PLACE_YOUR_DESTINATION_FOLDER_ID_HERE>";
 
-###################################################################################
-# Create file 
+# ##################################################################################
+# Move file by ID
+# ##################################################################################
+# Move file from one place to another folder. You need to specify the destination
+# folderId
 # ################################################################################
-# More details : https://developers.google.com/drive/api/v3/reference/files/create
-# #################################################################################
-
 public function main() returns error? {
     drive:ConnectionConfig config = {
         auth: {
@@ -41,14 +42,12 @@ public function main() returns error? {
         }
     };
     drive:Client driveClient = check new (config);
-    drive:File|error response = driveClient->createFile(fileName);
-    // drive:File|error response = driveClient->createFile(fileName, DOCUMENT);
-    // drive:File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
-    //Print folder ID
-    if(response is drive:File){
-        string id = response?.id.toString();
+    drive:File|error res = driveClient->moveFile(sourceFileId, destinationFolderId);
+    //Print file ID
+    if (res is drive:File) {
+        string id = res?.id.toString();
         log:printInfo(id);
     } else {
-        log:printError(response.message());
+        log:printError(res.message());
     }
 }
