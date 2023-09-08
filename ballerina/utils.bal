@@ -538,8 +538,8 @@ isolated function copyFile(http:Client httpClient, string fileId, CopyFileOption
 # 
 # + httpClient - The HTTP Client
 # + fileId - ID of the file to be updated
+# + fileResource - 'FileMetadata' can be added as a payload to change metadata
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
-# + fileResource - 'File' can added as a payload to change metadata
 # + return - If successful, returns `File`. Else returns `error`
 isolated function updateFileById(http:Client httpClient, string fileId, FileMetadata? fileResource = (), 
                             UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
