@@ -7,7 +7,7 @@ The `ballerinax/googleapis.drive` is a [Ballerina](https://ballerina.io/) connec
 ### Compatibility
 |                    | Version            |
 |--------------------|--------------------|
-| Ballerina Language | Swan Lake 2201.3.0 |
+| Ballerina Language | Swan Lake 2201.8.0 |
 | Google Drive API   | V3                 |
 
 ## Report issues
