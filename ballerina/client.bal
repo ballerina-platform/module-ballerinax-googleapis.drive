@@ -299,7 +299,7 @@ public isolated client class Client {
         UpdateFileMetadataOptional optionalsFileMetadata = {
             addParents : destinationFolderId
         };
-        return updateFileById(self.httpClient, fileId, null, optionalsFileMetadata);
+        return updateFileById(self.httpClient, fileId, optional = optionalsFileMetadata);
     }
 
     # Renames a file.
@@ -311,7 +311,7 @@ public isolated client class Client {
     remote isolated function renameFile(@display {label: "File ID"} string fileId, 
                                @display {label: "New File Name"} string newFileName) 
                                returns @tainted File|error {
-        File fileResource = {name : newFileName};
+        FileMetadata fileResource = {name : newFileName};
         return updateFileById(self.httpClient, fileId, fileResource);
     }
 
