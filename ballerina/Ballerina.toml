@@ -1,11 +1,11 @@
 [package]
-distribution = "2201.7.0"
+distribution = "2201.8.0"
 org = "ballerinax"
 name = "googleapis.drive"
 version = "3.4.0"
 authors = ["Ballerina"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-googleapis.drive"
-keywords = ["Drive", "Cost/Free", "Vendor/Google"]
+keywords = ["Content & Files/File Management & Storage", "Cost/Free", "Vendor/Google"]
 icon = "icon.png"
 license = ["Apache-2.0"]
 
