@@ -50,6 +50,9 @@ accessToken.bal
 temp.bal.ballerina/
 target/
 .DS_Store
+*Ballerina.lock
+drive/modules/drive/resources
+.ballerina
 
 # Ignore resource .json files
 **/resources/*.json
@@ -59,9 +62,6 @@ ballerina-internal.log
 
 # Gradle files
 .gradle
-
-# Build files
-**/build/*
 
 # Ignore Gradle build output directory
 build
