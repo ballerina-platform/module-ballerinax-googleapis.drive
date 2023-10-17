@@ -22,7 +22,7 @@ plugins {
     id 'io.ballerina.plugin'
 }
 
-description = 'Drive - Ballerina'
+description = 'GDrive - Ballerina'
 
 def packageName = "googleapis.drive"
 def packageOrg = "ballerinax"
@@ -67,24 +67,6 @@ task commitTomlFiles {
                 commandLine 'cmd', '/c', "git commit -m \"[Automated] Update the toml files\" Ballerina.toml Dependencies.toml"
             } else {
                 commandLine 'sh', '-c', "git commit -m '[Automated] Update the toml files' Ballerina.toml Dependencies.toml"
-            }
-        }
-    }
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifact source: createArtifactZip, extension: 'zip'
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ballerina-platform/module-${packageOrg}-${packageName}")
-            credentials {
-                username = System.getenv("publishUser")
-                password = System.getenv("publishPAT")
             }
         }
     }
