@@ -1,4 +1,4 @@
-// Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2025, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -24,8 +24,9 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 // Access token support
 //configurable string accessToken = os:getEnv("ACCESS_TOKEN");
 
-const string fileName = "ballerina_temp_file"; 
-const string folderName = "ballerina_temp_folder";
+configurable string fileName = ?;
+configurable string folderName = ?;
+configurable string docFileId = ?;
 const string localFilePath = "./tests/resources/bar.jpeg";
 
 // Access token support
@@ -82,7 +83,7 @@ function testGetFileContentById() {
     FileContent|error response = driveClient->getFileContent(fileId);
     if (response is FileContent) {
         log:printInfo(response.toString());
-    } 
+    }
     else {
         log:printError(response.message());
         test:assertFail(response.message());
@@ -220,7 +221,7 @@ function testCreateFolder() {
 }
 
 ##############
-# Create file 
+# Create file
 # ############
 
 @test:Config {
@@ -286,7 +287,7 @@ function testGetFoldersByName() {
 # #################
 
 @test:Config {}
-function testAllGetFiles() { 
+function testAllGetFiles() {
     log:printInfo("Gdrive Client -> testAllGetFiles()");
     stream<File>|error response = driveClient->getAllFiles("not name contains 'hello'");
     // stream<File>|error response = driveClient->getAllFiles();
@@ -301,7 +302,7 @@ function testAllGetFiles() {
 }
 
 #############################
-# Get All Google spreadsheets 
+# Get All Google spreadsheets
 # ###########################
 
 @test:Config {}
@@ -404,7 +405,7 @@ function testGetSlidesByName() {
 function testUploadFile() {
     log:printInfo("Gdrive Client -> testUploadFile()");
     File|error response = driveClient->uploadFile(localFilePath);
-    // Assertions 
+    // Assertions
     if(response is File){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
     } else {
@@ -443,7 +444,7 @@ function testUploadFileUsingByteArray() {
     log:printInfo("Gdrive Client -> testUploadFileUsingByteArray()");
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
-    // Assertions 
+    // Assertions
     if(response is File){
         string id = response?.id.toString();
         log:printInfo(id);
@@ -454,3 +455,56 @@ function testUploadFileUsingByteArray() {
     }
 }
 
+@test:Config {
+    dependsOn: [testCreateFile]
+}
+function testExportFile() {
+    log:printInfo("Gdrive Client -> testExportFile()");
+    string mimeType = "text/markdown";
+    FileContent|error content = driveClient->exportFile(docFileId, mimeType);
+    if (content is FileContent) {
+        log:printInfo(content.toString().substring(0, 10));
+        test:assertNotEquals(content, EMPTY_STRING, msg = "Expect File content");
+    } else {
+        log:printError(content.message());
+        test:assertFail(content.message());
+    }
+}
+
+@test:Config {}
+function testGetStartPageToken() {
+    log:printInfo("Gdrive Client -> testGetStartPageToken()");
+    string|error response = driveClient->getStartPageToken();
+    if (response is string) {
+        test:assertNotEquals(response, EMPTY_STRING, msg = "Expect non-empty start page token");
+        log:printInfo("Start page token: " + response);
+    } else {
+        log:printError(response.message());
+        test:assertFail(response.message());
+    }
+}
+
+@test:Config {
+    dependsOn: [testGetStartPageToken]
+}
+function testListChanges() {
+    log:printInfo("Gdrive Client -> testListChanges()");
+    string|error tokenResponse = driveClient->getStartPageToken();
+    if (tokenResponse is string) {
+        stream<Change>|error changesResponse = driveClient->listChanges(tokenResponse);
+        if (changesResponse is stream<Change>) {
+            boolean hasChanges = false;
+            changesResponse.forEach(function(Change change) {
+                hasChanges = true;
+                log:printInfo("Unexpected change: " + change.toString());
+            });
+            test:assertFalse(hasChanges, msg = "Expected no changes, but changes were found");
+        } else {
+            log:printError(changesResponse.message());
+            test:assertFail(changesResponse.message());
+        }
+    } else {
+        log:printError(tokenResponse.message());
+        test:assertFail(tokenResponse.message());
+    }
+}
