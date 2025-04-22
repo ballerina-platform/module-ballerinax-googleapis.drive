@@ -1,4 +1,4 @@
-// Copyright (c) 2025, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -458,53 +458,33 @@ function testUploadFileUsingByteArray() {
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testExportFile() {
+function testExportFile() returns error? {
     log:printInfo("Gdrive Client -> testExportFile()");
     string mimeType = "text/markdown";
-    FileContent|error content = driveClient->exportFile(docFileId, mimeType);
-    if (content is FileContent) {
-        log:printInfo(content.toString().substring(0, 10));
-        test:assertNotEquals(content, EMPTY_STRING, msg = "Expect File content");
-    } else {
-        log:printError(content.message());
-        test:assertFail(content.message());
-    }
+    FileContent content = check driveClient->exportFile(docFileId, mimeType);
+    log:printInfo(content.toString().substring(0, 10));
+    test:assertNotEquals(content, EMPTY_STRING, msg = "Expect File content");
 }
 
 @test:Config {}
-function testGetStartPageToken() {
+function testGetStartPageToken() returns error? {
     log:printInfo("Gdrive Client -> testGetStartPageToken()");
-    string|error response = driveClient->getStartPageToken();
-    if (response is string) {
-        test:assertNotEquals(response, EMPTY_STRING, msg = "Expect non-empty start page token");
-        log:printInfo("Start page token: " + response);
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+    string response = check driveClient->getStartPageToken();
+    test:assertNotEquals(response, EMPTY_STRING, msg = "Expect non-empty start page token");
+    log:printInfo("Start page token: " + response);
 }
 
 @test:Config {
     dependsOn: [testGetStartPageToken]
 }
-function testListChanges() {
+function testListChanges() returns error? {
     log:printInfo("Gdrive Client -> testListChanges()");
-    string|error tokenResponse = driveClient->getStartPageToken();
-    if (tokenResponse is string) {
-        stream<Change>|error changesResponse = driveClient->listChanges(tokenResponse);
-        if (changesResponse is stream<Change>) {
-            boolean hasChanges = false;
-            changesResponse.forEach(function(Change change) {
-                hasChanges = true;
-                log:printInfo("Unexpected change: " + change.toString());
-            });
-            test:assertFalse(hasChanges, msg = "Expected no changes, but changes were found");
-        } else {
-            log:printError(changesResponse.message());
-            test:assertFail(changesResponse.message());
-        }
-    } else {
-        log:printError(tokenResponse.message());
-        test:assertFail(tokenResponse.message());
-    }
+    string tokenResponse = check driveClient->getStartPageToken();
+    stream<Change> changesResponse = check driveClient->listChanges(tokenResponse);
+    boolean hasChanges = false;
+    changesResponse.forEach(function(Change change) {
+        hasChanges = true;
+        log:printInfo("Unexpected change: " + change.toString());
+    });
+    test:assertFalse(hasChanges, msg = "Expected no changes, but changes were found");
 }

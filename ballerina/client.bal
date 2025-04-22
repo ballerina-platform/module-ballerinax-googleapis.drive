@@ -1,4 +1,4 @@
-// Copyright (c) 2025, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -431,9 +431,9 @@ public isolated client class Client {
 
     # Gets the starting pageToken for listing future changes.
     #
-    # + return - If successful, `string`. Else an `error`
+    # + return - If successful, returns a `string`; otherwise, returns an `error`
     @display {label: "Get StartPage Token"}
-    remote isolated function getStartPageToken() returns @tainted string|error {
+    remote isolated function getStartPageToken() returns string|error {
         // GET /drive/v3/changes/startPageToken?supportsAllDrives=true
         string path = prepareUrl([DRIVE_PATH, CHANGES, START_PAGE_TOKEN]) +
                 QUESTION_MARK + SUPPORTS_ALL_DRIVES + EQUAL + TRUE;
@@ -445,15 +445,15 @@ public isolated client class Client {
             : error("startPageToken not found in response");
     }
 
-    # Lists rhe changes for a user or shared drive.
+    # Lists the changes for a user or a shared drive.
     #
     # + pageToken - The token returned from the previous request
-    # + optional - 'ListChangesOptional' used to add query parameters to the request
-    # + return - If successful, stream of changes `stream<Change>`. Else an `error`
+    # + optional - A `ListChangesOptional` record used to add query parameters to the request
+    # + return - If successful, returns a stream of changes `stream<Change>`; otherwise, returns an `error`
     @display {label: "List Changes"}
     remote isolated function listChanges(@display {label: "Page Token"} string pageToken,
             @display {label: "Optional Params"} ListChangesOptional? optional = ())
-        returns @tainted@display {label: "Change Stream"} stream<Change>|error {
+        returns @display {label: "Change Stream"} stream<Change>|error {
 
         Change[] collected = [];
         return getChangesStream(self.httpClient, pageToken, collected, optional);

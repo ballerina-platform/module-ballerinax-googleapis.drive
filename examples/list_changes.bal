@@ -42,16 +42,16 @@ public function main() returns error? {
     drive:Client driveClient = check new (config);
 
     string|error tokenResponse = driveClient->getStartPageToken();
-    if (tokenResponse is string) {
+    if tokenResponse is string {
         log:printInfo("Start page token: " + tokenResponse);
         stream<drive:Change>|error changesResponse = driveClient->listChanges(tokenResponse);
-        if (changesResponse is stream<drive:Change>) {
+        if changesResponse is stream<drive:Change> {
             boolean foundChanges = false;
             changesResponse.forEach(function(drive:Change change) {
                 foundChanges = true;
                 log:printInfo(`Change detected for file ID: ${change.fileId}`);
             });
-            if (!foundChanges) {
+            if !foundChanges {
                 log:printInfo("No changes found since token.");
             }
         } else {

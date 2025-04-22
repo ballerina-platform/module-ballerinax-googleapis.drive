@@ -16,7 +16,7 @@
 
 import ballerina/log;
 import ballerina/os;
-import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive;
 
 configurable string clientId = os:getEnv("CLIENT_ID");
 configurable string clientSecret = os:getEnv("CLIENT_SECRET");
@@ -45,7 +45,7 @@ public function main() returns error? {
     // MIME type for export (e.g., MARKDOWN)
     string exportMimeType = "text/markdown";
     drive:FileContent|error response = driveClient->exportFile(fileId, exportMimeType);
-    if (response is drive:FileContent) {
+    if response is drive:FileContent {
         log:printInfo("Exported file content: " + response.toString());
     } else {
         log:printError("Error exporting file: " + response.message());

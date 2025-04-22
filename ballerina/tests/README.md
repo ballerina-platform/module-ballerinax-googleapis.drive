@@ -2,7 +2,7 @@
 
 | Ballerina Language Version | Gdrive API Version|
 |:--------------------------:|:-----------------:|
-| Swan Lake Alpha 5          |   v3              |
+| Swan Lake Update 12        |   v3              |
 
 ### Prerequisites
 
