@@ -705,42 +705,38 @@ isolated function prepareUrlWithChangesOptional(string pageToken,
     string path = prepareUrl([DRIVE_PATH, CHANGES]);
 
     // Mandatory pageToken first
-    map<string> qp = {};
-    qp[PAGE_TOKEN] = pageToken;
+    map<string> queryParams = {};
+    queryParams[PAGE_TOKEN] = pageToken;
 
     if optional is ListChangesOptional {
         if optional.pageSize is int {
-            qp[PAGE_SIZE] = optional.pageSize.toString();
+            queryParams[PAGE_SIZE] = optional.pageSize.toString();
         }
         if optional.driveId is string {
-            qp[DRIVE_ID] = optional.driveId.toString();
+            queryParams[DRIVE_ID] = optional.driveId.toString();
         }
         if optional.fields is string {
-            qp[FIELDS] = optional.fields.toString();
+            queryParams[FIELDS] = optional.fields.toString();
         }
         if optional.supportsAllDrives is boolean {
-            qp[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+            queryParams[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
         }
         if optional.includeItemsFromAllDrives is boolean {
-            qp[INCLUDE_ITEMS_FROM_ALL_DRIVES] =
+            queryParams[INCLUDE_ITEMS_FROM_ALL_DRIVES] =
                 optional.includeItemsFromAllDrives.toString();
         }
         if optional.includeRemoved is boolean {
-            qp[INCLUDE_REMOVED] = optional.includeRemoved.toString();
+            queryParams[INCLUDE_REMOVED] = optional.includeRemoved.toString();
         }
         if optional.includeCorpusRemovals is boolean {
-            qp[INCLUDE_CORPUS_REMOVALS] = optional.includeCorpusRemovals.toString();
+            queryParams[INCLUDE_CORPUS_REMOVALS] = optional.includeCorpusRemovals.toString();
         }
         if optional.restrictToMyDrive is boolean {
-            qp[RESTRICT_TO_MY_DRIVE] = optional.restrictToMyDrive.toString();
+            queryParams[RESTRICT_TO_MY_DRIVE] = optional.restrictToMyDrive.toString();
         }
     }
 
-    string[] vals = [];
-    foreach var v in qp {
-        vals.push(v);
-    }
-    return prepareQueryUrl([path], qp.keys(), vals);
+    return prepareQueryUrl([path], queryParams.keys(), queryParams.toArray());
 }
 
 # Recursive paging helper used by `listChanges`

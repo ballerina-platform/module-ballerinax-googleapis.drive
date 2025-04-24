@@ -86,7 +86,7 @@ public isolated client class Client {
     @display {label: "Export File"}
     remote isolated function exportFile(@display {label: "File ID"} string fileId,
             @display {label: "MIME Type"} string mimeType)
-                                    returns @tainted FileContent|error {
+                                    returns FileContent|error {
         string path = prepareExportUrl(fileId, mimeType);
         return generateRecordFileContent(self.httpClient, path);
     }

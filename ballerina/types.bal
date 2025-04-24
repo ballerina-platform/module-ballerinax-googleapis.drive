@@ -818,9 +818,9 @@ public type ChangeList record {
 # + restrictions - Restrictions for accessing the content of the shared drive. This field is only populated on drives.get responses.
 # + themeId - The ID of the theme from which the background image and color are set. The set of possible driveThemes can be retrieved from a drive.about.get response. When not specified on a drive.drives.create request, a random theme is chosen from which the background image and color are set. This is a write-only field; it can only be set on requests that don't set colorRgb or backgroundImageFile.
 public type Drive record {
-    Drive_backgroundImageFile backgroundImageFile?;
+    DriveBackgroundImageFile backgroundImageFile?;
     string backgroundImageLink?;
-    Drive_capabilities capabilities?;
+    DriveCapabilities capabilities?;
     string colorRgb?;
     string createdTime?;
     boolean hidden?;
@@ -828,7 +828,7 @@ public type Drive record {
     string kind = "drive#drive";
     string name?;
     string orgUnitId?;
-    Drive_restrictions restrictions?;
+    DriveRestrictions restrictions?;
     string themeId?;
 };
 
@@ -859,7 +859,7 @@ public type ListChangesOptional record {
 # + width - The width of the cropped image in the closed range of 0 to 1. This value represents the width of the cropped image divided by the width of the entire image. The height is computed by applying a width to height aspect ratio of 80 to 9. The resulting image must be at least 1280 pixels wide and 144 pixels high.
 # + xCoordinate - The X coordinate of the upper left corner of the cropping area in the background image. This is a value in the closed range of 0 to 1. This value represents the horizontal distance from the left side of the entire image to the left side of the cropping area divided by the width of the entire image.
 # + yCoordinate - The Y coordinate of the upper left corner of the cropping area in the background image. This is a value in the closed range of 0 to 1. This value represents the vertical distance from the top side of the entire image to the top side of the cropping area divided by the height of the entire image.
-public type Drive_backgroundImageFile record {
+public type DriveBackgroundImageFile record {
     string id?;
     float width?;
     float xCoordinate?;
@@ -888,7 +888,7 @@ public type Drive_backgroundImageFile record {
 # + canResetDriveRestrictions - Whether the current user can reset the shared drive restrictions to defaults.
 # + canShare - Whether the current user can share files or folders in this shared drive.
 # + canTrashChildren - Whether the current user can trash children from folders in this shared drive.
-public type Drive_capabilities record {
+public type DriveCapabilities record {
     boolean canAddChildren?;
     boolean canChangeCopyRequiresWriterPermissionRestriction?;
     boolean canChangeDomainUsersOnlyRestriction?;
@@ -918,7 +918,7 @@ public type Drive_capabilities record {
 # + domainUsersOnly - Whether access to this shared drive and items inside this shared drive is restricted to users of the domain to which this shared drive belongs. This restriction may be overridden by other sharing policies controlled outside of this shared drive.
 # + driveMembersOnly - Whether access to items inside this shared drive is restricted to its members.
 # + sharingFoldersRequiresOrganizerPermission - If true, only users with the organizer role can share folders. If false, users with either the organizer role or the file organizer role can share folders.
-public type Drive_restrictions record {
+public type DriveRestrictions record {
     boolean adminManagedRestrictions?;
     boolean copyRequiresWriterPermission?;
     boolean domainUsersOnly?;
