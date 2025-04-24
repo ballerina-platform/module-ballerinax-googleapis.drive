@@ -682,8 +682,8 @@ isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteAr
 # + httpClient - Drive client
 # + path - GET URI path
 # + return - `FileContent` if successful, `error` if not.
-isolated function generateRecordFileContent(http:Client httpClient, string path) returns @tainted FileContent|error {
-    http:Response response = <http:Response> check httpClient->get(<@untainted>path);
+isolated function generateRecordFileContent(http:Client httpClient, string path) returns FileContent|error {
+    http:Response response = <http:Response>check httpClient->get(path);
     if (response.statusCode == http:STATUS_OK) {
         return {
             content: check response.getBinaryPayload(),
@@ -751,8 +751,8 @@ isolated function prepareUrlWithChangesOptional(string pageToken,
 # + optional - Optional query parameters
 # + return - A stream of changes or an error
 isolated function getChangesStream(http:Client httpClient,
-        string pageToken, @tainted Change[] acc,
-        ListChangesOptional? optional = ()) returns @tainted stream<Change>|error {
+        string pageToken, Change[] acc,
+        ListChangesOptional? optional = ()) returns stream<Change>|error {
     string url = prepareUrlWithChangesOptional(pageToken, optional);
     json resp = check sendRequest(httpClient, url);
     ChangeList|error decoded = resp.cloneWithType(ChangeList);
@@ -771,7 +771,7 @@ isolated function getChangesStream(http:Client httpClient,
         if decoded?.nextPageToken is string {
             _ = check getChangesStream(httpClient, decoded?.nextPageToken.toString(), acc, optional);
         }
-        return (<@untainted>acc).toStream();
+        return acc.toStream();
     }
     return error(ERR_FILE_RESPONSE, decoded);
 }
