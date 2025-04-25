@@ -713,10 +713,10 @@ isolated function prepareUrlWithChangesOptional(string pageToken,
             queryParams[PAGE_SIZE] = optional.pageSize.toString();
         }
         if optional.driveId is string {
-            queryParams[DRIVE_ID] = optional.driveId.toString();
+            queryParams[DRIVE_ID] = <string>optional.driveId;
         }
         if optional.fields is string {
-            queryParams[FIELDS] = optional.fields.toString();
+            queryParams[FIELDS] = <string>optional.fields;
         }
         if optional.supportsAllDrives is boolean {
             queryParams[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
@@ -765,7 +765,7 @@ isolated function getChangesStream(http:Client httpClient,
         }
 
         if decoded?.nextPageToken is string {
-            _ = check getChangesStream(httpClient, decoded?.nextPageToken.toString(), acc, optional);
+            _ = check getChangesStream(httpClient, <string>decoded?.nextPageToken, acc, optional);
         }
         return acc.toStream();
     }
