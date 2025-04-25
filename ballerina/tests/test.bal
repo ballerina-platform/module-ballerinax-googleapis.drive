@@ -83,7 +83,7 @@ function testGetFileContentById() {
     FileContent|error response = driveClient->getFileContent(fileId);
     if (response is FileContent) {
         log:printInfo(response.toString());
-    }
+    } 
     else {
         log:printError(response.message());
         test:assertFail(response.message());
@@ -221,7 +221,7 @@ function testCreateFolder() {
 }
 
 ##############
-# Create file
+# Create file 
 # ############
 
 @test:Config {
@@ -287,7 +287,7 @@ function testGetFoldersByName() {
 # #################
 
 @test:Config {}
-function testAllGetFiles() {
+function testAllGetFiles() { 
     log:printInfo("Gdrive Client -> testAllGetFiles()");
     stream<File>|error response = driveClient->getAllFiles("not name contains 'hello'");
     // stream<File>|error response = driveClient->getAllFiles();
@@ -302,7 +302,7 @@ function testAllGetFiles() {
 }
 
 #############################
-# Get All Google spreadsheets
+# Get All Google spreadsheets 
 # ###########################
 
 @test:Config {}
@@ -405,7 +405,7 @@ function testGetSlidesByName() {
 function testUploadFile() {
     log:printInfo("Gdrive Client -> testUploadFile()");
     File|error response = driveClient->uploadFile(localFilePath);
-    // Assertions
+    // Assertions 
     if(response is File){
         test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
     } else {
@@ -444,7 +444,7 @@ function testUploadFileUsingByteArray() {
     log:printInfo("Gdrive Client -> testUploadFileUsingByteArray()");
     byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
     File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
-    // Assertions
+    // Assertions 
     if(response is File){
         string id = response?.id.toString();
         log:printInfo(id);

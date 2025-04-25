@@ -20,7 +20,7 @@ import ballerina/io;
 import ballerina/log;
 
 # Send GET request.
-#
+# 
 # + httpClient - Drive client
 # + path - GET URI path
 # + return - JSON or error if not suceeded
@@ -40,7 +40,7 @@ isolated function sendRequest(http:Client httpClient, string path) returns @tain
 }
 
 # Send DELETE request.
-#
+# 
 # + httpClient - Drive client
 # + path - DELETE URI path
 # + return - boolean or error if not suceeded, True if Deleted successfully.
@@ -54,7 +54,7 @@ isolated function deleteRequest(http:Client httpClient, string path) returns @ta
 }
 
 # Send POST request with  a Payload.
-#
+# 
 # + httpClient - Drive client
 # + path - POST URI path
 # + jsonPayload - Payload of the request.
@@ -79,7 +79,7 @@ isolated function sendRequestWithPayload(http:Client httpClient, string path, js
 }
 
 # Send PATCH request with  a Payload.
-#
+# 
 # + httpClient - Drive client
 # + path - PATCH URI path
 # + jsonPayload - Payload of the request
@@ -104,7 +104,7 @@ isolated function updateRequestWithPayload(http:Client httpClient, string path, 
 }
 
 # Send POST request with  a Payload.
-#
+# 
 # + httpClient - Drive client
 # + path - POST URI path
 # + jsonPayload - Payload of the request
@@ -129,19 +129,19 @@ isolated function uploadRequestWithPayload(http:Client httpClient, string path, 
 }
 
 # Formation of error message
-#
+# 
 # + errorResponse - Can be json or error type
 # + return - error if not exist.
 isolated function getDriveError(json|error errorResponse) returns error {
-    if (errorResponse is json) {
+  if (errorResponse is json) {
         return error(errorResponse.toString());
-    } else {
+  } else {
         return errorResponse;
-    }
+  }
 }
 
 # Prepare Validate Status Code.
-#
+# 
 # + response - JSON response fromthe request
 # + statusCode - The Status code
 # + return - Error Message
@@ -152,7 +152,7 @@ isolated function validateStatusCode(json response, int statusCode) returns erro
 }
 
 # Prepare URL.
-#
+# 
 # + paths - An array of paths prefixes
 # + return - The prepared URL
 isolated function prepareUrl(string[] paths) returns string {
@@ -169,7 +169,7 @@ isolated function prepareUrl(string[] paths) returns string {
 }
 
 # Prepare URL with encoded query.
-#
+# 
 # + paths - An array of paths prefixes
 # + queryParamNames - An array of query param names
 # + queryParamValues - An array of query param values
@@ -199,7 +199,7 @@ isolated function prepareQueryUrl(string[] paths, string[] queryParamNames, stri
 }
 
 # Prepare URL with optional parameters.
-#
+# 
 # + fileId - File id
 # + optional - Record that contains optional parameters
 # + return - The prepared URL with encoded query
@@ -244,7 +244,7 @@ isolated function prepareExportUrl(string fileId, string mimeType) returns strin
 }
 
 # Prepare URL with optional parameters on Delete Request
-#
+# 
 # + fileId - File id
 # + optional - Delete Record that contains optional parameters
 # + return - The prepared URL with encoded query
@@ -265,7 +265,7 @@ isolated function prepareUrlWithDeleteOptional(string fileId , DeleteFileOptiona
 }
 
 # Prepare URL with optional parameters on Copy Request
-#
+# 
 # + fileId - File id
 # + optional - Copy Record that contains optional parameters
 # + return - The prepared URL with encoded query
@@ -299,11 +299,11 @@ isolated function prepareUrlWithCopyOptional(string fileId , CopyFileOptional? o
 }
 
 # Prepare URL with optional parameters on Update Request
-#
+# 
 # + fileId - File id
 # + optional - Update Record that contains optional parameters
 # + return - The prepared URL with encoded query
-isolated function prepareUrlWithUpdateOptional(string fileId , UpdateFileMetadataOptional? optional = ())
+isolated function prepareUrlWithUpdateOptional(string fileId , UpdateFileMetadataOptional? optional = ()) 
                                                 returns string {
     string[] value = [];
     map<string> optionalMap = {};
@@ -340,10 +340,10 @@ isolated function prepareUrlWithUpdateOptional(string fileId , UpdateFileMetadat
 }
 
 # Prepare URL with optional parameters.
-#
+# 
 # + optional - Record that contains optional parameters
 # + return - The prepared URL with encoded query
-isolated function prepareUrlwithMetadataFileOptional(CreateFileOptional? optional = ()) returns string {
+isolated function prepareUrlwithMetadataFileOptional(CreateFileOptional? optional = ()) returns string {    
     string[] value = [];
     map<string> optionalMap = {};
     string path = prepareUrl([DRIVE_PATH, FILES]);
@@ -376,7 +376,7 @@ isolated function prepareUrlwithMetadataFileOptional(CreateFileOptional? optiona
 }
 
 # Prepare URL with optional parameters.
-#
+# 
 # + optional - Record that contains optional parameters
 # + return - The prepared URL with encoded query
 isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = ()) returns string {
@@ -386,7 +386,7 @@ isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = (
     if (optional is ListFilesOptional) {
         //Optional Params
         if (optional?.corpora is string){
-            optionalMap[UPLOAD_TYPE] = optional?.corpora.toString();
+           optionalMap[UPLOAD_TYPE] = optional?.corpora.toString();
         }
         if (optional?.driveId is string) {
             optionalMap[DRIVE_ID] = optional?.driveId.toString();
@@ -428,8 +428,8 @@ isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = (
 
 # Upload files
 #
-# + httpClient - Http client
-# + path - Formatted URI
+# + httpClient - Http client  
+# + path - Formatted URI   
 # + filePath - File path subjected to upload
 # + return - Json response or Error
 isolated function uploadFiles(http:Client httpClient, string path, string filePath) returns @tainted json|error {
@@ -437,7 +437,7 @@ isolated function uploadFiles(http:Client httpClient, string path, string filePa
     byte[] fileContentByteArray = check io:fileReadBytes(filePath);
     httpRequest.setHeader(CONTENT_LENGTH ,fileContentByteArray.length().toString());
     httpRequest.setBinaryPayload(<@untainted> fileContentByteArray);
-    http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);
+    http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);     
     int statusCode = httpResponse.statusCode;
     json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
     if (jsonResponse is json) {
@@ -453,8 +453,8 @@ isolated function uploadFiles(http:Client httpClient, string path, string filePa
 
 # Upload files using a byte Array
 #
-# + httpClient - Http client
-# + path - Formatted URI
+# + httpClient - Http client  
+# + path - Formatted URI   
 # + byteArray - Byte Array subjected to upload
 # + return - Json response or Error
 isolated function uploadFileWithByteArray(http:Client httpClient, string path, byte[] byteArray) returns @tainted json|error {
@@ -462,22 +462,22 @@ isolated function uploadFileWithByteArray(http:Client httpClient, string path, b
     httpRequest.setHeader(CONTENT_LENGTH ,byteArray.length().toString());
     httpRequest.setBinaryPayload(<@untainted> byteArray);
     http:Response httpResponse = <http:Response> check httpClient->post(<@untainted>path, httpRequest);
-    int statusCode = httpResponse.statusCode;
-    json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
-    if (jsonResponse is json) {
-        error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
-        if (validateStatusCodeRes is error) {
-            return validateStatusCodeRes;
+        int statusCode = httpResponse.statusCode;
+        json|http:ClientError jsonResponse = httpResponse.getJsonPayload();
+        if (jsonResponse is json) {
+            error? validateStatusCodeRes = validateStatusCode(jsonResponse, statusCode);
+            if (validateStatusCodeRes is error) {
+                return validateStatusCodeRes;
+            }
+            return jsonResponse;
+        } else {
+            return getDriveError(jsonResponse);
         }
-        return jsonResponse;
-    } else {
-        return getDriveError(jsonResponse);
-    }
 }
 
 # Gets information about the user, the user's Drive, and system capabilities.
-#
-# + httpClient - The HTTP Client
+# 
+# + httpClient - The HTTP Client 
 # + fields - The paths of the fields you want included in the response
 # + return - If successful, returns `About`. Else returns `error`
 isolated function getDriveInfo(http:Client httpClient, string? fields) returns @tainted About|error {
@@ -495,12 +495,12 @@ isolated function getDriveInfo(http:Client httpClient, string? fields) returns @
 }
 
 # Retrieve file using the fileID.
-#
-# + httpClient - The HTTP Client
+# 
+# + httpClient - The HTTP Client 
 # + fileId - ID of the file to retreive
 # + optional - 'GetFileOptional' used to add query parameters to the request
 # + return - If successful, returns `File`. Else returns `error`
-isolated function getFileById(http:Client httpClient, string fileId,  GetFileOptional? optional = ())
+isolated function getFileById(http:Client httpClient, string fileId,  GetFileOptional? optional = ()) 
                         returns @tainted File|error {
     string path = prepareUrlWithFileOptional(fileId, optional);
     json response = check sendRequest(httpClient, path);
@@ -513,12 +513,12 @@ isolated function getFileById(http:Client httpClient, string fileId,  GetFileOpt
 }
 
 # Delete file using the fileID.
-#
+# 
 # + httpClient - The HTTP Client
 # + fileId - ID of the file to delete
 # + optional - 'DeleteFileOptional' used to add query parameters to the request
 # + return - If successful, returns `boolean` as true. Else returns `error`
-isolated function deleteFileById(http:Client httpClient, string fileId, DeleteFileOptional? optional = ())
+isolated function deleteFileById(http:Client httpClient, string fileId, DeleteFileOptional? optional = ()) 
                             returns @tainted boolean|error {
     string path = prepareUrlWithDeleteOptional(fileId, optional);
     boolean|error response = deleteRequest(httpClient, path);
@@ -527,14 +527,14 @@ isolated function deleteFileById(http:Client httpClient, string fileId, DeleteFi
 
 
 # Copy file using the fileID.
-#
+# 
 # + httpClient - The HTTP Client
 # + fileId - ID of the file to copy
 # + optional - 'CopyFileOptional' used to add query parameters to the request
 # + fileResource - 'File' can added as a payload to change metadata
 # + return - If successful, returns `File`. Else returns `error`
-isolated function copyFile(http:Client httpClient, string fileId, CopyFileOptional? optional = (),
-        File? fileResource = ()) returns @tainted File|error {
+isolated function copyFile(http:Client httpClient, string fileId, CopyFileOptional? optional = (), 
+                 File? fileResource = ()) returns @tainted File|error {
     json payload = check fileResource.cloneWithType(json);
     string path = prepareUrlWithCopyOptional(fileId, optional);
     json response = check sendRequestWithPayload(httpClient, path, payload);
@@ -547,14 +547,14 @@ isolated function copyFile(http:Client httpClient, string fileId, CopyFileOption
 }
 
 # Update file metadata using the fileID.
-#
+# 
 # + httpClient - The HTTP Client
 # + fileId - ID of the file to be updated
 # + fileResource - 'FileMetadata' can be added as a payload to change metadata
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
 # + return - If successful, returns `File`. Else returns `error`
-isolated function updateFileById(http:Client httpClient, string fileId, FileMetadata? fileResource = (),
-        UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
+isolated function updateFileById(http:Client httpClient, string fileId, FileMetadata? fileResource = (), 
+                            UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
     json payload = check fileResource.cloneWithType(json);
     string path = prepareUrlWithUpdateOptional(fileId, optional);
     json response = check updateRequestWithPayload(httpClient, path, payload);
@@ -567,12 +567,12 @@ isolated function updateFileById(http:Client httpClient, string fileId, FileMeta
 }
 
 # Create new file (with only metadata).
-#
+# 
 # + httpClient - The HTTP Client
 # + optional - 'CreateFileOptional' used to add query parameters to the request
-# + fileData - 'File' Metadata is send to in the payload
+# + fileData - 'File' Metadata is send to in the payload 
 # + return - If successful, returns `File`. Else returns `error`
-isolated function createMetaDataFile(http:Client httpClient, File? fileData = (), CreateFileOptional? optional = ())
+isolated function createMetaDataFile(http:Client httpClient, File? fileData = (), CreateFileOptional? optional = ()) 
                                 returns @tainted File|error {
     json payload = check fileData.cloneWithType(json);
     string path = prepareUrlwithMetadataFileOptional(optional);
@@ -586,16 +586,16 @@ isolated function createMetaDataFile(http:Client httpClient, File? fileData = ()
 }
 
 # Upload new file.
-#
+# 
 # + httpClient - The HTTP Client
 # + filePath - Path to the file object to be uploaded
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
-# + fileMetadata - 'File' Metadata is send to in the payload
+# + fileMetadata - 'File' Metadata is send to in the payload 
 # + return - If successful, returns `File`. Else returns `error`
-isolated function uploadFile(http:Client httpClient, string filePath, File? fileMetadata = (),
-        UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
-    string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);
-    json response = check uploadFiles(httpClient, path, filePath);
+isolated function uploadFile(http:Client httpClient, string filePath, File? fileMetadata = (), 
+                        UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {    
+    string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);  
+    json response = check uploadFiles(httpClient, path, filePath);  
     //update metadata
     json responseId = check response.id;
     string fileId = responseId.toString();
@@ -611,7 +611,7 @@ isolated function uploadFile(http:Client httpClient, string filePath, File? file
 }
 
 # Retrieve files.
-#
+# 
 # + httpClient - The HTTP Client
 # + optional - 'ListFilesOptional' used to add query parameters to the request
 # + return - If successful, returns stream of files `stream<File>`. Else returns `error`
@@ -621,12 +621,12 @@ isolated function getFiles(http:Client httpClient, ListFilesOptional? optional) 
 }
 
 # Get files stream.
-#
+# 
 # + httpClient - The HTTP Client
 # + files - File array
 # + optional - 'ListFilesOptional' used to add query parameters to the request
 # + return - File stream on success, else an error
-isolated function getFilesStream(http:Client httpClient, @tainted File[] files, ListFilesOptional? optional = ())
+isolated function getFilesStream(http:Client httpClient, @tainted File[] files, ListFilesOptional? optional = ()) 
                             returns @tainted stream<File>|error {
     string path = prepareUrlwithFileListOptional(optional);
     json resp = check sendRequest(httpClient, path);
@@ -636,7 +636,7 @@ isolated function getFilesStream(http:Client httpClient, @tainted File[] files, 
         foreach File item in res.files {
             files[i] = item;
             i = i + 1;
-        }
+        }        
         stream<File> filesStream = (<@untainted>files).toStream();
         string? nextPageToken = res?.nextPageToken;
         if (nextPageToken is string && optional is ListFilesOptional) {
@@ -650,14 +650,14 @@ isolated function getFilesStream(http:Client httpClient, @tainted File[] files, 
 }
 
 # Upload new file using a Byte array.
-#
+# 
 # + httpClient - The HTTP Client
 # + byteArray - Byte array that represents the file object
 # + optional - 'UpdateFileMetadataOptional' used to add query parameters to the request
-# + fileMetadata - 'File' Metadata is send to in the payload
+# + fileMetadata - 'File' Metadata is send to in the payload 
 # + return - If successful, returns `File`. Else returns `error`
-isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, File? fileMetadata = (),
-        UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {
+isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, File? fileMetadata = (), 
+                                    UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {    
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);
     json response = check uploadFileWithByteArray(httpClient, path, byteArray);
     //update metadata
@@ -678,17 +678,17 @@ isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteAr
 }
 
 # Utility function to retrieve File content as a binary content with its MIME type.
-#
+# 
 # + httpClient - Drive client
 # + path - GET URI path
 # + return - `FileContent` if successful, `error` if not.
-isolated function generateRecordFileContent(http:Client httpClient, string path) returns FileContent|error {
-    http:Response response = <http:Response>check httpClient->get(path);
+isolated function generateRecordFileContent(http:Client httpClient, string path) returns @tainted FileContent|error {
+    http:Response response = <http:Response> check httpClient->get(<@untainted>path);
     if (response.statusCode == http:STATUS_OK) {
         return {
             content: check response.getBinaryPayload(),
             mimeType: response.getContentType()
-        };
+        }; 
     } else {
         fail error(check response.getTextPayload());
     }
@@ -739,35 +739,3 @@ isolated function prepareUrlWithChangesOptional(string pageToken,
     return prepareQueryUrl([path], queryParams.keys(), queryParams.toArray());
 }
 
-# Recursive paging helper used by `listChanges`
-#
-# + httpClient - Drive client
-# + pageToken - The page token to start from
-# + acc - The accumulated changes
-# + optional - Optional query parameters
-# + return - A stream of changes or an error
-isolated function getChangesStream(http:Client httpClient,
-        string pageToken, Change[] acc,
-        ListChangesOptional? optional = ()) returns stream<Change>|error {
-    string url = prepareUrlWithChangesOptional(pageToken, optional);
-    json resp = check sendRequest(httpClient, url);
-    ChangeList|error decoded = resp.cloneWithType(ChangeList);
-
-    if decoded is ChangeList {
-        int i = acc.length();
-        if decoded.changes is Change[] {
-            Change[] changes = <Change[]>decoded.changes;
-            foreach Change c in changes {
-                acc[i] = c;
-                i += 1;
-            }
-            decoded.changes = changes;
-        }
-
-        if decoded?.nextPageToken is string {
-            _ = check getChangesStream(httpClient, <string>decoded?.nextPageToken, acc, optional);
-        }
-        return acc.toStream();
-    }
-    return error(ERR_FILE_RESPONSE, decoded);
-}
