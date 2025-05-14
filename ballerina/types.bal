@@ -767,3 +767,161 @@ public type FileContent record {
     byte[] content;
     string mimeType;
 };
+
+# A change to a file or shared drive.
+#
+# + changeType - The type of the change. Possible values are file and drive.
+# + drive - Drive the file or shared drive belongs to.
+# + driveId - The ID of the shared drive associated with this change.
+# + file - The file which has changed. This will only be populated if the file is still accessible to the user.
+# + fileId - The ID of the file which has changed.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#change".
+# + removed - Whether the file or shared drive has been removed from this list of changes,
+# for example by deletion or loss of access.
+# + time - The time of this change (RFC 3339 date-time).
+public type Change record {
+    string changeType?;
+    Drive drive?;
+    string driveId?;
+    File file?;
+    string fileId?;
+    string kind = "drive#change";
+    boolean removed?;
+    string time?;
+};
+
+# A list of changes for a user.
+#
+# + changes - The list of changes. If nextPageToken is populated, then this list may be incomplete and an additional page of results should be fetched.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#changeList".
+# + newStartPageToken - The starting page token for future changes. This will be present only if the end of the current changes list has been reached.
+# + nextPageToken - The page token for the next page of changes. This will be absent if the end of the changes list has been reached. If the token is rejected for any reason, it should be discarded, and pagination should be restarted from the first page of results.
+public type ChangeList record {
+    Change[] changes;
+    string kind = "drive#changeList";
+    string newStartPageToken?;
+    string nextPageToken?;
+};
+
+# Representation of a shared drive.
+#
+# + backgroundImageFile - Drive background image file details.
+# + backgroundImageLink - A short-lived link to this shared drive's background image.
+# + capabilities - Capabilities the current user has on this shared drive.
+# + colorRgb - The color of this shared drive as an RGB hex string. It can only be set on drive.drives.update requests that don't set themeId.
+# + createdTime - The time at which the shared drive was created (RFC 3339 date-time).
+# + hidden - Whether this shared drive is hidden from default view.
+# + id - The ID of this shared drive which is also the ID of the top level folder of this shared drive.
+# + kind - Identifies what kind of resource this is. Value: the fixed string "drive#drive".
+# + name - The name of this shared drive.
+# + orgUnitId - The organizational unit of this shared drive. This field is only populated on drives.list responses when the useDomainAdminAccess parameter is set to true.
+# + restrictions - Restrictions for accessing the content of the shared drive. This field is only populated on drives.get responses.
+# + themeId - The ID of the theme from which the background image and color are set. The set of possible driveThemes can be retrieved from a drive.about.get response. When not specified on a drive.drives.create request, a random theme is chosen from which the background image and color are set. This is a write-only field; it can only be set on requests that don't set colorRgb or backgroundImageFile.
+public type Drive record {
+    DriveBackgroundImageFile backgroundImageFile?;
+    string backgroundImageLink?;
+    DriveCapabilities capabilities?;
+    string colorRgb?;
+    string createdTime?;
+    boolean hidden?;
+    string id?;
+    string kind = "drive#drive";
+    string name?;
+    string orgUnitId?;
+    DriveRestrictions restrictions?;
+    string themeId?;
+};
+
+# Description.
+#
+# + pageSize - field description
+# + includeItemsFromAllDrives - field description
+# + includeRemoved - field description
+# + includeCorpusRemovals - field description
+# + restrictToMyDrive - field description
+# + driveId - field description
+# + fields - field description
+# + supportsAllDrives - field description
+public type ListChangesOptional record {
+    int pageSize?; // 1‑1000 (default 100)
+    boolean includeItemsFromAllDrives?; // Default false
+    boolean includeRemoved?; // Default false
+    boolean includeCorpusRemovals?; // Default false
+    boolean restrictToMyDrive?; // Default false
+    string driveId?;
+    string fields?;
+    boolean supportsAllDrives?; // Default false
+};
+
+# An image file and cropping parameters from which a background image for this shared drive is set. This is a write-only field; it can only be set on drive.drives.update requests that don't set themeId. When specified, all fields of the backgroundImageFile must be set.
+#
+# + id - The ID of an image file in Google Drive to use for the background image.
+# + width - The width of the cropped image in the closed range of 0 to 1. This value represents the width of the cropped image divided by the width of the entire image. The height is computed by applying a width to height aspect ratio of 80 to 9. The resulting image must be at least 1280 pixels wide and 144 pixels high.
+# + xCoordinate - The X coordinate of the upper left corner of the cropping area in the background image. This is a value in the closed range of 0 to 1. This value represents the horizontal distance from the left side of the entire image to the left side of the cropping area divided by the width of the entire image.
+# + yCoordinate - The Y coordinate of the upper left corner of the cropping area in the background image. This is a value in the closed range of 0 to 1. This value represents the vertical distance from the top side of the entire image to the top side of the cropping area divided by the height of the entire image.
+public type DriveBackgroundImageFile record {
+    string id?;
+    float width?;
+    float xCoordinate?;
+    float yCoordinate?;
+};
+
+# Capabilities the current user has on this shared drive.
+#
+# + canAddChildren - Whether the current user can add children to folders in this shared drive.
+# + canChangeCopyRequiresWriterPermissionRestriction - Whether the current user can change the copyRequiresWriterPermission restriction of this shared drive.
+# + canChangeDomainUsersOnlyRestriction - Whether the current user can change the domainUsersOnly restriction of this shared drive.
+# + canChangeDriveBackground - Whether the current user can change the background of this shared drive.
+# + canChangeDriveMembersOnlyRestriction - Whether the current user can change the driveMembersOnly restriction of this shared drive.
+# + canChangeSharingFoldersRequiresOrganizerPermissionRestriction - Whether the current user can change the sharingFoldersRequiresOrganizerPermission restriction of this shared drive.
+# + canComment - Whether the current user can comment on files in this shared drive.
+# + canCopy - Whether the current user can copy files in this shared drive.
+# + canDeleteChildren - Whether the current user can delete children from folders in this shared drive.
+# + canDeleteDrive - Whether the current user can delete this shared drive. Attempting to delete the shared drive may still fail if there are untrashed items inside the shared drive.
+# + canDownload - Whether the current user can download files in this shared drive.
+# + canEdit - Whether the current user can edit files in this shared drive
+# + canListChildren - Whether the current user can list the children of folders in this shared drive.
+# + canManageMembers - Whether the current user can add members to this shared drive or remove them or change their role.
+# + canReadRevisions - Whether the current user can read the revisions resource of files in this shared drive.
+# + canRename - Whether the current user can rename files or folders in this shared drive.
+# + canRenameDrive - Whether the current user can rename this shared drive.
+# + canResetDriveRestrictions - Whether the current user can reset the shared drive restrictions to defaults.
+# + canShare - Whether the current user can share files or folders in this shared drive.
+# + canTrashChildren - Whether the current user can trash children from folders in this shared drive.
+public type DriveCapabilities record {
+    boolean canAddChildren?;
+    boolean canChangeCopyRequiresWriterPermissionRestriction?;
+    boolean canChangeDomainUsersOnlyRestriction?;
+    boolean canChangeDriveBackground?;
+    boolean canChangeDriveMembersOnlyRestriction?;
+    boolean canChangeSharingFoldersRequiresOrganizerPermissionRestriction?;
+    boolean canComment?;
+    boolean canCopy?;
+    boolean canDeleteChildren?;
+    boolean canDeleteDrive?;
+    boolean canDownload?;
+    boolean canEdit?;
+    boolean canListChildren?;
+    boolean canManageMembers?;
+    boolean canReadRevisions?;
+    boolean canRename?;
+    boolean canRenameDrive?;
+    boolean canResetDriveRestrictions?;
+    boolean canShare?;
+    boolean canTrashChildren?;
+};
+
+# A set of restrictions that apply to this shared drive or items inside this shared drive.
+#
+# + adminManagedRestrictions - Whether administrative privileges on this shared drive are required to modify restrictions.
+# + copyRequiresWriterPermission - Whether the options to copy, print, or download files inside this shared drive, should be disabled for readers and commenters. When this restriction is set to true, it will override the similarly named field to true for any file inside this shared drive.
+# + domainUsersOnly - Whether access to this shared drive and items inside this shared drive is restricted to users of the domain to which this shared drive belongs. This restriction may be overridden by other sharing policies controlled outside of this shared drive.
+# + driveMembersOnly - Whether access to items inside this shared drive is restricted to its members.
+# + sharingFoldersRequiresOrganizerPermission - If true, only users with the organizer role can share folders. If false, users with either the organizer role or the file organizer role can share folders.
+public type DriveRestrictions record {
+    boolean adminManagedRestrictions?;
+    boolean copyRequiresWriterPermission?;
+    boolean domainUsersOnly?;
+    boolean driveMembersOnly?;
+    boolean sharingFoldersRequiresOrganizerPermission?;
+};

@@ -231,6 +231,18 @@ isolated function prepareUrlWithFileOptional(string fileId , GetFileOptional? op
     return path;
 }
 
+# Prepare URL for export.
+#
+# + fileId - File id
+# + mimeType - MIME type of the file to be exported
+# + return - The prepared URL with encoded query
+isolated function prepareExportUrl(string fileId, string mimeType) returns string {
+    string path = prepareUrl([DRIVE_PATH, FILES, fileId, "export"]);
+    string encodedMimeType = checkpanic url:encode(mimeType, ENCODING_CHARSET);
+    path = path + QUESTION_MARK + "mimeType=" + encodedMimeType;
+    return path;
+}
+
 # Prepare URL with optional parameters on Delete Request
 # 
 # + fileId - File id
@@ -680,5 +692,50 @@ isolated function generateRecordFileContent(http:Client httpClient, string path)
     } else {
         fail error(check response.getTextPayload());
     }
+}
+
+# Build `/changes` list URL with optional query parameters.
+#
+# + pageToken - The page token to start from
+# + optional - Optional query parameters
+# + return - The prepared URL with encoded query
+isolated function prepareUrlWithChangesOptional(string pageToken,
+        ListChangesOptional? optional = ()) returns string {
+
+    string path = prepareUrl([DRIVE_PATH, CHANGES]);
+
+    // Mandatory pageToken first
+    map<string> queryParams = {};
+    queryParams[PAGE_TOKEN] = pageToken;
+
+    if optional is ListChangesOptional {
+        if optional.pageSize is int {
+            queryParams[PAGE_SIZE] = optional.pageSize.toString();
+        }
+        if optional.driveId is string {
+            queryParams[DRIVE_ID] = <string>optional.driveId;
+        }
+        if optional.fields is string {
+            queryParams[FIELDS] = <string>optional.fields;
+        }
+        if optional.supportsAllDrives is boolean {
+            queryParams[SUPPORTS_ALL_DRIVES] = optional.supportsAllDrives.toString();
+        }
+        if optional.includeItemsFromAllDrives is boolean {
+            queryParams[INCLUDE_ITEMS_FROM_ALL_DRIVES] =
+                optional.includeItemsFromAllDrives.toString();
+        }
+        if optional.includeRemoved is boolean {
+            queryParams[INCLUDE_REMOVED] = optional.includeRemoved.toString();
+        }
+        if optional.includeCorpusRemovals is boolean {
+            queryParams[INCLUDE_CORPUS_REMOVALS] = optional.includeCorpusRemovals.toString();
+        }
+        if optional.restrictToMyDrive is boolean {
+            queryParams[RESTRICT_TO_MY_DRIVE] = optional.restrictToMyDrive.toString();
+        }
+    }
+
+    return prepareQueryUrl([path], queryParams.keys(), queryParams.toArray());
 }
 

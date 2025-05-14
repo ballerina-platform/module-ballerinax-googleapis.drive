@@ -78,6 +78,19 @@ public isolated client class Client {
         return fileResponse?.webContentLink.toString();
     }
 
+    # Exports file using the fileId.
+    #
+    # + fileId - ID of the file to retrieve
+    # + mimeType - MIME type of the file to be exported
+    # + return - If successful, `FileContent`. Else an `error`
+    @display {label: "Export File"}
+    remote isolated function exportFile(@display {label: "File ID"} string fileId,
+            @display {label: "MIME Type"} string mimeType)
+                                    returns FileContent|error {
+        string path = prepareExportUrl(fileId, mimeType);
+        return generateRecordFileContent(self.httpClient, path);
+    }
+
     # Retrieves all the files in the drive.
     # 
     # + filterString - Query used to find what you need. Read documentation for query string patterns.
@@ -415,4 +428,40 @@ public isolated client class Client {
         }
         return uploadFileUsingByteArray(self.httpClient, byteArray, fileMetadata, optional);
     }
-} 
+
+    # Gets the starting pageToken for listing future changes.
+    #
+    # + return - If successful, returns a `string`; otherwise, returns an `error`
+    @display {label: "Get StartPage Token"}
+    remote isolated function getStartPageToken() returns string|error {
+        string path = prepareUrl([DRIVE_PATH, CHANGES, START_PAGE_TOKEN]) +
+                QUESTION_MARK + SUPPORTS_ALL_DRIVES + EQUAL + TRUE;
+
+        json resp = check sendRequest(self.httpClient, path);
+        json|error token = resp.startPageToken;
+
+        return token is json ? token.toString()
+            : error("startPageToken not found in response");
+    }
+
+    # Lists the changes for a user or a shared drive.
+    #
+    # + pageToken - The token returned from the previous request
+    # + optional - A `ListChangesOptional` record used to add query parameters to the request
+    # + return - If successful, returns a stream of changes `stream<Change>`; otherwise, returns an `error`
+    @display {label: "List Changes"}
+    remote isolated function listChanges(@display {label: "Page Token"} string pageToken,
+            @display {label: "Optional Params"} ListChangesOptional? optional = ())
+        returns @display {label: "Change Stream"} stream<Change>|error {
+        Change[] changes = [];
+        string? nextPage = pageToken;
+        while nextPage is string {
+            json raw = check sendRequest(self.httpClient,
+                    prepareUrlWithChangesOptional(nextPage, optional));
+            ChangeList page = check raw.cloneWithType(ChangeList);
+            changes.push(...page.changes);
+            nextPage = page.nextPageToken;
+        }
+        return changes.toStream();
+    }
+}

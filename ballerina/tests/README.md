@@ -1,8 +1,8 @@
 ## Compatibility
 
-| Ballerina Language Version | Gdrive API Version|  
+| Ballerina Language Version | Gdrive API Version|
 |:--------------------------:|:-----------------:|
-| Swan Lake Alpha 5          |   v3              |
+| Swan Lake Update 12        |   v3              |
 
 ### Prerequisites
 
@@ -15,9 +15,9 @@
 
 * Go through the following steps to obtain client id, client secret, refresh token and access token for Gdrive API.
     *   Go to [Google API Console](https://console.developers.google.com) to create a project and an app for the project to connect with Gdrive API.
-    
+
     *   Configure the OAuth consent screen under **Credentials** and give a product name to shown to users.
-    
+
     *   Create OAuth Client ID credentials by selecting an application type and giving a name and a redirect URI.
 
     * Give the redirect URI as (https://developers.google.com/oauthplayground), if you are using [OAuth 2.0 Playground](https://developers.google.com/oauthplayground) to
@@ -27,7 +27,7 @@
 
     *   Give previously obtained client id and client secret and obtain the refresh token and access token.
 
-    
+
 ### Working with Gdrive Connector.
 
 In order to use the Gdrive connector, first you need to create a Gdrive endpoint by passing above mentioned parameters.
@@ -45,9 +45,12 @@ In order to run the tests, the user will need to have a Gdrive account and creat
 refreshToken = "enter your refresh token here"
 clientId = "enter your client id here"
 clientSecret = "enter your client secret here"
+fileName = "enter your file name here"
+folderName = "enter your folder name here"
+docFileId = "enter your sample doc file ID here"
 ```
 
-Assign the values for the clientId, clientSecret and refreshToken inside constructed endpoint in 
+Assign the values for the clientId, clientSecret and refreshToken inside constructed endpoint in
 test.bal
 
 ```ballerina
@@ -84,6 +87,7 @@ Assign values for other necessary parameters to perform api operations in test.b
 ```ballerina
 configurable string fileName = ?;
 configurable string folderName = ?;
+configurable string docFileId = ?;
 ```
 Run tests :
 

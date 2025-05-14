@@ -24,8 +24,9 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 // Access token support
 //configurable string accessToken = os:getEnv("ACCESS_TOKEN");
 
-const string fileName = "ballerina_temp_file"; 
-const string folderName = "ballerina_temp_folder";
+configurable string fileName = ?;
+configurable string folderName = ?;
+configurable string docFileId = ?;
 const string localFilePath = "./tests/resources/bar.jpeg";
 
 // Access token support
@@ -454,3 +455,36 @@ function testUploadFileUsingByteArray() {
     }
 }
 
+@test:Config {
+    dependsOn: [testCreateFile]
+}
+function testExportFile() returns error? {
+    log:printInfo("Gdrive Client -> testExportFile()");
+    string mimeType = "text/markdown";
+    FileContent content = check driveClient->exportFile(docFileId, mimeType);
+    log:printInfo(content.toString().substring(0, 10));
+    test:assertNotEquals(content, EMPTY_STRING, msg = "Expect File content");
+}
+
+@test:Config {}
+function testGetStartPageToken() returns error? {
+    log:printInfo("Gdrive Client -> testGetStartPageToken()");
+    string response = check driveClient->getStartPageToken();
+    test:assertNotEquals(response, EMPTY_STRING, msg = "Expect non-empty start page token");
+    log:printInfo("Start page token: " + response);
+}
+
+@test:Config {
+    dependsOn: [testGetStartPageToken]
+}
+function testListChanges() returns error? {
+    log:printInfo("Gdrive Client -> testListChanges()");
+    string tokenResponse = check driveClient->getStartPageToken();
+    stream<Change> changesResponse = check driveClient->listChanges(tokenResponse);
+    boolean hasChanges = false;
+    changesResponse.forEach(function(Change change) {
+        hasChanges = true;
+        log:printInfo("Unexpected change: " + change.toString());
+    });
+    test:assertFalse(hasChanges, msg = "Expected no changes, but changes were found");
+}
