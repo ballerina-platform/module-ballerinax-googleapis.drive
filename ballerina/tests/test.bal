@@ -24,9 +24,9 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 // Access token support
 //configurable string accessToken = os:getEnv("ACCESS_TOKEN");
 
-configurable string fileName = ?;
-configurable string folderName = ?;
-configurable string docFileId = ?;
+configurable string fileName = "FILE_NAME";
+configurable string folderName = "FOLDER_NAME";
+configurable string docFileId = "DOCUMENT_FILE_ID";
 const string localFilePath = "./tests/resources/bar.jpeg";
 
 // Access token support
