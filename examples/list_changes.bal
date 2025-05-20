@@ -49,7 +49,7 @@ public function main() returns error? {
             boolean foundChanges = false;
             changesResponse.forEach(function(drive:Change change) {
                 foundChanges = true;
-                log:printInfo(`Change detected for file ID: ${change.fileId}`);
+                log:printInfo("Change detected");
             });
             if !foundChanges {
                 log:printInfo("No changes found since token.");
