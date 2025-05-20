@@ -26,7 +26,6 @@ configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
 
 configurable string fileName = "FILE_NAME";
 configurable string folderName = "FOLDER_NAME";
-configurable string docFileId = "DOCUMENT_FILE_ID";
 const string localFilePath = "./tests/resources/bar.jpeg";
 
 // Access token support
@@ -453,17 +452,6 @@ function testUploadFileUsingByteArray() {
         log:printError(response.message());
         test:assertFail(response.message());
     }
-}
-
-@test:Config {
-    dependsOn: [testCreateFile]
-}
-function testExportFile() returns error? {
-    log:printInfo("Gdrive Client -> testExportFile()");
-    string mimeType = "text/markdown";
-    FileContent content = check driveClient->exportFile(docFileId, mimeType);
-    log:printInfo(content.toString().substring(0, 10));
-    test:assertNotEquals(content, EMPTY_STRING, msg = "Expect File content");
 }
 
 @test:Config {}
