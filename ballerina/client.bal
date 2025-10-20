@@ -98,15 +98,25 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + corpora - Groupings of files to search. Supported values: 'user' (default - My Drive and Shared with me),
+    #             'domain' (domain-wide search), 'allDrives' (all drives where user is a member including shared drives)
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get All Files"}
     remote isolated function getAllFiles(@display {label: "Filter String"} string? filterString = (), 
-                                        @display {label: "Order By"} string? orderBy = ()) 
+                                        @display {label: "Order By"} string? orderBy = (),
+                                        @display {label: "Corpora"} string corpora = "user") 
                                 returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {
             pageSize : 1000,
-            supportsAllDrives : false
+            corpora : corpora
         };
+        
+        // Set supportsAllDrives for allDrives corpora
+        if (corpora == "allDrives") {
+            optional.supportsAllDrives = true;
+            optional.includeItemsFromAllDrives = true;
+        }
+        
         if (filterString is string) {
             optional.q = filterString;
         }
@@ -131,8 +141,6 @@ public isolated client class Client {
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
                     + SPACE + TRASH_FALSE;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
@@ -147,8 +155,6 @@ public isolated client class Client {
         ListFilesOptional optional = {};
         string searchString = TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         return getFiles(self.httpClient, optional);
     }
 
@@ -167,8 +173,6 @@ public isolated client class Client {
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
                                 + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
@@ -190,8 +194,6 @@ public isolated client class Client {
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
                     + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + DOCS;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
@@ -213,8 +215,6 @@ public isolated client class Client {
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND
                      + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FORMS;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
@@ -236,8 +236,6 @@ public isolated client class Client {
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND
                          + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SLIDES;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
@@ -259,8 +257,6 @@ public isolated client class Client {
         string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + folderName + SINGLE_QUOTE + SPACE + AND 
                         +  SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FOLDERS;
         optional.q = searchString;
-        optional.supportsAllDrives = true;
-        optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
