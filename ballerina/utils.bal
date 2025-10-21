@@ -386,7 +386,7 @@ isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = (
     if (optional is ListFilesOptional) {
         //Optional Params
         if (optional?.corpora is string){
-           optionalMap[CORPORA] = optional?.corpora.toString();
+           optionalMap[UPLOAD_TYPE] = optional?.corpora.toString();
         }
         if (optional?.driveId is string) {
             optionalMap[DRIVE_ID] = optional?.driveId.toString();
