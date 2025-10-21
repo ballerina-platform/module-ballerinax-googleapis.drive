@@ -105,7 +105,8 @@ public isolated client class Client {
                                 returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {
             pageSize : 1000,
-            supportsAllDrives : false
+            supportsAllDrives : true,
+            includeItemsFromAllDrives : true
         };
         if (filterString is string) {
             optional.q = filterString;
