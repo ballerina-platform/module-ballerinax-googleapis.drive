@@ -3,6 +3,14 @@ The connector provides the capability to programmatically manage files and folde
 
 This module supports [Google Drive API v3](https://developers.google.com/drive/api).
 
+
+### Key Features
+
+- Manage files and folders in Google Drive
+- Upload, download, and share files programmatically
+- Search and list file metadata
+- Support for file permissions and sharing settings
+
 ## Prerequisites
 Before using this connector in your Ballerina application, complete the following:
 
