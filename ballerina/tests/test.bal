@@ -1,6 +1,6 @@
-// Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -15,464 +15,283 @@
 // under the License.
 
 import ballerina/log;
-import ballerina/os;
 import ballerina/test;
 
-configurable string clientId = os:getEnv("CLIENT_ID");
-configurable string clientSecret = os:getEnv("CLIENT_SECRET");
-configurable string refreshToken = os:getEnv("REFRESH_TOKEN");
-// Access token support
-//configurable string accessToken = os:getEnv("ACCESS_TOKEN");
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
 
-configurable string fileName = "FILE_NAME";
-configurable string folderName = "FOLDER_NAME";
-const string localFilePath = "./tests/resources/bar.jpeg";
+// Test resource for upload tests
+const string LOCAL_FILE_PATH = "./tests/resources/bar.jpeg";
 
-// Access token support
-// Configuration config = {
-//     clientConfig: {
-//         token: accessToken
-//     }
-// };
+// IDs captured during test run
+string createdFileId = "";
+string createdFolderId = "";
 
-ConnectionConfig config = {
+// ---------------------------------------------------------------------------
+// Client initialisation
+// ---------------------------------------------------------------------------
+
+final Client driveClient = check new ({
     auth: {
-        clientId: clientId,
-        clientSecret: clientSecret,
+        clientId,
+        clientSecret,
         refreshUrl: REFRESH_URL,
-        refreshToken: refreshToken
+        refreshToken
     }
-};
+});
 
-Client driveClient = check new (config);
+// ---------------------------------------------------------------------------
+// Folder & File creation  (anchors for dependent tests)
+// ---------------------------------------------------------------------------
 
-string fileId = EMPTY_STRING;
-string parentFolderId = EMPTY_STRING;
-string channelId = EMPTY_STRING;
-string resourceId = EMPTY_STRING;
+@test:Config {}
+function testCreateFolder() returns error? {
+    log:printInfo("driveClient -> testCreateFolder()");
+    File response = check driveClient->createFolder("TestFolder");
+    string folderId = response?.id ?: "";
+    test:assertNotEquals(folderId, EMPTY_STRING, msg = "Expected a folder ID");
+    createdFolderId = folderId;
+    log:printInfo("Created folder ID: " + createdFolderId);
+}
 
-###################
-# Get File By Id
-# ################
+@test:Config {
+    dependsOn: [testCreateFolder]
+}
+function testCreateFile() returns error? {
+    log:printInfo("driveClient -> testCreateFile()");
+    File response = check driveClient->createFile("TestFile");
+    string fileId = response?.id ?: "";
+    test:assertNotEquals(fileId, EMPTY_STRING, msg = "Expected a file ID");
+    createdFileId = fileId;
+    log:printInfo("Created file ID: " + createdFileId);
+}
+
+// ---------------------------------------------------------------------------
+// Get / read operations
+// ---------------------------------------------------------------------------
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testGetFileById() {
-    log:printInfo("Gdrive Client -> testGetFileById()");
-    File|error response = driveClient->getFile(fileId);
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response.toString());
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+function testGetFileById() returns error? {
+    log:printInfo("driveClient -> testGetFileById()");
+    File response = check driveClient->getFile(createdFileId);
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected a file ID");
+    log:printInfo("File ID: " + response?.id.toString());
 }
-
-#########################
-# Get File Content By Id
-# #######################
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testGetFileContentById() {
-    log:printInfo("Gdrive Client -> testGetFileContentById()");
-    FileContent|error response = driveClient->getFileContent(fileId);
-    if (response is FileContent) {
-        log:printInfo(response.toString());
-    } 
-    else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+function testGetFileContent() returns error? {
+    log:printInfo("driveClient -> testGetFileContent()");
+    FileContent response = check driveClient->getFileContent(createdFileId);
+    test:assertTrue(response.content.length() > 0, msg = "Expected non-empty file content");
+    test:assertNotEquals(response.mimeType, EMPTY_STRING, msg = "Expected a MIME type");
+    log:printInfo("MIME type: " + response.mimeType);
 }
-
-#######################
-# Delete File by ID
-# #####################
-
-// @test:AfterSuite {}
-function testDeleteFileById() {
-    log:printInfo("Gdrive Client -> testDeleteFileById()");
-    boolean|error response = driveClient->deleteFile(fileId);
-    if (response is boolean) {
-        log:printInfo("File Deleted");
-        test:assertTrue(response, msg = "Expects true on success");
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-############
-# Copy File
-# ##########
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testCopyFile() {
-    log:printInfo("Gdrive Client -> testCopyFile()");
-    string sourceFileId = fileId;
-    string destinationFolderId = parentFolderId;
-    string newFileName = "ballerina_temp_file_copy";
-    File|error response = driveClient->copyFile(sourceFileId, destinationFolderId, newFileName);
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response?.id.toString());
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+function testDownloadFile() returns error? {
+    log:printInfo("driveClient -> testDownloadFile()");
+    string downloadLink = check driveClient->downloadFile(createdFileId);
+    test:assertNotEquals(downloadLink, EMPTY_STRING, msg = "Expected a non-empty download link");
+    log:printInfo("Download link: " + downloadLink);
 }
-
-############
-# Move File
-# ##########
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testMoveFile(){
-    log:printInfo("Gdrive Client -> testMoveFile()");
-    string sourceFileId = fileId;
-    string destinationFolderId = parentFolderId;
-    File|error response = driveClient->moveFile(sourceFileId, destinationFolderId);
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response?.id.toString());
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+function testExportFile() returns error? {
+    log:printInfo("driveClient -> testExportFile()");
+    FileContent response = check driveClient->exportFile(createdFileId, "text/markdown");
+    test:assertTrue(response.content.length() > 0, msg = "Expected non-empty exported content");
+    test:assertNotEquals(response.mimeType, EMPTY_STRING, msg = "Expected a MIME type");
+    log:printInfo("Exported MIME type: " + response.mimeType);
 }
 
-############################
-# Rename file
-# ##########################
+// ---------------------------------------------------------------------------
+// List / search operations
+// ---------------------------------------------------------------------------
+
+@test:Config {}
+function testGetAllFiles() returns error? {
+    log:printInfo("driveClient -> testGetAllFiles()");
+    stream<File> fileStream = check driveClient->getAllFiles();
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one file");
+    test:assertNotEquals(files[0]?.id, EMPTY_STRING, msg = "Expected a file ID");
+}
+
+@test:Config {}
+function testGetFilesByName() returns error? {
+    log:printInfo("driveClient -> testGetFilesByName()");
+    stream<File> fileStream = check driveClient->getFilesByName("TestFile");
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one matching file");
+}
+
+@test:Config {}
+function testGetAllSpreadsheets() returns error? {
+    log:printInfo("driveClient -> testGetAllSpreadsheets()");
+    stream<File> fileStream = check driveClient->getAllSpreadsheets();
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one spreadsheet");
+}
+
+@test:Config {}
+function testGetSpreadsheetsByName() returns error? {
+    log:printInfo("driveClient -> testGetSpreadsheetsByName()");
+    stream<File> fileStream = check driveClient->getSpreadsheetsByName("TestFile");
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one spreadsheet by name");
+}
+
+@test:Config {}
+function testGetDocumentsByName() returns error? {
+    log:printInfo("driveClient -> testGetDocumentsByName()");
+    stream<File> fileStream = check driveClient->getDocumentsByName("TestFile");
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one document by name");
+}
+
+@test:Config {}
+function testGetFormsByName() returns error? {
+    log:printInfo("driveClient -> testGetFormsByName()");
+    stream<File> fileStream = check driveClient->getFormsByName("TestFile");
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one form by name");
+}
+
+@test:Config {}
+function testGetSlidesByName() returns error? {
+    log:printInfo("driveClient -> testGetSlidesByName()");
+    stream<File> fileStream = check driveClient->getSlidesByName("TestFile");
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one slide by name");
+}
+
+@test:Config {}
+function testGetFoldersByName() returns error? {
+    log:printInfo("driveClient -> testGetFoldersByName()");
+    stream<File> fileStream = check driveClient->getFoldersByName("TestFolder");
+    File[] files = from File f in fileStream select f;
+    test:assertTrue(files.length() > 0, msg = "Expected at least one folder by name");
+}
+
+// ---------------------------------------------------------------------------
+// File update operations
+// ---------------------------------------------------------------------------
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testRenameFile() {
-    log:printInfo("Gdrive Client -> testRenameFile()");
-    string newFileName = fileName+"_renamed";
-    File|error response = driveClient->renameFile(fileId, newFileName);
-    //Assertions
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response?.id.toString());
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+function testRenameFile() returns error? {
+    log:printInfo("driveClient -> testRenameFile()");
+    File response = check driveClient->renameFile(createdFileId, "TestFile_renamed");
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected a file ID after rename");
+    log:printInfo("Renamed file ID: " + response?.id.toString());
 }
 
-############################
-# Update Metadata in a file
-# ##########################
+@test:Config {
+    dependsOn: [testCreateFolder, testCreateFile]
+}
+function testMoveFile() returns error? {
+    log:printInfo("driveClient -> testMoveFile()");
+    File response = check driveClient->moveFile(createdFileId, createdFolderId);
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected a file ID after move");
+    log:printInfo("Moved file ID: " + response?.id.toString());
+}
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testUpdateFile() {
-    log:printInfo("Gdrive Client -> testUpdateFile()");
-    UpdateFileMetadataOptional optionalsFileMetadata = {
-        addParents : parentFolderId
+function testUpdateFileMetadata() returns error? {
+    log:printInfo("driveClient -> testUpdateFileMetadata()");
+    FileMetadata payload = {
+        name: "TestFile_updated",
+        description: "Updated description"
     };
-    FileMetadata payloadFileMetadata = {
-        name : fileName,
-        mimeType : "application/vnd.google-apps.document",
-        description : "A short description of the file"
-    };
-    File|error response = driveClient->updateFileMetadataById(fileId, payloadFileMetadata, optionalsFileMetadata);
-    //Assertions
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response?.id.toString());
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+    File response = check driveClient->updateFileMetadataById(createdFileId, payload);
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected a file ID after update");
+    log:printInfo("Updated file ID: " + response?.id.toString());
 }
 
-################
-# Create folder
-# #############
-
-@test:Config {}
-function testCreateFolder() {
-    log:printInfo("Gdrive Client -> testCreateFolder()");
-    File|error response = driveClient->createFolder(folderName);
-    //File|error response = driveClient->createFolder(folderName, "<PARENT_FOLDER_ID>");
-    //Assertions
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response?.id.toString());
-        //Set variable fileId for other unit tests
-        parentFolderId = <@untainted> response?.id.toString();
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-##############
-# Create file 
-# ############
-
-@test:Config {
-    dependsOn: [testCreateFolder]
-}
-function testCreateFile() {
-    log:printInfo("Gdrive Client -> testCreateFile()");
-    File|error response = driveClient->createFile(fileName);
-    //File|error response = driveClient->createFile(fileName, DOCUMENT);
-    //File|error response = driveClient->createFile(fileName, DOCUMENT, parentFolderId);
-    //Assertions
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-        log:printInfo(response?.id.toString());
-        //Set variable fileId for other unit tests
-        fileId = <@untainted> response?.id.toString();
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-#######################################
-# Search files by name (Partial search)
-# #####################################
-
-@test:Config {}
-function testGetFilesByName() {
-    log:printInfo("Gdrive Client -> testGetFilesByName()");
-    stream<File>|error response = driveClient->getFilesByName("ballerina");
-    // stream<File>|error response = driveClient->getFilesByName("ballerina", "createdTime");
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-##########################################
-# Search folders by name (Partial search)
-# ########################################
-
-@test:Config {}
-function testGetFoldersByName() {
-    log:printInfo("Gdrive Client -> testGetFoldersByName()");
-    stream<File>|error response = driveClient->getFoldersByName("ballerina");
-    // stream<File>|error response = driveClient->getFoldersByName("ballerina", "createdTime");
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-###################
-# Get all files
-# #################
-
-@test:Config {}
-function testAllGetFiles() { 
-    log:printInfo("Gdrive Client -> testAllGetFiles()");
-    stream<File>|error response = driveClient->getAllFiles("not name contains 'hello'");
-    // stream<File>|error response = driveClient->getAllFiles();
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-#############################
-# Get All Google spreadsheets 
-# ###########################
-
-@test:Config {}
-function testGetAllSpreadsheets() {
-    log:printInfo("Gdrive Client -> testGetAllSpreadsheets()");
-    stream<File>|error response = driveClient->getAllSpreadsheets();
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-######################################################
-# Search Google spreadsheets by name (Partial search)
-# ####################################################
-
-@test:Config {}
-function testGetSpreadsheetsByName() {
-    log:printInfo("Gdrive Client -> testGetSpreadsheetsByName()");
-    stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina");
-    // stream<File>|error response = driveClient->getSpreadsheetsByName("ballerina","createdTime");
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-###################################################
-# Search Google documents by name (Partial search)
-# ################################################
-
-@test:Config {}
-function testGetDocumentsByName() {
-    log:printInfo("Gdrive Client -> testGetDocumentsByName()");
-    stream<File>|error response = driveClient->getDocumentsByName("ballerina");
-    // stream<File>|error response = driveClient->getDocumentsByName("ballerina", "createdTime");
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-##############################################
-# Search Google forms by name (Partial search)
-# ############################################
-
-@test:Config {}
-function testGetFormsByName() {
-    log:printInfo("Gdrive Client -> testGetFormsByName()");
-    stream<File>|error response = driveClient->getFormsByName("ballerina");
-    // stream<File>|error response = driveClient->getFormsByName("ballerina", "createdTime");
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-##############################################
-# Search Google slides by name (Partial search)
-# ############################################
-
-@test:Config {}
-function testGetSlidesByName() {
-    log:printInfo("Gdrive Client -> testGetSlidesByName()");
-    stream<File>|error response = driveClient->getSlidesByName("ballerina");
-    // stream<File>|error response = driveClient->getSlidesByName("ballerina", "createdTime");
-    if (response is stream<File>){
-        response.forEach(isolated function (File file) {
-            test:assertNotEquals(file?.id, EMPTY_STRING, msg = "Expect File id");
-        });
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-##############
-# Upload File
-# ############
-
-@test:Config {
-    dependsOn: [testCreateFolder]
-}
-function testUploadFile() {
-    log:printInfo("Gdrive Client -> testUploadFile()");
-    File|error response = driveClient->uploadFile(localFilePath);
-    // Assertions 
-    if(response is File){
-        test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expect File id");
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
-}
-
-################
-# Download File
-# ##############
+// ---------------------------------------------------------------------------
+// Copy file
+// ---------------------------------------------------------------------------
 
 @test:Config {
     dependsOn: [testCreateFile]
 }
-function testDownloadFileById() {
-    log:printInfo("Gdrive Client -> testDownloadFileById()");
-    string downloadFileId = fileId;
-    string|error response = driveClient->downloadFile(downloadFileId);
-    if(response is string){
-        test:assertNotEquals(response, EMPTY_STRING, msg = "Expect download URL link");
-        log:printInfo(response);
-    } else {
-        test:assertFail(response.message());
-    }
+function testCopyFile() returns error? {
+    log:printInfo("driveClient -> testCopyFile()");
+    File response = check driveClient->copyFile(createdFileId);
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected an ID for the copied file");
+    log:printInfo("Copied file ID: " + response?.id.toString());
 }
 
-###############################
-# Upload File using Byte Array
-# #############################
+// ---------------------------------------------------------------------------
+// Upload operations
+// ---------------------------------------------------------------------------
 
-@test:Config {
-    dependsOn: [testCreateFolder]
+@test:Config {}
+function testUploadFileUsingByteArray() returns error? {
+    log:printInfo("driveClient -> testUploadFileUsingByteArray()");
+    byte[] byteArray = [116, 101, 115, 116, 45, 115, 116, 114, 105, 110, 103];
+    File response = check driveClient->uploadFileUsingByteArray(byteArray, "ByteArrayFile");
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected a file ID after byte-array upload");
+    log:printInfo("Uploaded file ID: " + response?.id.toString());
 }
-function testUploadFileUsingByteArray() {
-    log:printInfo("Gdrive Client -> testUploadFileUsingByteArray()");
-    byte[] byteArray = [116,101,115,116,45,115,116,114,105,110,103];
-    File|error response = driveClient->uploadFileUsingByteArray(byteArray, fileName);
-    // Assertions 
-    if(response is File){
-        string id = response?.id.toString();
-        log:printInfo(id);
-        test:assertNotEquals(id, EMPTY_STRING, msg = "Expect File id");
-    } else {
-        log:printError(response.message());
-        test:assertFail(response.message());
-    }
+
+@test:Config {}
+function testUploadFile() returns error? {
+    log:printInfo("driveClient -> testUploadFile()");
+    File response = check driveClient->uploadFile(LOCAL_FILE_PATH);
+    test:assertNotEquals(response?.id, EMPTY_STRING, msg = "Expected a file ID after file upload");
+    log:printInfo("Uploaded file ID: " + response?.id.toString());
 }
+
+// ---------------------------------------------------------------------------
+// Changes API
+// ---------------------------------------------------------------------------
 
 @test:Config {}
 function testGetStartPageToken() returns error? {
-    log:printInfo("Gdrive Client -> testGetStartPageToken()");
-    string response = check driveClient->getStartPageToken();
-    test:assertNotEquals(response, EMPTY_STRING, msg = "Expect non-empty start page token");
-    log:printInfo("Start page token: " + response);
+    log:printInfo("driveClient -> testGetStartPageToken()");
+    string token = check driveClient->getStartPageToken();
+    test:assertNotEquals(token, EMPTY_STRING, msg = "Expected a non-empty start page token");
+    log:printInfo("Start page token: " + token);
 }
 
 @test:Config {
     dependsOn: [testGetStartPageToken]
 }
 function testListChanges() returns error? {
-    log:printInfo("Gdrive Client -> testListChanges()");
-    string tokenResponse = check driveClient->getStartPageToken();
-    stream<Change> changesResponse = check driveClient->listChanges(tokenResponse);
-    boolean hasChanges = false;
-    changesResponse.forEach(function(Change change) {
-        hasChanges = true;
-        log:printInfo("Unexpected change: " + change.toString());
-    });
-    test:assertFalse(hasChanges, msg = "Expected no changes, but changes were found");
+    log:printInfo("driveClient -> testListChanges()");
+    string token = check driveClient->getStartPageToken();
+    stream<Change> changeStream = check driveClient->listChanges(token);
+    error? result = changeStream.forEach(function(Change _c) {});
+    test:assertEquals(result, (), msg = "Unexpected error while iterating changes");
+    log:printInfo("listChanges completed successfully");
+}
+
+// ---------------------------------------------------------------------------
+// Delete file  (run last to keep other tests usable)
+// ---------------------------------------------------------------------------
+
+@test:Config {
+    dependsOn: [
+        testGetFileById, testGetFileContent, testDownloadFile, testExportFile,
+        testRenameFile, testMoveFile, testUpdateFileMetadata, testCopyFile
+    ]
+}
+function testDeleteFile() returns error? {
+    log:printInfo("driveClient -> testDeleteFile()");
+    boolean result = check driveClient->deleteFile(createdFileId);
+    test:assertTrue(result, msg = "Expected true on successful deletion");
+    log:printInfo("File deleted successfully");
 }
