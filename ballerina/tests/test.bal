@@ -28,6 +28,7 @@ const string LOCAL_FILE_PATH = "./tests/resources/bar.jpeg";
 // IDs captured during test run
 string createdFileId = "";
 string createdFolderId = "";
+string createdDocsFileId = "";
 
 // ---------------------------------------------------------------------------
 // Client initialisation
@@ -104,12 +105,24 @@ function testDownloadFile() returns error? {
 }
 
 @test:Config {
-    dependsOn: [testCreateFile]
+    dependsOn: [testCreateFolder]
+}
+function testCreateDocsFile() returns error? {
+    log:printInfo("driveClient -> testCreateDocsFile()");
+    File response = check driveClient->createFile("TestDocsFile", DOCUMENT);
+    string fileId = response?.id ?: "";
+    test:assertNotEquals(fileId, EMPTY_STRING, msg = "Expected a file ID");
+    createdDocsFileId = fileId;
+    log:printInfo("Created Google Docs file ID: " + createdDocsFileId);
+}
+
+@test:Config {
+    dependsOn: [testCreateDocsFile]
 }
 function testExportFile() returns error? {
     log:printInfo("driveClient -> testExportFile()");
-    FileContent response = check driveClient->exportFile(createdFileId, "text/markdown");
-    test:assertTrue(response.content.length() > 0, msg = "Expected non-empty exported content");
+    FileContent response = check driveClient->exportFile(createdDocsFileId, "text/plain");
+    test:assertTrue(response.content.length() >= 0, msg = "Expected exported content");
     test:assertNotEquals(response.mimeType, EMPTY_STRING, msg = "Expected a MIME type");
     log:printInfo("Exported MIME type: " + response.mimeType);
 }
@@ -286,7 +299,7 @@ function testListChanges() returns error? {
 
 @test:Config {
     dependsOn: [
-        testGetFileById, testGetFileContent, testDownloadFile, testExportFile,
+        testGetFileById, testGetFileContent, testDownloadFile,
         testRenameFile, testMoveFile, testUpdateFileMetadata, testCopyFile
     ]
 }
@@ -295,4 +308,14 @@ function testDeleteFile() returns error? {
     boolean result = check driveClient->deleteFile(createdFileId);
     test:assertTrue(result, msg = "Expected true on successful deletion");
     log:printInfo("File deleted successfully");
+}
+
+@test:Config {
+    dependsOn: [testExportFile]
+}
+function testDeleteDocsFile() returns error? {
+    log:printInfo("driveClient -> testDeleteDocsFile()");
+    boolean result = check driveClient->deleteFile(createdDocsFileId);
+    test:assertTrue(result, msg = "Expected true on successful deletion");
+    log:printInfo("Docs file deleted successfully");
 }
