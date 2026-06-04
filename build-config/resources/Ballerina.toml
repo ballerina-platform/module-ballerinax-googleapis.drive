@@ -2,7 +2,7 @@
 distribution = "2201.12.0"
 org = "ballerinax"
 name = "googleapis.drive"
-version = "3.5.0"
+version = "@toml.version@"
 authors = ["Ballerina"]
 keywords = ["Content & Files/File Management & Storage", "Cost/Free", "Vendor/Google", "Area/Storage & File Management", "Type/Connector"]
 icon = "icon.png"

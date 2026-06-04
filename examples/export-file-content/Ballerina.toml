@@ -1,0 +1,5 @@
+[package]
+org = "ballerinax_examples"
+name = "export_file_content"
+version = "0.1.0"
+distribution = "2201.12.0"
