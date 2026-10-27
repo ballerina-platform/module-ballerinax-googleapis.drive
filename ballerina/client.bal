@@ -118,7 +118,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -147,7 +147,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     } 
@@ -165,7 +165,7 @@ public isolated client class Client {
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -194,7 +194,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     } 
@@ -223,7 +223,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -252,7 +252,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -281,7 +281,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -310,7 +310,7 @@ public isolated client class Client {
             optional.orderBy = orderBy;
         }
         if fields is string {
-            optional.fields = fields;
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -515,7 +515,8 @@ public isolated client class Client {
 
     # Retrieves a single page of changes. Unlike `listChanges`, this exposes the page tokens, so the caller can fetch
     # the next page using `nextPageToken`. When the last page is reached, `newStartPageToken` is the token to use
-    # for the next poll.
+    # for the next poll. A change can take a few seconds to appear after the write, so a poll right after a write may
+    # return it only on the next call.
     #
     # + pageToken - The token for the page to fetch. Use `getStartPageToken` for the first call
     # + optional - A `ListChangesOptional` record used to add query parameters to the request

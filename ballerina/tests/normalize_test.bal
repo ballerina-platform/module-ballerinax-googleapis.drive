@@ -59,8 +59,23 @@ function testFileListAndChangeListNormalization() returns error? {
 
 @test:Config {}
 function testFilesResponseWithoutKind() returns error? {
-    FilesResponse files = check normalizeFileListJson({files: [{id: "a"}]}).cloneWithType(FilesResponse);
+    FilesResponse files = check normalizeFilesResponseJson({files: [{id: "a"}]}).cloneWithType(FilesResponse);
     test:assertEquals(files.kind, "drive#fileList");
+}
+
+@test:Config {}
+function testFilesResponseWithoutFiles() returns error? {
+    FilesResponse onlyToken = check normalizeFilesResponseJson({nextPageToken: "t"}).cloneWithType(FilesResponse);
+    test:assertEquals(onlyToken.files, []);
+    test:assertEquals(onlyToken.kind, "drive#fileList");
+    test:assertEquals(onlyToken?.nextPageToken, "t");
+}
+
+@test:Config {}
+function testIncludeNextPageToken() {
+    test:assertEquals(includeNextPageToken("files(id,name,size)"), "nextPageToken,files(id,name,size)");
+    test:assertEquals(includeNextPageToken("nextPageToken,files(id)"), "nextPageToken,files(id)");
+    test:assertEquals(includeNextPageToken("*"), "*");
 }
 
 @test:Config {}

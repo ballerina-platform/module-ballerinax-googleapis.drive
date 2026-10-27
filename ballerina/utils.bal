@@ -665,7 +665,7 @@ isolated function getFilesStream(http:Client httpClient, @tainted File[] files, 
                             returns @tainted stream<File>|error {
     string path = prepareUrlwithFileListOptional(optional);
     json resp = check sendRequest(httpClient, path);
-    FilesResponse|error res = normalizeFileListJson(resp).cloneWithType(FilesResponse);
+    FilesResponse|error res = normalizeFilesResponseJson(resp).cloneWithType(FilesResponse);
     if (res is FilesResponse) {
         int i = files.length();
         foreach File item in res.files {
@@ -826,10 +826,6 @@ isolated function normalizeFileListJson(json responseJson) returns json {
     map<json> response = responseJson;
     json files = response["files"];
     if files is json[] {
-        if !response.hasKey("kind") {
-            // `kind` is absent when the `fields` mask leaves it out
-            response["kind"] = "drive#fileList";
-        }
         foreach int i in 0 ..< files.length() {
             files[i] = normalizeFileJson(files[i]);
         }
@@ -858,4 +854,35 @@ isolated function discardUploadedFile(http:Client httpClient, string fileId) {
     if result is error {
         log:printDebug("Unable to remove the partially uploaded file " + fileId, 'error = result);
     }
+}
+
+# Normalizes a file list response (`FilesResponse`). `files` and `kind` are absent when the `fields` mask leaves them
+# out, so they default to an empty list and `drive#fileList`.
+#
+# + responseJson - JSON of a file list response
+# + return - The JSON with the files normalized and the defaults applied
+isolated function normalizeFilesResponseJson(json responseJson) returns json {
+    json normalized = normalizeFileListJson(responseJson);
+    if normalized is map<json> {
+        if !normalized.hasKey("files") {
+            normalized["files"] = [];
+        }
+        if !normalized.hasKey("kind") {
+            normalized["kind"] = "drive#fileList";
+        }
+    }
+    return normalized;
+}
+
+# Adds `nextPageToken` to a file list `fields` mask when missing. Without it Drive omits the token, and the connector
+# would stop after the first page.
+#
+# + fields - The caller's `fields` mask, e.g. `files(id,name,size)`
+# + return - The mask including `nextPageToken`
+isolated function includeNextPageToken(string fields) returns string {
+    string trimmed = fields.trim();
+    if trimmed == "*" || trimmed.includes("nextPageToken") {
+        return fields;
+    }
+    return "nextPageToken," + fields;
 }
