@@ -31,9 +31,9 @@ public isolated client class Client {
     # + config -  Configurations required to initialize the `Client`
     # + return - An error on failure of initialization or else `()`
     public isolated function init(ConnectionConfig driveConfig) returns error? {
-        ConnectionConfig connectionConfig = driveConfig;
+        ConnectionConfig connectionConfig = {...driveConfig};
         connectionConfig.http1Settings = {chunking: http:CHUNKING_NEVER};
-        http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(driveConfig);
+        http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(connectionConfig);
         self.httpClient = check new (BASE_URL, httpClientConfig);
     }   
 
@@ -98,10 +98,13 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get All Files"}
     remote isolated function getAllFiles(@display {label: "Filter String"} string? filterString = (), 
-                                        @display {label: "Order By"} string? orderBy = ()) 
+                                        @display {label: "Order By"} string? orderBy = (), 
+                                        @display {label: "Fields"} string? fields = ()) 
                                 returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {
             pageSize : 1000,
@@ -114,6 +117,9 @@ public isolated client class Client {
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
+        }
         return getFiles(self.httpClient, optional);
     }
 
@@ -123,13 +129,16 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Files By Name"}
     remote isolated function getFilesByName(@display {label: "File Name"} string fileName, 
-                                   @display {label: "Order By"} string? orderBy = ())    
+                                   @display {label: "Order By"} string? orderBy = (), 
+                                   @display {label: "Fields"} string? fields = ())    
                                    returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + escapeQueryValue(fileName) + SINGLE_QUOTE + SPACE + AND 
                     + SPACE + TRASH_FALSE;
         optional.q = searchString;
         optional.supportsAllDrives = true;
@@ -137,19 +146,27 @@ public isolated client class Client {
         if (orderBy is string) {
             optional.orderBy = orderBy;
         }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
+        }
         return getFiles(self.httpClient, optional);
     } 
 
     # Retrieves all Google spreadsheets.
     # 
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get All Spreadsheets"}
-    remote isolated function getAllSpreadsheets() returns @tainted @display {label: "File Stream"} stream<File>|error {
+    remote isolated function getAllSpreadsheets(@display {label: "Fields"} string? fields = ()) returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
         string searchString = TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
+        }
         return getFiles(self.httpClient, optional);
     }
 
@@ -159,19 +176,25 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Spreadsheets"}
     remote isolated function getSpreadsheetsByName(@display {label: "File Name"} string fileName, 
-                                          @display {label: "Order By"} string? orderBy = ()) 
+                                          @display {label: "Order By"} string? orderBy = (), 
+                                   @display {label: "Fields"} string? fields = ()) 
                                           returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + escapeQueryValue(fileName) + SINGLE_QUOTE + SPACE + AND 
                                 + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SHEETS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
+        }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     } 
@@ -182,19 +205,25 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Documents"}
     remote isolated function getDocumentsByName(@display {label: "File Name"} string fileName, 
-                                       @display {label: "Order By"} string? orderBy = ()) 
+                                       @display {label: "Order By"} string? orderBy = (), 
+                                   @display {label: "Fields"} string? fields = ()) 
                                        returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND 
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + escapeQueryValue(fileName) + SINGLE_QUOTE + SPACE + AND 
                     + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + DOCS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
+        }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -205,19 +234,25 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Forms"}
     remote isolated function getFormsByName(@display {label: "File Name"} string fileName, 
-                                   @display {label: "Order By"} string? orderBy = ()) 
+                                   @display {label: "Order By"} string? orderBy = (), 
+                                   @display {label: "Fields"} string? fields = ()) 
                                    returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + escapeQueryValue(fileName) + SINGLE_QUOTE + SPACE + AND
                      + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FORMS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
+        }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -228,19 +263,25 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Slides"}
     remote isolated function getSlidesByName(@display {label: "File Name"} string fileName, 
-                                    @display {label: "Order By"} string? orderBy = ()) 
+                                    @display {label: "Order By"} string? orderBy = (), 
+                                   @display {label: "Fields"} string? fields = ()) 
                                     returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + fileName + SINGLE_QUOTE + SPACE + AND
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + escapeQueryValue(fileName) + SINGLE_QUOTE + SPACE + AND
                          + SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + SLIDES;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
+        }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -251,19 +292,25 @@ public isolated client class Client {
     # + orderBy - A comma-separated list of sort keys. Valid keys are 'createdTime', 'folder', 'modifiedByMeTime', 
     #             'modifiedTime', 'name', 'name_natural', 'quotaBytesUsed', 'recency', 'sharedWithMeTime', 'starred', 
     #              and 'viewedByMeTime'.  
+    # + fields - The paths of the fields you want included in the response, e.g. `files(id,name,size)`.
+    #            Defaults to `id`, `name`, `mimeType` and `kind`
     # + return - If successful, stream of files `stream<File>`. Else an `error`
     @display {label: "Get Folders"}
     remote isolated function getFoldersByName(@display {label: "Folder Name"} string folderName, 
-                                     @display {label: "Order By"} string? orderBy = ()) 
+                                     @display {label: "Order By"} string? orderBy = (), 
+                                   @display {label: "Fields"} string? fields = ()) 
                                      returns @tainted @display {label: "File Stream"} stream<File>|error {
         ListFilesOptional optional = {};
-        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + folderName + SINGLE_QUOTE + SPACE + AND 
+        string searchString = NAME + SPACE + CONTAINS + SPACE + SINGLE_QUOTE + escapeQueryValue(folderName) + SINGLE_QUOTE + SPACE + AND 
                         +  SPACE + TRASH_FALSE + SPACE + AND + SPACE + MIME_TYPE + EQUAL + FOLDERS;
         optional.q = searchString;
         optional.supportsAllDrives = true;
         optional.includeItemsFromAllDrives = true;
         if (orderBy is string) {
             optional.orderBy = orderBy;
+        }
+        if fields is string {
+            optional.fields = includeNextPageToken(fields);
         }
         return getFiles(self.httpClient, optional);
     }
@@ -459,10 +506,26 @@ public isolated client class Client {
         while nextPage is string {
             json raw = check sendRequest(self.httpClient,
                     prepareUrlWithChangesOptional(nextPage, optional));
-            ChangeList page = check raw.cloneWithType(ChangeList);
+            ChangeList page = check normalizeFileListJson(raw).cloneWithType(ChangeList);
             changes.push(...page.changes);
             nextPage = page.nextPageToken;
         }
         return changes.toStream();
+    }
+
+    # Retrieves a single page of changes. Unlike `listChanges`, this exposes the page tokens, so the caller can fetch
+    # the next page using `nextPageToken`. When the last page is reached, `newStartPageToken` is the token to use
+    # for the next poll. A change can take a few seconds to appear after the write, so a poll right after a write may
+    # return it only on the next call.
+    #
+    # + pageToken - The token for the page to fetch. Use `getStartPageToken` for the first call
+    # + optional - A `ListChangesOptional` record used to add query parameters to the request
+    # + return - If successful, a `ChangeList` with the changes of this page and its page tokens; otherwise, an `error`
+    @display {label: "List Changes Page"}
+    remote isolated function listChangesPage(@display {label: "Page Token"} string pageToken,
+            @display {label: "Optional Params"} ListChangesOptional? optional = ())
+        returns @display {label: "Change List"} ChangeList|error {
+        json raw = check sendRequest(self.httpClient, prepareUrlWithChangesOptional(pageToken, optional));
+        return normalizeFileListJson(raw).cloneWithType(ChangeList);
     }
 }

@@ -131,13 +131,36 @@ isolated function uploadRequestWithPayload(http:Client httpClient, string path, 
 # Formation of error message
 # 
 # + errorResponse - Can be json or error type
+# + statusCode - HTTP status code of the response, if known
 # + return - error if not exist.
-isolated function getDriveError(json|error errorResponse) returns error {
-  if (errorResponse is json) {
-        return error(errorResponse.toString());
-  } else {
+isolated function getDriveError(json|error errorResponse, int? statusCode = ()) returns error {
+    if (errorResponse is json) {
+        int? code = statusCode;
+        string? reason = ();
+        if errorResponse is map<json> {
+            json body = errorResponse["error"];
+            if body is map<json> {
+                json bodyCode = body["code"];
+                if code is () && bodyCode is int {
+                    code = bodyCode;
+                }
+                json errors = body["errors"];
+                if errors is json[] && errors.length() > 0 {
+                    json first = errors[0];
+                    if first is map<json> {
+                        json bodyReason = first["reason"];
+                        if bodyReason is string {
+                            reason = bodyReason;
+                        }
+                    }
+                }
+            }
+        }
+        // The message is kept as the raw response body for backward compatibility
+        return error(errorResponse.toString(), statusCode = code, reason = reason);
+    } else {
         return errorResponse;
-  }
+    }
 }
 
 # Prepare Validate Status Code.
@@ -147,8 +170,16 @@ isolated function getDriveError(json|error errorResponse) returns error {
 # + return - Error Message
 isolated function validateStatusCode(json response, int statusCode) returns error? {
     if (statusCode != http:STATUS_OK) {
-        return getDriveError(response);
+        return getDriveError(response, statusCode);
     }
+}
+
+# Escapes a value to be used inside a single-quoted string of a Drive search query.
+#
+# + value - The raw value
+# + return - The value with backslashes and single quotes escaped
+isolated function escapeQueryValue(string value) returns string {
+    return re `'`.replaceAll(re `\\`.replaceAll(value, "\\\\"), "\\'");
 }
 
 # Prepare URL.
@@ -386,7 +417,7 @@ isolated function prepareUrlwithFileListOptional(ListFilesOptional? optional = (
     if (optional is ListFilesOptional) {
         //Optional Params
         if (optional?.corpora is string){
-           optionalMap[UPLOAD_TYPE] = optional?.corpora.toString();
+           optionalMap[CORPORA] = optional?.corpora.toString();
         }
         if (optional?.driveId is string) {
             optionalMap[DRIVE_ID] = optional?.driveId.toString();
@@ -504,7 +535,7 @@ isolated function getFileById(http:Client httpClient, string fileId,  GetFileOpt
                         returns @tainted File|error {
     string path = prepareUrlWithFileOptional(fileId, optional);
     json response = check sendRequest(httpClient, path);
-    File|error file = response.cloneWithType(File);
+    File|error file = normalizeFileJson(response).cloneWithType(File);
     if (file is File) {
         return file;
     } else {
@@ -538,7 +569,7 @@ isolated function copyFile(http:Client httpClient, string fileId, CopyFileOption
     json payload = check fileResource.cloneWithType(json);
     string path = prepareUrlWithCopyOptional(fileId, optional);
     json response = check sendRequestWithPayload(httpClient, path, payload);
-    File|error file = response.cloneWithType(File);
+    File|error file = normalizeFileJson(response).cloneWithType(File);
     if (file is File) {
         return file;
     } else {
@@ -558,7 +589,7 @@ isolated function updateFileById(http:Client httpClient, string fileId, FileMeta
     json payload = check fileResource.cloneWithType(json);
     string path = prepareUrlWithUpdateOptional(fileId, optional);
     json response = check updateRequestWithPayload(httpClient, path, payload);
-    File|error file = response.cloneWithType(File);
+    File|error file = normalizeFileJson(response).cloneWithType(File);
     if (file is File) {
         return file;
     } else {
@@ -577,7 +608,7 @@ isolated function createMetaDataFile(http:Client httpClient, File? fileData = ()
     json payload = check fileData.cloneWithType(json);
     string path = prepareUrlwithMetadataFileOptional(optional);
     json response = check uploadRequestWithPayload(httpClient, path, payload);
-    File|error file = response.cloneWithType(File);
+    File|error file = normalizeFileJson(response).cloneWithType(File);
     if (file is File) {
         return file;
     } else {
@@ -595,14 +626,18 @@ isolated function createMetaDataFile(http:Client httpClient, File? fileData = ()
 isolated function uploadFile(http:Client httpClient, string filePath, File? fileMetadata = (), 
                         UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {    
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);  
+    json payload = check fileMetadata.cloneWithType(json);
     json response = check uploadFiles(httpClient, path, filePath);  
     //update metadata
     json responseId = check response.id;
     string fileId = responseId.toString();
     string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
-    json payload = check fileMetadata.cloneWithType(json);
-    json changeResponse = check updateRequestWithPayload(httpClient, newFileUrl, payload);
-    File|error file = changeResponse.cloneWithType(File);
+    json|error changeResponse = updateRequestWithPayload(httpClient, newFileUrl, payload);
+    if changeResponse is error {
+        discardUploadedFile(httpClient, fileId);
+        return changeResponse;
+    }
+    File|error file = normalizeFileJson(changeResponse).cloneWithType(File);
     if (file is File) {
         return file;
     } else {
@@ -630,7 +665,7 @@ isolated function getFilesStream(http:Client httpClient, @tainted File[] files, 
                             returns @tainted stream<File>|error {
     string path = prepareUrlwithFileListOptional(optional);
     json resp = check sendRequest(httpClient, path);
-    FilesResponse|error res = resp.cloneWithType(FilesResponse);
+    FilesResponse|error res = normalizeFilesResponseJson(resp).cloneWithType(FilesResponse);
     if (res is FilesResponse) {
         int i = files.length();
         foreach File item in res.files {
@@ -659,6 +694,7 @@ isolated function getFilesStream(http:Client httpClient, @tainted File[] files, 
 isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteArray, File? fileMetadata = (), 
                                     UpdateFileMetadataOptional? optional = ()) returns @tainted File|error {    
     string path = prepareUrl([UPLOAD, DRIVE_PATH, FILES]);
+    json payload = check fileMetadata.cloneWithType(json);
     json response = check uploadFileWithByteArray(httpClient, path, byteArray);
     //update metadata
     json|error responseId = response.id;
@@ -667,9 +703,12 @@ isolated function uploadFileUsingByteArray(http:Client httpClient, byte[] byteAr
         fileId = responseId.toString();
     }
     string newFileUrl = prepareUrlWithUpdateOptional(fileId, optional);
-    json payload = check fileMetadata.cloneWithType(json);
-    json changeResponse = check updateRequestWithPayload(httpClient, newFileUrl, payload);
-    File|error file = changeResponse.cloneWithType(File);
+    json|error changeResponse = updateRequestWithPayload(httpClient, newFileUrl, payload);
+    if changeResponse is error {
+        discardUploadedFile(httpClient, fileId);
+        return changeResponse;
+    }
+    File|error file = normalizeFileJson(changeResponse).cloneWithType(File);
     if (file is File) {
         return file;
     } else {
@@ -739,3 +778,111 @@ isolated function prepareUrlWithChangesOptional(string pageToken,
     return prepareQueryUrl([path], queryParams.keys(), queryParams.toArray());
 }
 
+
+// Drive returns int64 fields as JSON strings (e.g. "size": "12345"), which `cloneWithType` does not convert to `int`.
+final readonly & string[] INT64_FILE_FIELDS = ["size", "quotaBytesUsed", "version", "thumbnailVersion"];
+
+# Converts the string-encoded int64 fields of a Drive file JSON object to numbers, in place of the lax conversion.
+# `appProperties` and `properties` hold user-defined values and are left untouched.
+#
+# + fileJson - JSON representation of a file, as returned by the Drive API
+# + return - The JSON with numeric values in place of the string-encoded ones
+isolated function normalizeFileJson(json fileJson) returns json {
+    if fileJson !is map<json> {
+        return fileJson;
+    }
+    map<json> file = fileJson;
+    foreach string fieldName in INT64_FILE_FIELDS {
+        json value = file[fieldName];
+        if value is string {
+            int|error parsed = int:fromString(value);
+            if parsed is int {
+                file[fieldName] = parsed;
+            }
+        }
+    }
+    json videoMetadata = file["videoMediaMetadata"];
+    if videoMetadata is map<json> {
+        json duration = videoMetadata["durationMillis"];
+        if duration is string {
+            float|error parsed = float:fromString(duration);
+            if parsed is float {
+                videoMetadata["durationMillis"] = parsed;
+            }
+        }
+    }
+    return file;
+}
+
+# Normalizes every file in a Drive response that wraps files, i.e. `files[]` of a file list or `changes[].file`
+# of a change list.
+#
+# + responseJson - JSON of a `FilesResponse` or a `ChangeList`
+# + return - The JSON with the files normalized
+isolated function normalizeFileListJson(json responseJson) returns json {
+    if responseJson !is map<json> {
+        return responseJson;
+    }
+    map<json> response = responseJson;
+    json files = response["files"];
+    if files is json[] {
+        foreach int i in 0 ..< files.length() {
+            files[i] = normalizeFileJson(files[i]);
+        }
+    }
+    json changes = response["changes"];
+    if changes is json[] {
+        foreach json change in changes {
+            if change is map<json> && change.hasKey("file") {
+                change["file"] = normalizeFileJson(change["file"]);
+            }
+        }
+    }
+    return response;
+}
+
+# Deletes a file whose content was uploaded but whose metadata update failed, so that no unnamed file is left behind.
+# Failures are ignored, since the caller reports the original error.
+#
+# + httpClient - The HTTP Client
+# + fileId - ID of the uploaded file
+isolated function discardUploadedFile(http:Client httpClient, string fileId) {
+    if fileId == EMPTY_STRING {
+        return;
+    }
+    boolean|error result = deleteRequest(httpClient, prepareUrlWithDeleteOptional(fileId, {supportsAllDrives: true}));
+    if result is error {
+        log:printDebug("Unable to remove the partially uploaded file " + fileId, 'error = result);
+    }
+}
+
+# Normalizes a file list response (`FilesResponse`). `files` and `kind` are absent when the `fields` mask leaves them
+# out, so they default to an empty list and `drive#fileList`.
+#
+# + responseJson - JSON of a file list response
+# + return - The JSON with the files normalized and the defaults applied
+isolated function normalizeFilesResponseJson(json responseJson) returns json {
+    json normalized = normalizeFileListJson(responseJson);
+    if normalized is map<json> {
+        if !normalized.hasKey("files") {
+            normalized["files"] = [];
+        }
+        if !normalized.hasKey("kind") {
+            normalized["kind"] = "drive#fileList";
+        }
+    }
+    return normalized;
+}
+
+# Adds `nextPageToken` to a file list `fields` mask when missing. Without it Drive omits the token, and the connector
+# would stop after the first page.
+#
+# + fields - The caller's `fields` mask, e.g. `files(id,name,size)`
+# + return - The mask including `nextPageToken`
+isolated function includeNextPageToken(string fields) returns string {
+    string trimmed = fields.trim();
+    if trimmed == "*" || trimmed.includes("nextPageToken") {
+        return fields;
+    }
+    return "nextPageToken," + fields;
+}
